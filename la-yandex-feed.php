@@ -6,8 +6,7 @@ Version: 1.0
 Author: Teplitsa
 Author URI: http://te-st.ru/
 Contributors:	
-	Anna Ladoshkina aka foralien (webdev@foralien.com)
-	Lev Zvyagincev aka Ahaenor (ahaenor@gmail.com)
+	Anna Ladoshkina aka foralien (webdev@foralien.com)	
 
 License: GPLv2 or later
 

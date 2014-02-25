@@ -32,24 +32,40 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <pdalink><?php the_permalink_rss() ?></pdalink>
 <description><?php the_excerpt_rss(); ?></description>
 <?php
-	$layf_author = apply_filters('layf_author', ''); 
+	$layf_author = apply_filters('layf_author', get_the_author()); 
 	if(!empty($layf_author)):
 ?>
 <author><?php echo $layf_author; ?></author>
 <?php endif;?>
 <?php
-	$layf_category = apply_filters('layf_category', '');
+	$layf_category = apply_filters('layf_category', get_the_category_list(','));
 	if(!empty($layf_category)):
 ?>
 <category><?php echo $layf_category;?></category>
 <?php endif;?>
 <?php
-	$thumb = La_Yandex_Feed_Core::item_enclosure();
-	if(!empty($thumb)):
+	$enclosure = La_Yandex_Feed_Core::item_enclosure();
+	if(!empty($enclosure)): foreach($enclosure as $i => $img):
 ?>
-<enclosure url="<?php echo esc_url($thumb);?>" type="image/jpeg"/>
-<?php endif;?>
-<pubDate><?php echo mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false); ?></pubDate>
+<enclosure url="<?php echo esc_url($img['url']);?>" type="<?php echo esc_attr($img['mime']);?>"/>
+<?php endforeach; endif;?>
+<?php
+	$related = La_Yandex_Feed_Core::item_related();
+	if(!empty($related)):
+?>
+<yandex:related>
+<?php foreach($related as $i => $link): ?>
+<link url="<?php echo $link;?>">Президент России</link>
+
+<?php endforeach;?>
+</yandex:related>	
+<?php	
+	endif;
+	
+	$gmt_offset = get_option('gmt_offset');
+	$gmt_offset = ($gmt_offset > 9) ? $gmt_offset.'00' : ('0'.$gmt_offset.'00');
+?>
+<pubDate><?php echo mysql2date('D, d M Y H:i:s +'.$gmt_offset, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
 <yandex:full-text><?php the_content_feed('rss2'); ?></yandex:full-text>
 </item>
 <?php endwhile; ?>
