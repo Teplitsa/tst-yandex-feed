@@ -20,6 +20,11 @@ class La_Yandex_Feed_Core {
 		add_filter('the_content_feed', array($this, 'full_text_formatting'));
 		add_filter('layf_category', array($this, 'full_text_formatting'), 10);
 		add_filter('layf_author', array($this, 'full_text_formatting'), 10);
+		add_filter('layf_related_link_text', array($this, 'full_text_formatting'));
+		
+		/* metabox */
+		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
+		add_action('save_post', array($this, 'save_custom_data'));
 		
 		/* robots txt */
 		add_filter('robots_txt', array($this, 'robots_txt_permission'), 2, 2);
@@ -54,9 +59,7 @@ class La_Yandex_Feed_Core {
 	function custom_request($query) {
 		
 		if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
-			$pt = get_option('layf_post_types', 'post');
-			$pt = explode(',', $pt);
-			$pt = array_map('trim', $pt);
+			$pt = $this->get_supported_post_types();			
 			
 			$query->query_vars['post_type'] = $pt;
 			$query->query_vars['posts_per_page'] = -1;
@@ -79,7 +82,7 @@ class La_Yandex_Feed_Core {
 	function custom_templates_redirect(){
 		global $wp_query;
         
-		$qv = get_query_var('yandex_feed');
+		$qv = get_query_var('yandex_feed'); 
 		
 		if('news' == $qv){
 			
@@ -163,12 +166,11 @@ Allow: /yandex/news/
 	static function item_enclosure(){
 		global $post;
 		
-		$enclosure = $matches = array();
-		$out = do_shortcode($post->post_content);
+		$enclosure = $matches = $res = array();
+		$out = do_shortcode($post->post_content); 
 		//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
-		preg_match_all('/<img(.*)src(.*)=(.*)"(.*)"/U', $out, $matches);
-		
-		
+		preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
+			
 		
 		if(!isset($matches[4]) || empty($matches)){
 			$thumb_id = get_post_thumbnail_id($post->ID);
@@ -182,8 +184,7 @@ Allow: /yandex/news/
 		
 		if(empty($enclosure))
 			return $enclosure;
-		
-		$res = array();
+				
 		foreach($enclosure as $i => $img){
 			
 			$mime = self::_get_mime($img);
@@ -192,13 +193,14 @@ Allow: /yandex/news/
 			}
 		}
 		
-		//var_dump($res);		
+		//var_dump($res);
 		return $res;
 	}
 	
 	static function _get_mime($img){
-		//@to-do make this correct
+		//@to-do make this poetic
 		$mime = '';
+		
 		if(false !== strpos($img,'.jpg') || false !== strpos($img,'.jpeg')){
 			$mime = 'image/jpeg';
 		}
@@ -212,21 +214,75 @@ Allow: /yandex/news/
 		return $mime;
 	}
 	
+	/**	Related links **/
+	function get_supported_post_types() {
+		$pt = get_option('layf_post_types', 'post');
+		$pt = explode(',', $pt);
+		$pt = array_map('trim', $pt);
+		
+		return $pt;
+	}
+	
+	/* create metabox */
+	function create_metaboxes() {
+		
+		$pt = $this->get_supported_post_types();
+		$callback = array($this, 'links_metabox');
+		
+		if(!empty($pt)){ foreach($pt as $post_type){
+			add_meta_box('layf_related_links', __('Yandex.News related links', 'layf'), $callback, $post_type, 'advanced');
+		}}
+			
+	}
+	
+	function links_metabox() {
+		global $post;
+		
+		$value = get_post_meta($post->ID, 'layf_related_links', true);
+		$value = esc_textarea($value);
+	?>
+		<textarea id="layf_related_links" name="layf_related_links" cols="40" rows="4" class="widefat"><?php echo $value;?></textarea>
+		<p><?php _e('Enter related links URL and descrioption separated by space, one link per string', 'layf');?></p>
+	<?php
+	}
+	
+	/* save data */
+	function save_custom_data($post_id){
+		
+		$meta_value = (isset($_REQUEST['layf_related_links']) && !empty($_REQUEST['layf_related_links'])) ? trim($_REQUEST['layf_related_links']) : '';
+		$post_type = get_post_type($post_id);
+		
+		
+		if(in_array($post_type, $this->get_supported_post_types())){
+			
+			update_post_meta( $post_id, 'layf_related_links', $meta_value);
+		}
+	}
+	
+		
 	static function item_related() {
 		global $post;
 		
 		$links = array();
-		/*$dom = new DOMDocument;
-		$dom->loadHTML($post->post_content);
-		$home = home_url();
-		foreach ($dom->getElementsByTagName('a') as $node) {
-			$parts = array();
-			$parts = parse_url($node->getAttribute( 'href' ));
-			if(isset($parts['host']) & false !== strpos($home, $parts['host'])){
-				$links[]['url'] = $parts['host'];
-			}
-		}*/
+		$links_data_raw = get_post_meta($post->ID, 'layf_related_links', true);
+		if(empty($links_data_raw))
+			return $links;
 		
+		$links_data_raw = str_replace("\n\r", "\n", $links_data_raw);
+		$links_data_raw = explode("\n", $links_data_raw);
+		$links_data_raw = array_map('trim', $links_data_raw);
+		
+		if(!empty($links_data_raw)){ foreach($links_data_raw as $link_raw) {
+			$url = explode(' ', $link_raw);
+			$link = array();
+			if(isset($url[0]) && !empty($url[0])){
+				$link['url'] = $url[0];
+				$link['text'] = trim(str_replace($url[0], '', $link_raw));
+								
+				$links[] = $link;
+			}
+		}}
+		//var_dump($links);		
 		
 		return $links;
 	}

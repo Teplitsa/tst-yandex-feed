@@ -55,8 +55,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
 <yandex:related>
 <?php foreach($related as $i => $link): ?>
-<link url="<?php echo $link;?>">Президент России</link>
-
+<link url="<?php echo esc_url($link['url']);?>"><?php echo apply_filters('layf_related_link_text', $link['text']);?></link>
 <?php endforeach;?>
 </yandex:related>	
 <?php	
