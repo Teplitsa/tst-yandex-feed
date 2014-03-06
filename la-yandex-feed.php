@@ -2,7 +2,7 @@
 /*
 Plugin Name: LA Yandex Feed
 Description: The plugin creates feed for Yandex.News service
-Version: 1.0
+Version: 1.1
 Author: Teplitsa
 Author URI: http://te-st.ru/
 Contributors:	
