@@ -6,6 +6,8 @@ class La_Yandex_Feed_Core {
 		
 	private function __construct() {
         
+		
+		
 		/* request */
         add_action('init', array($this,'custom_query_vars') );
         add_action('template_redirect', array($this, 'custom_templates_redirect'));
@@ -40,11 +42,13 @@ class La_Yandex_Feed_Core {
     }       
 	
 	static function on_activation() {
-		flush_rewrite_rules(false);
+		/* forse rewrite flush on time */
+		update_option('layf_permalinks_flushed', 0);
 	}
 	
 	static function on_deactivation() {
-		flush_rewrite_rules(false);
+		/* forse rewrite flush on time */
+		delete_option('layf_permalinks_flushed');
 	}
 	
 	
@@ -54,6 +58,13 @@ class La_Yandex_Feed_Core {
         
         $wp->add_query_var('yandex_feed');
 		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+		
+		if( !get_option('layf_permalinks_flushed') ) {
+			
+                flush_rewrite_rules(false);
+                update_option('layf_permalinks_flushed', 1);
+           
+        }
     }
 	
 	function custom_request($query) {
