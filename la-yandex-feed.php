@@ -1,16 +1,18 @@
 <?php
 /*
-Plugin Name: LA Yandex Feed
+Plugin Name: LA Yandex.News Feed
 Description: The plugin creates feed for Yandex.News service
-Version: 1.1
+Version: 1.0
 Author: Teplitsa
 Author URI: http://te-st.ru/
+Text Domain: layf
+Domain Path: /languages
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Contributors:	
 	Anna Ladoshkina aka foralien (webdev@foralien.com)	
 
 License: GPLv2 or later
-
-	Copyright (C) 2012-2013 by Teplitsa of Social Technologies (http://te-st.ru).
+	Copyright (C) 2012-2014 by Teplitsa of Social Technologies (http://te-st.ru).
 
 	GNU General Public License, Free Software Foundation <http://www.gnu.org/licenses/gpl-2.0.html>
 
@@ -45,3 +47,8 @@ register_activation_hook( __FILE__, array( 'La_Yandex_Feed_Core', 'on_activation
 register_deactivation_hook(__FILE__, array( 'La_Yandex_Feed_Core', 'on_deactivation' ));
 
 
+/** strings to be translated **/
+$strings = array(
+__('The plugin creates feed for Yandex.News service', 'layf'),
+__('Teplitsa', 'layf'),
+);

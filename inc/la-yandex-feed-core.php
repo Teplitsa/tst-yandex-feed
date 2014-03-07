@@ -122,7 +122,7 @@ Allow: /yandex/news/
  	 	
 		add_settings_field(
 			'layf_post_types',
-			__('Post types for Ynadex.News feed', 'layf'),
+			__('Post types for Yandex.News feed', 'layf'),
 			array($this, 'settngs_post_types_callback'),
 			'reading',
 			'default'
