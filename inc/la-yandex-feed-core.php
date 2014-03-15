@@ -170,8 +170,10 @@ Allow: /yandex/news/
 		$text = htmlentities ($text, ENT_QUOTES, 'UTF-8', false);
 		//fix for some characters block displaying feed in browser
 		$text = str_replace(
-				array('&laquo;', '&raquo;', '&ndash;', '&mdash;', '&lt;', '&gt;', '&nbsp;'),
-				array('&#171;', '&#187;', "&#8212;", "&#8212;", "&#60;", "&#62;", " "),
+				array('&laquo;', '&raquo;', '&ndash;', '&mdash;', '&lt;', '&gt;', '&nbsp;', '&tilde;', '&sbquo;', '&dbquo;', '&lsaquo;', 
+					'&lsquo;', '&rsquo;', '&ldquo;', '&rdquo;', '&tilde', '&rsaquo;'),
+				array('&#171;', '&#187;', "&#8212;", "&#8212;", "&#60;", "&#62;", " ", "&#126;", '&#130;', '&#132;', '&#139;', 
+					'&#145;', '&#146;', '&#147;', '&#148;', '&#152;', '&#155;'),
 				$text);
 		
 		return $text;
