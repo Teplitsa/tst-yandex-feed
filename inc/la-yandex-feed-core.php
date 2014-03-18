@@ -17,12 +17,12 @@ class La_Yandex_Feed_Core {
 		add_action( 'admin_init', array($this, 'settings_init'));
 		
 		/* formatting */
-		add_filter('the_title_rss', array($this, 'full_text_formatting'));
-		add_filter('the_excerpt_rss', array($this, 'full_text_formatting'));
-		add_filter('the_content_feed', array($this, 'full_text_formatting'));
-		add_filter('layf_category', array($this, 'full_text_formatting'), 10);
-		add_filter('layf_author', array($this, 'full_text_formatting'), 10);
-		add_filter('layf_related_link_text', array($this, 'full_text_formatting'));
+		add_filter('the_title_rss', array($this, 'full_text_formatting'), 15);
+		add_filter('the_excerpt_rss', array($this, 'full_text_formatting'), 15);
+		add_filter('the_content_feed', array($this, 'full_text_formatting'), 15);
+		add_filter('layf_category', array($this, 'full_text_formatting'), 15);
+		add_filter('layf_author', array($this, 'full_text_formatting'), 15);
+		add_filter('layf_related_link_text', array($this, 'full_text_formatting'), 15);
 		
 		/* metabox */
 		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
