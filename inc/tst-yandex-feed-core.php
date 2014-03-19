@@ -172,9 +172,9 @@ Allow: /yandex/news/
 		//fix for some characters block displaying feed in browser
 		$text = str_replace(
 				array('&laquo;', '&raquo;', '&ndash;', '&mdash;', '&lt;', '&gt;', '&nbsp;', '&tilde;', '&sbquo;', '&dbquo;', '&lsaquo;', 
-					'&lsquo;', '&rsquo;', '&ldquo;', '&rdquo;', '&tilde', '&rsaquo;'),
+					'&lsquo;', '&rsquo;', '&ldquo;', '&rdquo;', '&tilde', '&rsaquo;', '&minus;', '&hellip;'),
 				array('&#171;', '&#187;', "&#8212;", "&#8212;", "&#60;", "&#62;", " ", "&#126;", '&#130;', '&#132;', '&#139;', 
-					'&#145;', '&#146;', '&#147;', '&#148;', '&#152;', '&#155;'),
+					'&#145;', '&#146;', '&#147;', '&#148;', '&#152;', '&#155;', '&#45;', '&#8230;'),
 				$text);
 		
 		return $text;
