@@ -2,7 +2,6 @@
 /**
  * RSS2 Feed Template for Yandex.News translation.
  *
- * @package WordPress
  */
  
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);

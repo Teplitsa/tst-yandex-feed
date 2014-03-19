@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: LA Yandex.News Feed
+Plugin Name: Yandex.News Feed by Teplita
 Description: The plugin creates feed for Yandex.News service
 Version: 1.0
 Author: Teplitsa
@@ -9,7 +9,8 @@ Text Domain: layf
 Domain Path: /languages
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Contributors:	
-	Anna Ladoshkina aka foralien (webdev@foralien.com)	
+	Anna Ladoshkina aka foralien (webdev@foralien.com)
+	Denis Cherniatev (denis.cherniatev@gmail.com)	
 
 License: GPLv2 or later
 	Copyright (C) 2012-2014 by Teplitsa of Social Technologies (http://te-st.ru).
@@ -35,11 +36,11 @@ if( !defined('ABSPATH') ) exit; // Exit if accessed directly
 
 define('LAYF_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
 
-load_plugin_textdomain('layf', false, '/la-yandex-feed/languages');
+load_plugin_textdomain('layf', false, '/tst-yandex-feed/languages');
 
 
 /** Init **/
-require_once(plugin_dir_path(__FILE__).'inc/la-yandex-feed-core.php');
+require_once(plugin_dir_path(__FILE__).'inc/tst-yandex-feed-core.php');
 $layf = La_Yandex_Feed_Core::get_instance();
 
 
