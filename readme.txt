@@ -27,3 +27,4 @@ Yandex.News Feed by Teplita - плагин для WordPress, позволяющ�
 
 = 1.0 =
 * First official release!
+* First official release!
