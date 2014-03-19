@@ -1,5 +1,5 @@
 === LA Yandex.News Feed ===
-Contributors: foralien
+Contributors: foralien, denis.cherniatev
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.8
 Tested up to: 3.8.1
@@ -15,6 +15,7 @@ LA Yandex.News Feed - плагин для WordPress, позволяющий ор
 
 * Плагин элементарно устанавливается и требует минимум настроек.
 * Функции трансляции записей в Яндекс.Новости доступны сразу после установки.
+* Плагин строго и точно поддерживает [формат трансляции для Яндекс.Новостей](http://help.yandex.ru/news/info-for-mass-media.xml).
 
 == Installation ==
 Процесс инсталляции плагина стандартен для WordPress.
