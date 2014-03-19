@@ -85,7 +85,8 @@ class La_Yandex_Feed_Core {
 					)
 				)
 			);
-			$query->is_feed = true;
+			$query->is_page = false;
+			$query->is_home = false;
 			//var_dump($query->query_vars); die();
 		}
 		
