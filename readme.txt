@@ -21,7 +21,7 @@ LA Yandex.News Feed - плагин для WordPress, позволяющий ор
 Процесс инсталляции плагина стандартен для WordPress.
 
 Если у вас установлен GIT, то вы можете клонировать репозиторий: https://github.com/Teplitsa/La-Yandex-Feed.git
-Или скачать его в виде ZIP архива: https://github.com/Teplitsa/La-Yandex-Feed/archive/master.zip
+или скачать его в виде ZIP архива: https://github.com/Teplitsa/La-Yandex-Feed/archive/master.zip
 
 == Changelog ==
 
