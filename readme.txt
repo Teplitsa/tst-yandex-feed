@@ -3,6 +3,7 @@ Contributors: foralien, denis.cherniatev
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.8
 Tested up to: 3.8.1
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -23,8 +24,15 @@ Yandex.News Feed by Teplita - плагин для WordPress, позволяющ�
 Если у вас установлен GIT, то вы можете клонировать репозиторий: https://github.com/Teplitsa/tst-yandex-feed.git
 или скачать его в виде ZIP архива: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
 
+После установки и активации плагина можно настроить материалы, которые попадут в трансляцию Яндекс.Новостей, с помощью страницы "Параметры -> Чтение" в Админ. разделе сайта.
+
+== Frequently Asked Questions ==
+
+== Upgrade Notice ==
+
+== Screenshots ==
+
 == Changelog ==
 
 = 1.0 =
-* First official release!
 * First official release!
