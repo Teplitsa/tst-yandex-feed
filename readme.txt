@@ -1,4 +1,4 @@
-=== Yandex.News Feed by Teplita ===
+=== Yandex.News Feed by Teplitsa ===
 Contributors: foralien, denis.cherniatev
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.8
@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Трансляция материалов сайта для сервиса Яндекс.Новости.
 
 == Description ==
-Yandex.News Feed by Teplita - плагин для WordPress, позволяющий организовать трансляцию материалов сайта для сервиса Яндекс.Новости.
+Yandex.News Feed by Teplitsa - плагин для WordPress, позволяющий организовать трансляцию материалов сайта для сервиса Яндекс.Новости.
 
 Задача плагина - облегчить интеграцию любого сайта на WordPress с Яндекс.Новостями, позволив авторам сайта избежать кастомных технических решений.
 
