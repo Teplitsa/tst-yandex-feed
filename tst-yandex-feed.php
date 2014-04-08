@@ -10,7 +10,8 @@ Domain Path: /languages
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Contributors:	
 	Anna Ladoshkina aka foralien (webdev@foralien.com)
-	Denis Cherniatev (denis.cherniatev@gmail.com)	
+	Denis Cherniatev (denis.cherniatev@gmail.com)
+	Lev Zvyagincev (ahaenor@gmail.com)
 
 License: GPLv2 or later
 	Copyright (C) 2012-2014 by Teplitsa of Social Technologies (http://te-st.ru).
