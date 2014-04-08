@@ -1,5 +1,5 @@
 === Yandex.News Feed by Teplita ===
-Contributors: foralien, denis.cherniatev
+Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.8
 Tested up to: 3.8.1
