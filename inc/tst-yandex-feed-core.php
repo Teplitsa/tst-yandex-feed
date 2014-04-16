@@ -18,7 +18,7 @@ class La_Yandex_Feed_Core {
 		/* formatting */
 		add_filter('the_title_rss', array($this, 'full_text_formatting'), 15);
 		add_filter('the_excerpt_rss', array($this, 'full_text_formatting'), 15);
-		add_filter('the_content_feed', array($this, 'full_text_formatting'), 15);
+		add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_category', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_author', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_related_link_text', array($this, 'full_text_formatting'), 15);
@@ -185,6 +185,22 @@ Allow: /yandex/news/
 	
 	
 	/** template helpers */
+	static function get_the_content_feed() {
+		
+		$post = get_post();		
+		$content = str_replace(']]>', ']]&gt;', $post->post_content);
+		
+		add_filter( 'layf_the_content', 'wptexturize'        );
+		add_filter( 'layf_the_content', 'convert_smilies'    );
+		add_filter( 'layf_the_content', 'convert_chars'      );
+		add_filter( 'layf_the_content', 'wpautop'            );
+		add_filter( 'layf_the_content', 'shortcode_unautop'  );
+		add_filter( 'layf_the_content', 'do_shortcode' );		
+			
+		return apply_filters('layf_content_feed', $content);	
+		
+	}
+	
 	static function item_enclosure(){
 		global $post;
 		

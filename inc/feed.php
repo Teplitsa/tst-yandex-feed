@@ -37,7 +37,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <author><?php echo $layf_author; ?></author>
 <?php endif;?>
 <?php
-	$layf_category = apply_filters('layf_category', get_the_category_list(','));
+	$layf_category = apply_filters('layf_category', get_the_category_list(', '));
 	if(!empty($layf_category)):
 ?>
 <category><?php echo $layf_category;?></category>
@@ -64,7 +64,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	$gmt_offset = ($gmt_offset > 9) ? $gmt_offset.'00' : ('0'.$gmt_offset.'00');
 ?>
 <pubDate><?php echo mysql2date('D, d M Y H:i:s +'.$gmt_offset, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
-<yandex:full-text><?php the_content_feed('rss2'); ?></yandex:full-text>
+<yandex:full-text><?php echo La_Yandex_Feed_Core::get_the_content_feed(); ?></yandex:full-text>
 </item>
 <?php endwhile; ?>
 </channel>
