@@ -35,6 +35,7 @@ Yandex.News Feed by Teplita - плагин для WordPress, позволяющ�
 * Fix: some invalid characters appear in feed
 * Fix: security fix
 * Fix: translation files not loading
+* Fix: incorrect content behaviour due to conflicts with some themes
 
 = 1.0 =
 * First official release!
