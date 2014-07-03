@@ -18,10 +18,13 @@ class La_Yandex_Feed_Core {
 		/* formatting */
 		add_filter('the_title_rss', array($this, 'full_text_formatting'), 15);
 		add_filter('the_excerpt_rss', array($this, 'full_text_formatting'), 15);
-		add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
-		add_filter('layf_category', array($this, 'full_text_formatting'), 15);
+
+        add_filter('layf_category', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_author', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_related_link_text', array($this, 'full_text_formatting'), 15);
+
+        add_filter('layf_content_feed', 'do_shortcode', 10);
+        add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
 		
 		/* metabox */
 		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
@@ -160,20 +163,16 @@ Allow: /yandex/news/
 	<?php
 	}
 	
-	
 	/** formatting */		
 	function full_text_formatting($text){
 		global $wp_query;
 		
-		if(!isset($wp_query->query_vars['yandex_feed']))
+		if(empty($wp_query->query_vars['yandex_feed']))
 			return $text;
 		
-		$text = strip_tags($text);
-		$text = self::_valid_characters($text);
-		
-		return $text;
+		return self::_valid_characters(strip_tags($text));
 	}
-	
+
 	static function _valid_characters($text) {
 		
 		$text = htmlentities ($text, ENT_QUOTES, 'UTF-8', false);

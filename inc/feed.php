@@ -26,22 +26,28 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <?php endif;?>
 <?php while( have_posts()) : the_post(); ?>
 <item>
-<title><?php the_title_rss() ?></title>
-<link><?php the_permalink_rss() ?></link>
-<pdalink><?php the_permalink_rss() ?></pdalink>
-<description><?php the_excerpt_rss(); ?></description>
+<title><?php the_title_rss();?></title>
+<link><?php the_permalink_rss();?></link>
+<pdalink><?php the_permalink_rss();?></pdalink>
+<description><?php the_excerpt_rss();?></description>
 <?php
 	$layf_author = apply_filters('layf_author', get_the_author()); 
-	if(!empty($layf_author)):
+	if($layf_author):
 ?>
 <author><?php echo $layf_author; ?></author>
 <?php endif;?>
 <?php
-	$layf_category = apply_filters('layf_category', get_the_category_list(', '));
-	if(!empty($layf_category)):
+    $category = wp_get_post_terms(get_the_ID(), 'category');
+    if(count($category) > 1 && $category[0]->slug == 'uncategorized')
+        $category = $category[1]->name;
+    else
+        $category = $category ? reset($category)->name : '';
+
+    $category = apply_filters('layf_category', $category);
+	if($category) :
 ?>
-<category><?php echo $layf_category;?></category>
-<?php endif;?>
+<category><?php echo $category;?></category>
+<?php endif; ?>
 <?php
 	$enclosure = La_Yandex_Feed_Core::item_enclosure();
 	if(!empty($enclosure)): foreach($enclosure as $i => $img):

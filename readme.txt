@@ -2,7 +2,8 @@
 Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.8
-Tested up to: 3.8.1
+Tested up to: 3.9.1
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -30,6 +31,10 @@ Yandex.News Feed by Teplita - плагин для WordPress, позволяющ�
 или скачать его в виде ZIP архива: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
 
 == Changelog ==
+
+= 1.2 =
+* Fix: Category field should contains only one category label
+* Fix: some shortcodes appeared incorrectly in the feed content
 
 = 1.1 =
 * Fix: some invalid characters appear in feed
