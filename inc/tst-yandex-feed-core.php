@@ -169,8 +169,8 @@ Allow: /yandex/news/
 		
 		if(empty($wp_query->query_vars['yandex_feed']))
 			return $text;
-		
-		return self::_valid_characters(strip_tags($text));
+				
+		return self::_valid_characters(wp_strip_all_tags($text));
 	}
 
 	static function _valid_characters($text) {
