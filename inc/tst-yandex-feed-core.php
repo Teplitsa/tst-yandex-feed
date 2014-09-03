@@ -194,7 +194,8 @@ Allow: /yandex/news/
 		add_filter( 'layf_the_content', 'convert_chars'      );
 		add_filter( 'layf_the_content', 'wpautop'            );
 		add_filter( 'layf_the_content', 'shortcode_unautop'  );
-		add_filter( 'layf_the_content', 'do_shortcode' );		
+		add_filter( 'layf_the_content', 'do_shortcode' );
+		add_filter( 'use_default_gallery_style', false );
 			
 		return apply_filters('layf_content_feed', $content);	
 		
