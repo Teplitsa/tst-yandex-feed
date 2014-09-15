@@ -22,9 +22,7 @@ class La_Yandex_Feed_Core {
         add_filter('layf_category', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_author', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_related_link_text', array($this, 'full_text_formatting'), 15);
-
-        add_filter('layf_content_feed', 'do_shortcode', 10);
-        add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
+		add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
 		
 		/* metabox */
 		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
@@ -169,8 +167,14 @@ Allow: /yandex/news/
 		
 		if(empty($wp_query->query_vars['yandex_feed']))
 			return $text;
-				
-		return self::_valid_characters(wp_strip_all_tags($text));
+		
+		$text = wp_strip_all_tags($text);
+		
+		//remove multiply spaces
+		$text = preg_replace('/\s\s+/', ' ', $text);
+		$text = preg_replace('/(\r|\n|\r\n){3,}/', '', $text);
+		
+		return self::_valid_characters($text);
 	}
 
 	static function _valid_characters($text) {
@@ -178,6 +182,8 @@ Allow: /yandex/news/
 		$text = htmlentities ($text, ENT_QUOTES, 'UTF-8', false);
 		$ent_table = layf_get_chars_table();
 		$text = strtr($text, $ent_table);
+		
+		
 		
 		return $text;
 	}
@@ -189,13 +195,14 @@ Allow: /yandex/news/
 		$post = get_post();		
 		$content = str_replace(']]>', ']]&gt;', $post->post_content);
 		
-		add_filter( 'layf_the_content', 'wptexturize'        );
-		add_filter( 'layf_the_content', 'convert_smilies'    );
-		add_filter( 'layf_the_content', 'convert_chars'      );
-		add_filter( 'layf_the_content', 'wpautop'            );
-		add_filter( 'layf_the_content', 'shortcode_unautop'  );
-		add_filter( 'layf_the_content', 'do_shortcode' );		
-			
+		add_filter( 'layf_content_feed', 'wptexturize'        );
+		add_filter( 'layf_content_feed', 'convert_smilies'    );
+		add_filter( 'layf_content_feed', 'convert_chars'      );
+		add_filter( 'layf_content_feed', 'wpautop'            );
+		add_filter( 'layf_content_feed', 'shortcode_unautop'  );
+		add_filter( 'layf_content_feed', 'do_shortcode'       );		
+        		
+		
 		return apply_filters('layf_content_feed', $content);	
 		
 	}
