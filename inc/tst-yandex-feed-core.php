@@ -72,8 +72,10 @@ class La_Yandex_Feed_Core {
 		
 		if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
 			$pt = $this->get_supported_post_types();			
+			$pc = $this->get_supported_post_categories();
 			
 			$query->query_vars['post_type'] = $pt;
+			if (count($pc) > 0) $query->query_vars['category__in'] = $pc;
 			$query->query_vars['posts_per_page'] = -1;
 			
 			$limit = strtotime('- 8 days'); //Limited by Yandex rules
@@ -132,6 +134,14 @@ Allow: /yandex/news/
 		);
 		
 		add_settings_field(
+			'layf_post_categories',
+			__('Post categories for Yandex.News feed', 'layf'),
+			array($this, 'settngs_post_categories_callback'),
+			'reading',
+			'default'
+		);
+		
+		add_settings_field(
 			'layf_feed_logo',
 			__('Logo URL for feed description', 'layf'),
 			array($this, 'settings_feed_logo_callback'),
@@ -140,6 +150,7 @@ Allow: /yandex/news/
 		);
  	
 		register_setting( 'reading', 'layf_post_types' );
+		register_setting( 'reading', 'layf_post_categories' );
 		register_setting( 'reading', 'layf_feed_logo' );
 	}
  
@@ -152,6 +163,15 @@ Allow: /yandex/news/
 	<?php
 	}
 	
+	function settngs_post_categories_callback() {
+		
+		$value = get_option('layf_post_categories', '');
+		?>
+		<label for="layf_post_categories"><input name="layf_post_categories" id="layf_post_categories" type="text" class="regular-text code" value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Comma separated list of category id\'s', 'layf');?></p>
+	<?php
+	}
+
 	function settings_feed_logo_callback() {
 		
 		$value = get_option('layf_feed_logo', '');
@@ -266,6 +286,16 @@ Allow: /yandex/news/
 		$pt = array_map('trim', $pt);
 		
 		return $pt;
+	}
+
+	function get_supported_post_categories() {
+		$pc = get_option('layf_post_categories', 'post');
+        if (!$pc)
+            return null;
+		$pc = explode(',', $pc);
+		$pc = array_map('trim', $pc);
+		
+		return $pc;
 	}
 	
 	/* create metabox */
