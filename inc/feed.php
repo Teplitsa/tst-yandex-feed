@@ -38,7 +38,8 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <?php endif;?>
 <?php
 	$category_tax = apply_filters('layf_category_taxonomy', 'category', get_the_ID());
-    $category = wp_get_object_terms(get_the_ID(), $category_tax);
+    $categories = wp_get_object_terms(get_the_ID(), $category_tax);
+    $category = apply_filters('layf_category_filter', $categories);
     if(count($category) > 1 && $category[0]->slug == 'uncategorized')
         $category = $category[1]->name;
     else
