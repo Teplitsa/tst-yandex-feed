@@ -1,0 +1,89 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Yandex.News Feed by Teplitsa\n"
+"POT-Creation-Date: 2014-11-11 22:28+0300\n"
+"PO-Revision-Date: 2014-11-11 22:28+0300\n"
+"Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
+"Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: inc/admin.php:42 inc/admin.php:103
+msgid "Yandex.News Feed Settings"
+msgstr ""
+
+#: inc/admin.php:43
+msgid "Yandex.News"
+msgstr ""
+
+#: inc/admin.php:54
+msgid "General"
+msgstr ""
+
+#: inc/admin.php:61
+msgid "Post types for feed"
+msgstr ""
+
+#: inc/admin.php:69
+msgid "Logo URL for feed description"
+msgstr ""
+
+#: inc/admin.php:77
+msgid "Taxonomy to filter entries for feed"
+msgstr ""
+
+#: inc/admin.php:85
+msgid "Terms to filter entries for feed"
+msgstr ""
+
+#: inc/admin.php:125
+msgid "Comma separated list of post types"
+msgstr ""
+
+#: inc/admin.php:134
+msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
+msgstr ""
+
+#: inc/admin.php:158
+msgid "Comma separated list of term IDs"
+msgstr ""
+
+#: inc/admin.php:171
+msgid "Yandex.News settings"
+msgstr ""
+
+#: inc/admin.php:191
+msgid "Related links"
+msgstr ""
+
+#: inc/admin.php:193
+msgid ""
+"Enter related links URL and descrioption separated by space, one link per "
+"string."
+msgstr ""
+
+#: inc/admin.php:196
+msgid "Exclude entry from Yandex.News feed"
+msgstr ""
+
+#: inc/admin.php:197
+msgid "Exclude despite the global settings"
+msgstr ""
+
+#: tst-yandex-feed.php:54
+msgid "The plugin creates feed for Yandex.News service"
+msgstr ""
+
+#: tst-yandex-feed.php:55
+msgid "Teplitsa"
+msgstr ""

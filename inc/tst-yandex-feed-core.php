@@ -11,10 +11,7 @@ class La_Yandex_Feed_Core {
         add_action('init', array($this,'custom_query_vars') );
         add_action('template_redirect', array($this, 'custom_templates_redirect'));
 		add_action('parse_query', array($this, 'custom_request'));
-		
-		/* settings */
-		add_action( 'admin_init', array($this, 'settings_init'));
-		
+				
 		/* formatting */
 		add_filter('the_title_rss', array($this, 'full_text_formatting'), 15);
 		add_filter('the_excerpt_rss', array($this, 'full_text_formatting'), 15);
@@ -23,13 +20,12 @@ class La_Yandex_Feed_Core {
 		add_filter('layf_author', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_related_link_text', array($this, 'full_text_formatting'), 15);
 		add_filter('layf_content_feed', array($this, 'full_text_formatting'), 15);
-		
-		/* metabox */
-		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
-		add_action('save_post', array($this, 'save_custom_data'));
-		
+				
 		/* robots txt */
 		add_filter('robots_txt', array($this, 'robots_txt_permission'), 2, 2);
+		
+		/* admin */
+		$this->admin_setup();
     }
 		
 		
@@ -53,8 +49,27 @@ class La_Yandex_Feed_Core {
 	}
 	
 	
+	public function admin_setup(){
+		
+		if(!is_admin())
+			return;
+		
+		require_once(LAYF_PLUGIN_DIR.'inc/admin.php');
+		La_Yandex_Feed_Admin::get_instance();
+	}
+	
+	
+	public function get_supported_post_types() {
+		$pt = get_option('layf_post_types', 'post');
+		$pt = explode(',', $pt);
+		$pt = array_map('trim', $pt);
+		
+		return $pt;
+	}
+	
+	
 	/** request */	
-	function custom_query_vars(){
+	public function custom_query_vars(){
         global $wp;
         
         $wp->add_query_var('yandex_feed');
@@ -68,7 +83,7 @@ class La_Yandex_Feed_Core {
         }
     }
 	
-	function custom_request($query) {
+	public function custom_request($query) {
 		
 		if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
 			$pt = $this->get_supported_post_types();			
@@ -88,12 +103,39 @@ class La_Yandex_Feed_Core {
 			);
 			$query->is_page = false;
 			$query->is_home = false;
+			
+			//filtering by category
+			$terms = get_option('layf_filter_terms', '');			
+			if(!empty($terms)){
+				$tax = get_option('layf_filter_taxonomy', 'category');
+				$terms = array_map('intval', explode(',', $terms));
+				$query->query_vars['tax_query'][] = array(
+					'taxonomy' => $tax,
+					'field' => 'id',
+					'terms' => $terms
+				);
+			}
+			
+			//filtering by exclusion
+			$query->query_vars['meta_query'] = array(
+				array(
+					'key' => 'layf_exclude_from_feed',
+					'compare' => 'NOT EXISTS'
+				),
+				array(
+					'key' => 'layf_exclude_from_feed',
+					'value' => 1,
+					'compare' => '!='
+				),
+				'relation' => 'OR'
+			);
+			
 			//var_dump($query->query_vars); die();
 		}
 		
 	}
 	
-	function custom_templates_redirect(){
+	public function custom_templates_redirect(){
 		global $wp_query;
         
 		$qv = get_query_var('yandex_feed'); 
@@ -105,7 +147,7 @@ class La_Yandex_Feed_Core {
 		}
 	}
 	
-	function robots_txt_permission($output, $public){
+	public function robots_txt_permission($output, $public){
 		
 		if($public == 0)
 			return $output;
@@ -118,48 +160,7 @@ Allow: /yandex/news/
 		
 		return $output;
 	}
-	
-	
-	/** settings */
-	function settings_init() {
- 	 	
-		add_settings_field(
-			'layf_post_types',
-			__('Post types for Yandex.News feed', 'layf'),
-			array($this, 'settngs_post_types_callback'),
-			'reading',
-			'default'
-		);
 		
-		add_settings_field(
-			'layf_feed_logo',
-			__('Logo URL for feed description', 'layf'),
-			array($this, 'settings_feed_logo_callback'),
-			'reading',
-			'default'
-		);
- 	
-		register_setting( 'reading', 'layf_post_types' );
-		register_setting( 'reading', 'layf_feed_logo' );
-	}
- 
-	function settngs_post_types_callback() {
-		
-		$value = get_option('layf_post_types', '');
-		?>
-		<label for="layf_post_types"><input name="layf_post_types" id="layf_post_types" type="text" class="regular-text code" value="<?php echo $value;?>"> </label>
-		<p class="description"><?php _e('Comma separated list of post types', 'layf');?></p>
-	<?php
-	}
-	
-	function settings_feed_logo_callback() {
-		
-		$value = get_option('layf_feed_logo', '');
-		?>
-		<label for="layf_feed_logo"><input name="layf_feed_logo" id="layf_feed_logo" type="text" class="code widefat" value="<?php echo $value;?>"> </label>
-		<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (100px size of max side)', 'layf');?></p>
-	<?php
-	}
 	
 	/** formatting */		
 	function full_text_formatting($text){
@@ -259,52 +260,8 @@ Allow: /yandex/news/
 	}
 	
 	
-	/**	related links */
-	function get_supported_post_types() {
-		$pt = get_option('layf_post_types', 'post');
-		$pt = explode(',', $pt);
-		$pt = array_map('trim', $pt);
-		
-		return $pt;
-	}
 	
-	/* create metabox */
-	function create_metaboxes() {
-		
-		$pt = $this->get_supported_post_types();
-		$callback = array($this, 'links_metabox');
-		
-		if(!empty($pt)){ foreach($pt as $post_type){
-			add_meta_box('layf_related_links', __('Yandex.News related links', 'layf'), $callback, $post_type, 'advanced');
-		}}
-			
-	}
-	
-	function links_metabox() {
-		global $post;
-		
-		$value = get_post_meta($post->ID, 'layf_related_links', true);
-		$value = esc_textarea($value);
-	?>
-		<textarea id="layf_related_links" name="layf_related_links" cols="40" rows="4" class="widefat"><?php echo $value;?></textarea>
-		<p><?php _e('Enter related links URL and descrioption separated by space, one link per string', 'layf');?></p>
-	<?php
-	}
-	
-	/* save data */
-	function save_custom_data($post_id){
-		
-		$meta_value = (isset($_REQUEST['layf_related_links']) && !empty($_REQUEST['layf_related_links'])) ? trim($_REQUEST['layf_related_links']) : '';
-		$post_type = get_post_type($post_id);
-		
-		
-		if(in_array($post_type, $this->get_supported_post_types())){
-			
-			update_post_meta( $post_id, 'layf_related_links', $meta_value);
-		}
-	}
-	
-	/* build links block */	
+	/* build related links block */	
 	static function item_related() {
 		global $post;
 		

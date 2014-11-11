@@ -1,55 +1,94 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: La Yandex.News Feed\n"
-"POT-Creation-Date: 2014-03-07 16:32+0400\n"
-"PO-Revision-Date: 2014-03-07 16:33+0400\n"
-"Last-Translator: Anna <nordworldofann@gmail.com>\n"
-"Language-Team: \n"
+"Project-Id-Version: Yandex.News Feed by Teplitsa\n"
+"POT-Creation-Date: 2014-11-11 22:14+0300\n"
+"PO-Revision-Date: 2014-11-11 22:16+0300\n"
+"Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
+"Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
-"X-Poedit-Basepath: ../\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: inc/la-yandex-feed-core.php:125
-msgid "Post types for Yandex.News feed"
-msgstr "Типы записей для трансляции Яндекс.Новости"
+#: inc/admin.php:42 inc/admin.php:103
+msgid "Yandex.News Feed Settings"
+msgstr "Настройки трансляции Яндекс.Новости"
 
-#: inc/la-yandex-feed-core.php:133
+#: inc/admin.php:43
+msgid "Yandex.News"
+msgstr "Яндекс.Новости"
+
+#: inc/admin.php:54
+msgid "General"
+msgstr "Общие"
+
+#: inc/admin.php:61
+msgid "Post types for feed"
+msgstr "Типы записей для трансляции"
+
+#: inc/admin.php:69
 msgid "Logo URL for feed description"
 msgstr "Ссылка на логотип для описания сайта на сервисе Яндекс.Новости"
 
-#: inc/la-yandex-feed-core.php:148
+#: inc/admin.php:77
+msgid "Taxonomy to filter entries for feed"
+msgstr "Таксономия для фильтрации трансляции"
+
+#: inc/admin.php:85
+msgid "Terms to filter entries for feed"
+msgstr "Термины для фильтрации трансляции"
+
+#: inc/admin.php:125
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/la-yandex-feed-core.php:157
+#: inc/admin.php:134
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/la-yandex-feed-core.php:244
-msgid "Yandex.News related links"
-msgstr "Связанные ссылки для трансляции Яндекс.Новости"
+#: inc/admin.php:158
+msgid "Comma separated list of term IDs"
+msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/la-yandex-feed-core.php:256
+#: inc/admin.php:171
+msgid "Yandex.News settings"
+msgstr "Настройки Яндекс.Новости"
+
+#: inc/admin.php:191
+msgid "Related links"
+msgstr "Связанные ссылки"
+
+#: inc/admin.php:193
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
-"string"
+"string."
 msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
-"описание ссылки. Указывайте каждую ссылку на отдельной строке"
+"описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: la-yandex-feed.php:52
+#: inc/admin.php:196
+msgid "Exclude entry from Yandex.News feed"
+msgstr "Исключить запись из трансляции Яндекс.Новости"
+
+#: inc/admin.php:197
+msgid "Exclude despite the global settings"
+msgstr "Исключить, не смотря на глобальные настройки"
+
+#: tst-yandex-feed.php:54
 msgid "The plugin creates feed for Yandex.News service"
 msgstr "Плагин создает трансляцию материалов сайта для сервиса Яндекс.Новости"
 
-#: la-yandex-feed.php:53
+#: tst-yandex-feed.php:55
 msgid "Teplitsa"
 msgstr "Теплица социальных технологий"
