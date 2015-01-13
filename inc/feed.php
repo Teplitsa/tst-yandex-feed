@@ -3,7 +3,7 @@
  * RSS2 Feed Template for Yandex.News translation.
  *
  */
- 
+
 header('Content-Type: ' . feed_content_type('rss-http') . '; charset=' . get_option('blog_charset'), true);
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';

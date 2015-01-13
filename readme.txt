@@ -97,6 +97,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 == Changelog ==
 
+= 1.6 =
+* Fix: Minor fixes in plugin dashboard area
+
 = 1.5 =
 * New: Own options page for plugin settings
 * New: Posts in feed could be filtering by category or custom taxonomy term
