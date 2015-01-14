@@ -34,11 +34,12 @@ _For English description scroll down, please._
 Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_.
 
 Плагин имеет минимум необходимых настроек. Подробнее о его использовании можно узнать на сайте разработчиков:
+
 * [руководство](http://te-st.ru/2014/12/02/wordpress-and-yandex-news/) по использованию плагина;
 * [скринкаст](http://te-st.ru/2014/04/08/screencast-yandex-news-plugin/) по использованию плагина; 
 
 
-** Помощь проекту **
+**Помощь проекту**
 
 Мы будем очень благодарны за вашу помощь проекту. Вы можете помочь следующими способами:
 
@@ -74,11 +75,11 @@ Feed is accessible at the link _domain.ru/yandex/news/_.
 
 The plugin has the minimum of settings. Read more about it's usage at the developers' website:
 
-* [detailed guide](http://te-st.EN/2014/12/02/wordpress-and-yandex-news/);
-* [screencast](http://te-st.EN/2014/04/08/screencast-yandex-news-plugin/);
+* [detailed guide](http://te-st.EN/2014/12/02/wordpress-and-yandex-news/) about plugin usage;
+* [screencast](http://te-st.EN/2014/04/08/screencast-yandex-news-plugin/) about plugin usage;
 
 
-** Help us  **
+**Help us**
 
 We will be very grateful for your help us to make the plugin better. You can do it in the following ways:
 
@@ -123,4 +124,3 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 = 1.0 =
 * First official release!
-
