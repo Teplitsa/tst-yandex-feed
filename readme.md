@@ -46,6 +46,7 @@ _For English description scroll down, please._
 
 Если у вас есть вопросы по работе плагина, то обратитесь за поддержкой с помощью GitHub.
 
+Если вам нужна помощь волонтеров в установке и настройке - создайте задачу на https://itv.te-st.ru
 
 ##In English##
 
@@ -93,3 +94,5 @@ We will be very grateful for your help us to make the plugin better. You can do 
 * Translate the plugin or optimize it for your country.
 
 If you have questions about the plugin, then ask for support through GitHub.
+
+
