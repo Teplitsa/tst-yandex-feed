@@ -96,7 +96,16 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 Если у вас установлен GIT, то вы можете клонировать репозиторий: https://github.com/Teplitsa/tst-yandex-feed.git
 или скачать его в виде ZIP архива: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
 
+== Screenshots ==
+
+1. Пример формата выдачи
+2. Пример страницы настроек плагина
+
+
 == Changelog ==
+
+= 1.7 =
+* New: Added support for new Yandex square logo format update
 
 = 1.6 =
 * Fix: Minor fixes in plugin dashboard area

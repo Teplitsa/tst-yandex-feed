@@ -15,15 +15,18 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <link><?php bloginfo_rss('url') ?></link>
 <description><?php bloginfo_rss("description") ?></description>
 <?php
-	$logo = get_option('layf_feed_logo', '');
+	$logo = get_option('layf_feed_logo', '');	
 	if(!empty($logo)):
 ?>
-<image>
-<url><?php echo esc_url($logo);?></url>
-<title><?php bloginfo_rss('name');?></title>
-<link><?php bloginfo_rss('url') ?></link>
-</image>
+<yandex:logo><?php echo esc_url($logo);?></yandex:logo>
 <?php endif;?>
+<?php
+	$logo_square = get_option('layf_feed_logo_square', '');
+	if(!empty($logo_square)):
+?>
+<yandex:logo  type="square"><?php echo esc_url($logo_square);?></yandex:logo>
+<?php endif;?>
+
 <?php while( have_posts()) : the_post(); ?>
 <item>
 <title><?php the_title_rss();?></title>

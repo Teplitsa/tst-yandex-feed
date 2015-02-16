@@ -73,6 +73,14 @@ class La_Yandex_Feed_Admin {
 		);
 		
 		add_settings_field(
+			'layf_feed_logo_square',
+			__('Square Logo URL for feed description', 'layf'),
+			array($this, 'settings_feed_logo_square_callback'),
+			'layf_settings',
+			'layf_base'
+		);
+		
+		add_settings_field(
 			'layf_filter_taxonomy',
 			__('Taxonomy to filter entries for feed', 'layf'),
 			array($this, 'settings_filter_taxonomy_callback'),
@@ -90,6 +98,7 @@ class La_Yandex_Feed_Admin {
  	
 		register_setting( 'layf_settings', 'layf_post_types' );
 		register_setting( 'layf_settings', 'layf_feed_logo' );
+		register_setting( 'layf_settings', 'layf_feed_logo_square' );
 		register_setting( 'layf_settings', 'layf_filter_taxonomy' );
 		register_setting( 'layf_settings', 'layf_filter_terms' );
 		
@@ -130,8 +139,17 @@ class La_Yandex_Feed_Admin {
 		
 		$value = get_option('layf_feed_logo', '');
 		?>
-		<label for="layf_feed_logo"><input name="layf_feed_logo" id="layf_feed_logo" type="text" class="code widefat" value="<?php echo $value;?>"> </label>
+		<label for="layf_feed_logo_square"><input name="layf_feed_logo" id="layf_feed_logo" type="text" class="code widefat" value="<?php echo $value;?>"> </label>
 		<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (100px size of max side)', 'layf');?></p>
+	<?php
+	}
+	
+	function settings_feed_logo_square_callback() {
+		
+		$value = get_option('layf_feed_logo_square', '');
+		?>
+		<label for="layf_feed_logo_square"><input name="layf_feed_logo_square" id="layf_feed_logo_square" type="text" class="code widefat" value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (180x180px size as min)', 'layf');?></p>
 	<?php
 	}
 	
