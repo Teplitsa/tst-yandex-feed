@@ -51,13 +51,22 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	if($category) :?>
 <category><?php echo $category;?></category>
 <?php endif; ?>
-<?php
+<?php //enclosures
 	$enclosure = La_Yandex_Feed_Core::item_enclosure();
 	if(!empty($enclosure)): foreach($enclosure as $i => $img):
 ?>
 <enclosure url="<?php echo esc_url($img['url']);?>" type="<?php echo esc_attr($img['mime']);?>"/>
 <?php endforeach; endif;?>
+<?php //media group
+	$media = La_Yandex_Feed_Core::item_media();	
+	if(!empty($media)): foreach($media as $media_link) :
+?>
+<media:group>
+<media:content url=""/>
+<media player url="<?php echo esc_url($media_link);?>"/>
+</media:group>
 <?php
+	endforeach; endif;
 	$related = La_Yandex_Feed_Core::item_related();
 	if(!empty($related)):
 ?>

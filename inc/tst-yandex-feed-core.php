@@ -84,7 +84,14 @@ class La_Yandex_Feed_Core {
         global $wp;
         
         $wp->add_query_var('yandex_feed');
+		//deafult
 		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+		
+		//custom
+		$slug = trailingslashit(get_option('layf_custom_url', 'yandex/news'));
+		if($slug != 'yandex/news/'){
+			add_rewrite_rule("^$slug?", 'index.php?yandex_feed=news', 'top');
+		}
 		
 		if( !get_option('layf_permalinks_flushed') ) {
 			
@@ -201,11 +208,16 @@ Allow: /yandex/news/
 	}
 	
 	
+	
+	
 	/** template helpers */
 	static function get_the_content_feed() {
 		
 		$post = get_post();		
 		$content = str_replace(']]>', ']]&gt;', $post->post_content);
+		
+		add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
+		add_filter( 'layf_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
 		
 		add_filter( 'layf_content_feed', 'wptexturize'        );
 		add_filter( 'layf_content_feed', 'convert_smilies'    );
@@ -215,11 +227,12 @@ Allow: /yandex/news/
 		add_filter( 'layf_content_feed', 'do_shortcode'       );		
         		
 		
-		return apply_filters('layf_content_feed', $content);	
-		
+		return apply_filters('layf_content_feed', $content);		
 	}
 	
-	static function item_enclosure(){
+	
+	/* @to-do: add support for support video files */
+	static function item_enclosure(){ 
 		global $post;
 		
 		$enclosure = $matches = $res = array();
@@ -268,6 +281,28 @@ Allow: /yandex/news/
 		}
 		
 		return $mime;
+	}
+	
+	
+	/* videos */
+	static function item_media(){
+		global $post;
+		
+		$matches = $res = array();
+		//include shorcodes and oembeds
+		$out = do_shortcode($post->post_content);
+		$out = $GLOBALS['wp_embed']->autoembed($out);
+			
+		//youtube
+		$youtube_regexp = "/(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([\w-]{10,12})/";
+				
+		preg_match_all($youtube_regexp, $out, $matches);		
+		if(isset($matches[0]) && !empty($matches[0]))
+			$res = array_merge($res, $matches[0]); //append links
+		
+		//@to_do: add another video providers
+		
+		return $res;
 	}
 	
 	
@@ -564,4 +599,9 @@ $table = array(
 return $table;
 }
 
+
+function layf_filter_image_caption($out, $attr, $content) {
+		
+	return $content;			
+}
 ?>

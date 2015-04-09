@@ -57,6 +57,14 @@ class La_Yandex_Feed_Admin {
 		);
 		
 		add_settings_field(
+			'layf_custom_url',
+			__('URL for feed', 'layf'),
+			array($this, 'settngs_custom_url_callback'),
+			'layf_settings',
+			'layf_base'
+		);
+		
+		add_settings_field(
 			'layf_post_types',
 			__('Post types for feed', 'layf'),
 			array($this, 'settngs_post_types_callback'),
@@ -101,10 +109,10 @@ class La_Yandex_Feed_Admin {
 		register_setting( 'layf_settings', 'layf_feed_logo_square' );
 		register_setting( 'layf_settings', 'layf_filter_taxonomy' );
 		register_setting( 'layf_settings', 'layf_filter_terms' );
-		
+		register_setting( 'layf_settings', 'layf_custom_url' );
 
 	}
-	
+		
 	function layf_settings_screen(){
 		
 	?>
@@ -124,6 +132,18 @@ class La_Yandex_Feed_Admin {
 	
 	function layf_base_section_screen($args) {
 		//may be some description
+	}
+	
+	function settngs_custom_url_callback() {
+		
+		$value = trailingslashit(get_option('layf_custom_url', 'yandex/news'));
+		update_option('layf_permalinks_flushed', 0); //is it ok?
+		
+	?>
+		<label for="layf_custom_url">
+			<?php echo home_url('/');?><input name="layf_custom_url" id="layf_custom_url" type="text" class="regular-text code" value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Customoze the URL of the feed if needed', 'layf');?></p>
+	<?php	
 	}
  
 	function settngs_post_types_callback() {
