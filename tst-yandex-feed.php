@@ -2,7 +2,7 @@
 /*
 Plugin Name: Yandex.News Feed by Teplitsa
 Description: The plugin creates feed for Yandex.News service
-Version: 1.7
+Version: 1.8
 Author: Teplitsa
 Author URI: http://te-st.ru/
 Text Domain: layf

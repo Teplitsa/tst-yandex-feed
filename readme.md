@@ -30,7 +30,7 @@ _For English description scroll down, please._
 После установки настройки плагина доступны через меню _Настройки -> Яндекс.Новости_. Пример страницы настроек
 ![](http://itv.te-st.ru/wp-content/uploads/screen-2.png)
 
-Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_. Пример выдачи
+Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_. В настройках может быть указан собственный адрес, которые работает при активных "красивых пермалинках". Пример выдачи
 ![](http://itv.te-st.ru/wp-content/uploads/screen-1.png)
 
 Плагин имеет минимум необходимых настроек. Подробнее о его использовании можно узнать на сайте разработчиков:
@@ -79,7 +79,7 @@ or download it as a ZIP archive: https://github.com/Teplitsa/tst-yandex-feed/arc
 
 After installing the plugin settings are available under menu _Settings -> Yandex.Novosti_.
 
-Feed is accessible at the link _domain.ru/yandex/news/_.
+Feed is accessible at the link _domain.ru/yandex/news/_. A custom URL could be specify through Settings page in case of active "pretty permalinks".
 
 The plugin has the minimum of settings. Read more about it's usage at the developers' website:
 

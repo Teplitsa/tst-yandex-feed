@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo
 Requires at least: 3.9
-Tested up to: 4.1
+Tested up to: 4.1.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -31,7 +31,7 @@ _For English description scroll down, please._
 
 После установки настройки плагина доступны через меню _Настройки -> Яндекс.Новости_.
 
-Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_.
+Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_. В настройках может быть указан собственный адрес, которые работает при активных "красивых пермалинках".
 
 Плагин имеет минимум необходимых настроек. Подробнее о его использовании можно узнать на сайте разработчиков:
 
@@ -71,7 +71,7 @@ The plugin is developed and maintained by [Teplitsa of social technologies](http
 
 After installing the plugin settings are available under menu _Settings -> Yandex.Novosti_.
 
-Feed is accessible at the link _domain.ru/yandex/news/_.
+Feed is accessible at the link _domain.ru/yandex/news/_. A custom URL could be specify through Settings page in case of active "pretty permalinks".
 
 The plugin has the minimum of settings. Read more about it's usage at the developers' website:
 
@@ -103,6 +103,11 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Changelog ==
+
+= 1.8 =
+* New: Support for YouTube video embedded in the post content
+* News: Custom URL for the feed (with pretty permalinks active)
+* Fix: Image caption text stripped out from the translation context
 
 = 1.7 =
 * New: Added support for new Yandex square logo format update

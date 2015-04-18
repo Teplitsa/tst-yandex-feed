@@ -295,14 +295,19 @@ Allow: /yandex/news/
 			
 		//youtube
 		$youtube_regexp = "/(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([\w-]{10,12})/";
-				
 		preg_match_all($youtube_regexp, $out, $matches);		
 		if(isset($matches[0]) && !empty($matches[0]))
 			$res = array_merge($res, $matches[0]); //append links
 		
 		//@to_do: add another video providers
 		
-		return $res;
+		//modify $res to be able add thumbnails
+		$return = array();
+		if(!empty($res)){ foreach($res as $i => $url) {
+			$return[] = array('url' => $url, 'thumb' => '');
+		}}
+		
+		return apply_filters('layf_video_embeds', $return, $post->ID);
 	}
 	
 	
