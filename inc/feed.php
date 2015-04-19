@@ -62,7 +62,6 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	if(!empty($media)): foreach($media as $media_obj) :	
 ?>
 <media:group>
-<media:content url=""/>
 <media:player url="<?php echo esc_url($media_obj['url']);?>" />
 <?php if(!empty($media_obj['thumb'])) { ?>
 <media:thumbnail url="<?php echo esc_url($media_obj['thumb']);?>"/>
