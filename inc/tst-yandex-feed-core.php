@@ -88,8 +88,9 @@ class La_Yandex_Feed_Core {
 		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
 		
 		//custom
-		$slug = trailingslashit(get_option('layf_custom_url', 'yandex/news'));
-		if($slug != 'yandex/news/'){
+		$slug = trailingslashit(get_option('layf_custom_url', 'yandex/news')); //var_dump($slug);
+		
+		if(!empty($slug) && $slug != '/' && $slug != 'yandex/news/'){
 			add_rewrite_rule("^$slug?", 'index.php?yandex_feed=news', 'top');
 		}
 		

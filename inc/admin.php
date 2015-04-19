@@ -137,6 +137,7 @@ class La_Yandex_Feed_Admin {
 	function settngs_custom_url_callback() {
 		
 		$value = trailingslashit(get_option('layf_custom_url', 'yandex/news'));
+			
 		update_option('layf_permalinks_flushed', 0); //is it ok?
 		
 	?>

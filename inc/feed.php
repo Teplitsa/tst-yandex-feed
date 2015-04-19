@@ -63,7 +63,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
 <media:group>
 <media:content url=""/>
-<media player url="<?php echo esc_url($media_obj['url']);?>"/>
+<media:player url="<?php echo esc_url($media_obj['url']);?>" />
 <?php if(!empty($media_obj['thumb'])) { ?>
 <media:thumbnail url="<?php echo esc_url($media_obj['thumb']);?>"/>
 <?php }?>
