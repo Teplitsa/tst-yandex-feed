@@ -104,6 +104,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 == Changelog ==
 
+= 1.8.1 =
+* Fix: Incorrect custom URL behaviour on existing installs
+
 = 1.8 =
 * New: Support for YouTube video embedded in the post content
 * News: Custom URL for the feed (with pretty permalinks active)
