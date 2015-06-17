@@ -22,6 +22,13 @@ class La_Yandex_Feed_Admin {
 		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
 		add_action('save_post', array($this, 'save_custom_data'));
 		
+		/* style */
+		add_action('admin_enqueue_scripts', array($this, 'enqueue_cssjs'));
+		
+		/* links in description */
+		add_filter('plugin_row_meta', array($this, 'plugin_links'), 10, 2);
+		add_filter('plugin_action_links', array($this, 'action_links'), 10, 2);
+
     }
 		
 		
@@ -32,7 +39,29 @@ class La_Yandex_Feed_Admin {
 			self :: $instance = new self;
 					
 		return self :: $instance;
-    }       
+    }
+	
+	
+	/* plugin links */
+	public function action_links($links, $file) {
+		
+		//var_dump($file); die();
+		
+		if (false !== strpos($file, 'tst-yandex-feed.php')) {
+			$txt = __('Settings', 'layf');		
+			$links[] = "<a href='".admin_url('options-general.php?page=layf_settings')."'>{$txt}</a>";
+		}
+		
+		return $links;
+	}
+	
+	public function plugin_links ($links, $file) {
+		
+		if (false !== strpos($file, 'tst-yandex-feed.php')) {
+			$links[] = '<a href="'.layf_github_link().'" target="_blank">' . __('GitHub', 'layf') . '</a>';			
+		}
+		return $links;
+	}
 	
 	
 	/** settings */
@@ -119,13 +148,18 @@ class La_Yandex_Feed_Admin {
 		<div class="wrap">
 			<h2><?php _e('Yandex.News Feed Settings', 'layf');?></h2>
 			
-			<form method="POST" action="options.php">
-			<?php
-				settings_fields( 'layf_settings' );	
-				do_settings_sections( 'layf_settings' ); 	
-				submit_button();
-			?>
-			</form>			
+			<div class="layf-columns">
+				<div class="layf-form">
+					<form method="POST" action="options.php">
+					<?php
+						settings_fields( 'layf_settings' );	
+						do_settings_sections( 'layf_settings' ); 	
+						submit_button();
+					?>
+					</form>
+				</div>
+				<div class="layf-sidebar"><?php layf_itv_info_widget();?></div>
+			</div>
 		</div>
 	<?php	
 	}
@@ -199,6 +233,16 @@ class La_Yandex_Feed_Admin {
 		
 	}
 	
+	/* styles */
+	function enqueue_cssjs() {
+		
+		$screen = get_current_screen(); 
+		if('settings_page_layf_settings' != $screen->id)
+			return;
+      
+        wp_enqueue_style('layf-admin', LAYF_PLUGIN_BASE_URL.'css/admin.css', array(), LAYF_VERSION);
+	}
+	
 	
 	/* create metabox */
 	function create_metaboxes() {
@@ -264,3 +308,34 @@ class La_Yandex_Feed_Admin {
 	
 	
 } //class
+
+
+/** ITV info-widget **/
+function layf_itv_info_widget(){
+	//only in Russian as for now
+    $locale = get_locale();
+    
+    if($locale != 'ru_RU')
+        return;
+    
+    
+    $src = LAYF_PLUGIN_BASE_URL.'img/logo-itv.png';
+    $domain = parse_url(home_url()); 
+    $itv_url = "https://itv.te-st.ru/?ynfeed=".$domain['host'];
+?>
+	<div id="itv-card">
+        <div class="itv-logo"><a href="<?php echo esc_url($itv_url);?>" target="_blank"><img src="<?php echo esc_url($src);?>"></a></div>
+        
+        <p>Вам нужна помощь в настройке плагина на вашем сайте? Вы являетесь социальным или некоммерческим проектом? Опубликуйте задачу на платформе <a href="<?php echo esc_url($itv_url);?>" target="_blank">it-волонтер</a></p>
+                
+        <p><a href="<?php echo esc_url($itv_url);?>" target="_blank" class="button">Опубликовать задачу</a></p>
+    </div>
+	
+	<p>Есть вопросы к разработчикм плагина? Хотите предложить новую функцию? Напишите свой вопрос или предложение на <a href="<?php echo layf_github_link();?>" target="_blank">GitHub</a></p>
+<?php
+}
+
+function layf_github_link(){
+	
+	return 'https://github.com/Teplitsa/tst-yandex-feed';
+}

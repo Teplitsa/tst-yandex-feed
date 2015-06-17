@@ -1,8 +1,8 @@
 === Yandex.News Feed by Teplitsa ===
 Contributors: foralien, denis.cherniatev, ahaenor
-Tags: yandex,news,xml,rss,seo
+Tags: yandex,news,xml,rss,seo,Yandex.News
 Requires at least: 3.9
-Tested up to: 4.1.1
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -103,6 +103,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Changelog ==
+
+= 1.8.2 =
+* Fix: Minor fixes and updated for admin settings
 
 = 1.8.1 =
 * Fix: Incorrect custom URL behaviour on existing installs

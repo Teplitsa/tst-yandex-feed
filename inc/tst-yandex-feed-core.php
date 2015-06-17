@@ -27,8 +27,7 @@ class La_Yandex_Feed_Core {
 		/* admin */
 		$this->admin_setup();
 		
-		/* links in description */
-		add_filter('plugin_row_meta', array($this, 'plugin_links'), 10, 2);
+		
     }
 		
 		
@@ -52,13 +51,6 @@ class La_Yandex_Feed_Core {
 	}
 	
 	
-	public function plugin_links ($links, $file) {
-		
-		if (false !== strpos($file, 'tst-yandex-feed.php')) {
-			$links[] = '<a href="https://github.com/Teplitsa/tst-yandex-feed" target="_blank">' . __('GitHub', 'layf') . '</a>';			
-		}
-		return $links;
-	}
 	
 	public function admin_setup(){
 		
