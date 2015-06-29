@@ -244,6 +244,19 @@ Allow: /yandex/news/
 			$enclosure = $matches[4];
 		}
 		
+		$post_galleries = get_post_galleries( $post, false );
+		if ( count( $post_galleries ) ) {
+			foreach ( $post_galleries as $post_gallery ) {
+				$ids = explode( ',', $post_gallery['ids'] );
+				foreach ( $ids as $attachment_id ) {
+					$image_info   = wp_get_attachment_image_src( $attachment_id, 'full' );
+					$enclosure[] = $image_info[0];
+				}
+			}
+		}
+
+		$enclosure = array_unique($enclosure);
+		
 		if(empty($enclosure))
 			return $enclosure;
 				
