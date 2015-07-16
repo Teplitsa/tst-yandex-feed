@@ -132,7 +132,23 @@ class La_Yandex_Feed_Admin {
 			'layf_settings',
 			'layf_base'
 		);
-		
+
+		add_settings_field(
+			'layf_exclude_taxonomy',
+			__('Taxonomy to exclude from feed', 'layf'),
+			array($this, 'settings_exclude_taxonomy_callback'),
+			'layf_settings',
+			'layf_base'
+		);
+
+		add_settings_field(
+			'layf_exclude_terms',
+			__('Terms exclude from feed', 'layf'),
+			array($this, 'settings_exclude_terms_callback'),
+			'layf_settings',
+			'layf_base'
+		);
+
 		add_settings_field(
             'layf_include_post_thumbnail',
             __('Include post thumbnails into feed', 'layf'),
@@ -140,12 +156,14 @@ class La_Yandex_Feed_Admin {
             'layf_settings',
             'layf_base'
 		);
-		
+
 		register_setting( 'layf_settings', 'layf_post_types' );
 		register_setting( 'layf_settings', 'layf_feed_logo' );
 		register_setting( 'layf_settings', 'layf_feed_logo_square' );
 		register_setting( 'layf_settings', 'layf_filter_taxonomy' );
 		register_setting( 'layf_settings', 'layf_filter_terms' );
+		register_setting( 'layf_settings', 'layf_exclude_taxonomy' );
+		register_setting( 'layf_settings', 'layf_exclude_terms' );
 		register_setting( 'layf_settings', 'layf_custom_url' );
 		register_setting( 'layf_settings', 'layf_include_post_thumbnail' );
 
@@ -241,12 +259,37 @@ class La_Yandex_Feed_Admin {
 	<?php
 		
 	}
-	
+
+	function settings_exclude_taxonomy_callback() {
+
+		$value = get_option('layf_exclude_taxonomy', 'category');
+		$taxes = get_taxonomies(array('public' => true), 'objects');
+		if(!empty($taxes)){
+		?>
+			<select name="layf_exclude_taxonomy">
+			<?php foreach($taxes as $key => $tax_obj) { ?>
+				<option value="<?php echo esc_attr($key);?>" <?php selected($key, $value);?>><?php echo esc_attr($tax_obj->labels->name);?></option>
+			<?php } ?>
+			</select>
+		<?php
+		}
+	}
+
+	function settings_exclude_terms_callback() {
+
+		$value = esc_attr(get_option('layf_exclude_terms', ''));
+	?>
+		<label for="layf_exclude_terms"><input name="layf_exclude_terms" id="layf_exclude_terms" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Comma separated list of term IDs', 'layf');?></p>
+	<?php
+
+	}
+
 	function settings_exclude_post_thumbnail_callback() {
 	    $value = get_option('layf_include_post_thumbnail', '');
         ?>
 			<input type="checkbox" name="layf_include_post_thumbnail" value="1" <?php if($value):?>checked="checked"<?php endif;?>/>
-		<?php	
+		<?php
 	}
 	
 	/* styles */

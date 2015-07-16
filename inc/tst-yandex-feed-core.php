@@ -135,10 +135,23 @@ class La_Yandex_Feed_Core {
 				$query->query_vars['tax_query'][] = array(
 					'taxonomy' => $tax,
 					'field' => 'id',
-					'terms' => $terms
+					'terms' => $terms,
 				);
 			}
-			
+
+			//exclude taxonomy terms
+			$terms = get_option('layf_exclude_terms', '');
+			if(!empty($terms)){
+				$tax = get_option('layf_exclude_taxonomy', 'category');
+				$terms = array_map('intval', explode(',', $terms));
+				$query->query_vars['tax_query'][] = array(
+					'taxonomy' => $tax,
+					'field' => 'id',
+					'terms' => $terms,
+					'operator' => 'NOT IN'
+				);
+			}
+
 			//filtering by exclusion
 			$query->query_vars['meta_query'] = array(
 				array(
