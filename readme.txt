@@ -104,6 +104,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 == Changelog ==
 
+= 1.8.3 =
+* Fix: Minor fixes and updates for feed content
+
 = 1.8.2 =
 * Fix: Minor fixes and updated for admin settings
 
