@@ -185,7 +185,7 @@ Allow: /yandex/news/
 	}
 		
 	
-	/** formatting */		
+	/** formatting */
 	function full_text_formatting($text){
 	
 		$pattern = '\[(\[?)(embed|wp_caption|caption|gallery|playlist|audio|video)(?![\w-])([^\]\/]*(?:\/(?!\])[^\]\/]*)*?)(?:(\/)\]|\](?:([^\[]*+(?:\[(?!\/\2\])[^\[]*+)*+)\[\/\2\])?)(\]?)';
@@ -206,7 +206,7 @@ Allow: /yandex/news/
 		
 		return self::_valid_characters($text);
 	}
-
+	
 	static function _valid_characters($text) {
 		
 		$text = htmlentities ($text, ENT_QUOTES, 'UTF-8', false);
@@ -252,13 +252,25 @@ Allow: /yandex/news/
 			$enclosure[0] = wp_get_attachment_url($thumb_id);
 		}
 		
-		$out = do_shortcode($post->post_content); 
-		//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
-		preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
-			
-		if(isset($matches[4]) && !empty($matches)){
-			$enclosure = array_merge($enclosure, $matches[4]);
+		$out = do_shortcode($post->post_content);
+		if(preg_match('/youtube\.com/', $post->post_content) || preg_match('/youtu\.be/', $post->post_content)) {
+			preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $post->post_content, $urls_match);
+			if($urls_match && count($urls_match) && $urls_match[0]) {
+				foreach($urls_match[0] as $url) {
+					$thumbnail_url = self::get_youtube_thumbnail_url($url);
+					if($thumbnail_url) {
+						$enclosure[] = $thumbnail_url;
+					}
+				}
+			}
 		}
+		else {
+			//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
+			preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
+			if(isset($matches[4]) && !empty($matches)){
+				$enclosure = array_merge($enclosure, $matches[4]);
+			}
+		} 
 		
 		if(empty($enclosure))
 			return $enclosure;
@@ -313,7 +325,8 @@ Allow: /yandex/news/
 		//modify $res to be able add thumbnails
 		$return = array();
 		if(!empty($res)){ foreach($res as $i => $url) {
-			$return[] = array('url' => $url, 'thumb' => '');
+			$thumbnail_url = self::get_youtube_thumbnail_url($url);
+			$return[] = array('url' => $url, 'thumb' => $thumbnail_url);
 		}}
 		
 		return apply_filters('layf_video_embeds', $return, $post->ID);
@@ -387,6 +400,18 @@ Allow: /yandex/news/
 
 		$category = apply_filters('layf_category', $category, get_the_ID());
 		return $category;
+	}
+	
+	static function get_youtube_thumbnail_url($url) {
+		$ret = '';
+		if(preg_match('/youtube\.com/', $url) || preg_match('/youtu\.be/', $url)) {
+			preg_match("#(?<=vi\/)[^&\n]+|(?<=v\/)[^&\n]+|(?<=user\/)[^&\n]+|(?<=embed\/)[^&\n]+|(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $youtube_id_matches);
+			if($youtube_id_matches && count($youtube_id_matches)) {
+				$youtube_video_id = $youtube_id_matches[0];
+				$ret = 'https://img.youtube.com/vi/' . $youtube_video_id . '/1.jpg';
+			}
+		}
+		return $ret;
 	}
 	
 } //class
