@@ -408,7 +408,7 @@ Allow: /yandex/news/
 			preg_match("#(?<=vi\/)[^&\n]+|(?<=v\/)[^&\n]+|(?<=user\/)[^&\n]+|(?<=embed\/)[^&\n]+|(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $youtube_id_matches);
 			if($youtube_id_matches && count($youtube_id_matches)) {
 				$youtube_video_id = $youtube_id_matches[0];
-				$ret = 'https://img.youtube.com/vi/' . $youtube_video_id . '/1.jpg';
+				$ret = 'https://img.youtube.com/vi/' . $youtube_video_id . '/0.jpg';
 			}
 		}
 		return $ret;
