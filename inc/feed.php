@@ -54,16 +54,14 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	if(!empty($media)):
 	//media group 
 ?>
-<media:group>
 <?php foreach($media as $media_obj):?>
-<media:content url="<?php echo esc_url($media_obj['url']);?>">
+<media:group>
 <media:player url="<?php echo esc_url($media_obj['url']);?>" />
 <?php if(!empty($media_obj['thumb'])) { ?>
 <media:thumbnail url="<?php echo esc_url($media_obj['thumb']);?>"/>
 <?php }?>
-</media:content>
-<?php endforeach; ?>
 </media:group>
+<?php endforeach; ?>
 <?php endif;?>
 <?php
 	$related = La_Yandex_Feed_Core::item_related();
