@@ -104,6 +104,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 == Changelog ==
 
+= 1.8.4.2 =
+* Fix: media:group structure optimized
+
 = 1.8.4.1 =
 * Fix: Size of youtube video thumbnails changed
 
