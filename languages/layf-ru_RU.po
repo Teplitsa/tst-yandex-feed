@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Yandex.News Feed by Teplitsa\n"
-"POT-Creation-Date: 2015-06-17 16:56+0300\n"
-"PO-Revision-Date: 2015-06-17 17:00+0300\n"
+"POT-Creation-Date: 2015-12-08 11:54+0200\n"
+"PO-Revision-Date: 2015-12-08 11:55+0200\n"
 "Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -19,83 +19,87 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: inc/admin.php:50
+#: inc/admin.php:51
 msgid "Settings"
 msgstr "Настройки"
 
-#: inc/admin.php:62
+#: inc/admin.php:61
 msgid "GitHub"
 msgstr "GitHub"
 
-#: inc/admin.php:72 inc/admin.php:150
+#: inc/admin.php:71 inc/admin.php:158
 msgid "Yandex.News Feed Settings"
 msgstr "Настройки трансляции Яндекс.Новости"
 
-#: inc/admin.php:73
+#: inc/admin.php:72
 msgid "Yandex.News"
 msgstr "Яндекс.Новости"
 
-#: inc/admin.php:84
+#: inc/admin.php:83
 msgid "General"
 msgstr "Общие"
 
-#: inc/admin.php:91
+#: inc/admin.php:90
 msgid "URL for feed"
 msgstr "URL трансляции"
 
-#: inc/admin.php:99
+#: inc/admin.php:98
 msgid "Post types for feed"
 msgstr "Типы записей для трансляции"
 
-#: inc/admin.php:107
+#: inc/admin.php:106
 msgid "Logo URL for feed description"
 msgstr "Ссылка на логотип для описания сайта на сервисе Яндекс.Новости"
 
-#: inc/admin.php:115
+#: inc/admin.php:114
 msgid "Square Logo URL for feed description"
 msgstr "Ссылка на квадратный логотип"
 
-#: inc/admin.php:123
+#: inc/admin.php:122
 msgid "Taxonomy to filter entries for feed"
 msgstr "Таксономия для фильтрации трансляции"
 
-#: inc/admin.php:131
+#: inc/admin.php:130
 msgid "Terms to filter entries for feed"
 msgstr "Термины для фильтрации трансляции"
 
-#: inc/admin.php:181
+#: inc/admin.php:138
+msgid "Include post thumbnails into feed"
+msgstr "Включить миниатюру в трансляцию Яндекс.Новости"
+
+#: inc/admin.php:189
 msgid "Customoze the URL of the feed if needed"
 msgstr "При необходимости укажите собственный URL-адрес трансляции"
 
-#: inc/admin.php:190
+#: inc/admin.php:198
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/admin.php:199
+#: inc/admin.php:207
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/admin.php:208
+#: inc/admin.php:216
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (минимальный размер 180х180рх, "
 "строго квадратное изображение)"
 
-#: inc/admin.php:232
+#: inc/admin.php:240
 msgid "Comma separated list of term IDs"
 msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/admin.php:255
+#: inc/admin.php:270
 msgid "Yandex.News settings"
 msgstr "Настройки Яндекс.Новости"
 
-#: inc/admin.php:275
+#: inc/admin.php:290
 msgid "Related links"
 msgstr "Связанные ссылки"
 
-#: inc/admin.php:277
+#: inc/admin.php:292
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
 "string."
@@ -103,11 +107,11 @@ msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
 "описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: inc/admin.php:280
+#: inc/admin.php:295
 msgid "Exclude entry from Yandex.News feed"
 msgstr "Исключить запись из трансляции Яндекс.Новости"
 
-#: inc/admin.php:281
+#: inc/admin.php:296
 msgid "Exclude despite the global settings"
 msgstr "Исключить, не смотря на глобальные настройки"
 
@@ -118,3 +122,6 @@ msgstr "Плагин создает трансляцию материалов с
 #: tst-yandex-feed.php:69
 msgid "Teplitsa"
 msgstr "Теплица социальных технологий"
+
+#~ msgid "Exclude post thumbnails from feed"
+#~ msgstr "Исключить миниатюры из трансляции Яндекс.Новости"

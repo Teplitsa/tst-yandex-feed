@@ -247,9 +247,12 @@ Allow: /yandex/news/
 		global $post;
 		
 		$enclosure = $matches = $res = array();
-		$thumb_id = get_post_thumbnail_id($post->ID);
-		if(!empty($thumb_id)){
-			$enclosure[0] = wp_get_attachment_url($thumb_id);
+		
+		if(get_option('layf_include_post_thumbnail')) {
+		    $thumb_id = get_post_thumbnail_id($post->ID);
+		    if(!empty($thumb_id)){
+		        $enclosure[0] = wp_get_attachment_url($thumb_id);
+		    }
 		}
 		
 		$out = do_shortcode($post->post_content);
@@ -266,7 +269,7 @@ Allow: /yandex/news/
 		}
 		else {
 			//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
-			preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
+		    preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
 			if(isset($matches[4]) && !empty($matches)){
 				$enclosure = array_merge($enclosure, $matches[4]);
 			}
@@ -275,6 +278,12 @@ Allow: /yandex/news/
 		if(empty($enclosure))
 			return $enclosure;
 				
+		$enclosure = array_unique($enclosure);
+		foreach($enclosure as $i => $img){
+		    $enclosure[$i] = preg_replace('/-\d+x\d+(\.\w+)$/', '$1', $img);
+		}
+		$enclosure = array_unique($enclosure);
+		
 		foreach($enclosure as $i => $img){
 			
 			$mime = self::_get_mime($img);
@@ -405,7 +414,7 @@ Allow: /yandex/news/
 	static function get_youtube_thumbnail_url($url) {
 		$ret = '';
 		if(preg_match('/youtube\.com/', $url) || preg_match('/youtu\.be/', $url)) {
-			preg_match("#(?<=vi\/)[^&\n]+|(?<=v\/)[^&\n]+|(?<=user\/)[^&\n]+|(?<=embed\/)[^&\n]+|(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $youtube_id_matches);
+			preg_match("#(?<=vi\/)[^&?/\n]+|(?<=v\/)[^&?/\n]+|(?<=user\/)[^&?/\n]+|(?<=embed\/)[^&?/\n]+|(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&?/\n]+(?=\?)|(?<=v=)[^&?/\n]+|(?<=youtu.be/)[^&?/\n]+#", $url, $youtube_id_matches);
 			if($youtube_id_matches && count($youtube_id_matches)) {
 				$youtube_video_id = $youtube_id_matches[0];
 				$ret = 'https://img.youtube.com/vi/' . $youtube_video_id . '/0.jpg';
