@@ -256,6 +256,13 @@ Allow: /yandex/news/
 		}
 		
 		$out = do_shortcode($post->post_content);
+		
+		//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
+		preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
+		if(isset($matches[4]) && !empty($matches)){
+		    $enclosure = array_merge($enclosure, $matches[4]);
+		}
+		
 		if(preg_match('/youtube\.com/', $post->post_content) || preg_match('/youtu\.be/', $post->post_content)) {
 			preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $post->post_content, $urls_match);
 			if($urls_match && count($urls_match) && $urls_match[0]) {
@@ -267,13 +274,6 @@ Allow: /yandex/news/
 				}
 			}
 		}
-		else {
-			//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
-		    preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
-			if(isset($matches[4]) && !empty($matches)){
-				$enclosure = array_merge($enclosure, $matches[4]);
-			}
-		} 
 		
 		if(empty($enclosure))
 			return $enclosure;
