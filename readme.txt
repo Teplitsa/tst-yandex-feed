@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo,Yandex.News
 Requires at least: 3.9
-Tested up to: 4.3.1
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -103,6 +103,12 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Changelog ==
+
+= 1.8.5 =
+* New: thumbnails in feed replaced to original images
+* New: Option to include or exclude featured image from feed added
+* Fix: youtube links parsing improved
+* Fix: duplicated enclosures removed
 
 = 1.8.4.2 =
 * Fix: media:group structure optimized
