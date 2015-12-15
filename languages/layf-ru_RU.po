@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Yandex.News Feed by Teplitsa\n"
-"POT-Creation-Date: 2015-12-08 11:54+0200\n"
-"PO-Revision-Date: 2015-12-08 11:55+0200\n"
+"POT-Creation-Date: 2015-12-16 00:34+0700\n"
+"PO-Revision-Date: 2015-12-16 00:41+0700\n"
 "Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.7.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -27,7 +27,7 @@ msgstr "Настройки"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: inc/admin.php:71 inc/admin.php:158
+#: inc/admin.php:71 inc/admin.php:176
 msgid "Yandex.News Feed Settings"
 msgstr "Настройки трансляции Яндекс.Новости"
 
@@ -64,42 +64,50 @@ msgid "Terms to filter entries for feed"
 msgstr "Термины для фильтрации трансляции"
 
 #: inc/admin.php:138
+msgid "Taxonomy to exclude from feed"
+msgstr "Таксономия, которую надо исключить из трансляции"
+
+#: inc/admin.php:146
+msgid "Terms exclude from feed"
+msgstr "Термины для исключения из трансляции"
+
+#: inc/admin.php:154
 msgid "Include post thumbnails into feed"
 msgstr "Включить миниатюру в трансляцию Яндекс.Новости"
 
-#: inc/admin.php:189
+#: inc/admin.php:207
 msgid "Customoze the URL of the feed if needed"
 msgstr "При необходимости укажите собственный URL-адрес трансляции"
 
-#: inc/admin.php:198
+#: inc/admin.php:216
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/admin.php:207
+#: inc/admin.php:225
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/admin.php:216
+#: inc/admin.php:234
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (минимальный размер 180х180рх, "
 "строго квадратное изображение)"
 
-#: inc/admin.php:240
+#: inc/admin.php:258 inc/admin.php:283
 msgid "Comma separated list of term IDs"
 msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/admin.php:270
+#: inc/admin.php:313
 msgid "Yandex.News settings"
 msgstr "Настройки Яндекс.Новости"
 
-#: inc/admin.php:290
+#: inc/admin.php:333
 msgid "Related links"
 msgstr "Связанные ссылки"
 
-#: inc/admin.php:292
+#: inc/admin.php:335
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
 "string."
@@ -107,11 +115,11 @@ msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
 "описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: inc/admin.php:295
+#: inc/admin.php:338
 msgid "Exclude entry from Yandex.News feed"
 msgstr "Исключить запись из трансляции Яндекс.Новости"
 
-#: inc/admin.php:296
+#: inc/admin.php:339
 msgid "Exclude despite the global settings"
 msgstr "Исключить, не смотря на глобальные настройки"
 
