@@ -187,7 +187,7 @@ class La_Yandex_Feed_Admin {
     id="layf_custom_url" type="text" class="regular-text code"
     value="<?php echo $value;?>">
 </label>
-<p class="description"><?php _e('Customoze the URL of the feed if needed', 'layf');?></p>
+<p class="description"><?php echo sprintf(__('Customoze the URL of the feed if needed', 'layf'), '<a href="'.home_url('/index.php?yandex_feed=news').'">'.home_url('/index.php?yandex_feed=news').'</a>');?></p>
 <?php	
 	}
  
