@@ -30,8 +30,11 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <item>
 <title><?php the_title_rss();?></title>
 <link><?php the_permalink_rss();?></link>
+
+<?php if(!get_option('layf_remove_pdalink')): ?>
 <pdalink><?php the_permalink_rss();?></pdalink>
-<description><?php the_excerpt_rss();?></description>
+<?php endif ?>
+<description><?php La_Yandex_Feed_Core::custom_the_excerpt_rss();?></description>
 <?php
 	$layf_author = apply_filters('layf_author', get_the_author(), get_the_ID()); 
 	if($layf_author):
