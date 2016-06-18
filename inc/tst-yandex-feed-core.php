@@ -76,6 +76,9 @@ class La_Yandex_Feed_Core {
 	
 	public function get_supported_post_types() {
 		$pt = get_option('layf_post_types', 'post');
+		if(!trim($pt)) {
+			$pt = 'post';
+		}
 		$pt = explode(',', $pt);
 		$pt = array_map('trim', $pt);
 		
