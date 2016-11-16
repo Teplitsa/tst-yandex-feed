@@ -48,7 +48,7 @@ class La_Yandex_Feed_Admin {
 		//var_dump($file); die();
 		
 		if (false !== strpos($file, 'tst-yandex-feed.php')) {
-			$txt = __('Settings', 'layf');		
+			$txt = __('Settings', 'yandexnews-feed-by-teplitsa');		
 			$links[] = "<a href='".admin_url('options-general.php?page=layf_settings')."'>{$txt}</a>";
 		}
 		
@@ -58,7 +58,7 @@ class La_Yandex_Feed_Admin {
 	public function plugin_links ($links, $file) {
 		
 		if (false !== strpos($file, 'tst-yandex-feed.php')) {
-			$links[] = '<a href="'.layf_github_link().'" target="_blank">' . __('GitHub', 'layf') . '</a>';			
+			$links[] = '<a href="'.layf_github_link().'" target="_blank">' . __('GitHub', 'yandexnews-feed-by-teplitsa') . '</a>';			
 		}
 		return $links;
 	}
@@ -68,52 +68,52 @@ class La_Yandex_Feed_Admin {
 	function admin_menu() {
 		
 		add_options_page(
-			__('Yandex.News Feed Settings', 'layf'),
-			__('Yandex.News', 'layf'),
+			__('Yandex.News Feed Settings', 'yandexnews-feed-by-teplitsa'),
+			__('Yandex.News', 'yandexnews-feed-by-teplitsa'),
 			'manage_options',
 			'layf_settings',
 			array($this,'layf_settings_screen')
 		);
 	}
     function settings_init() {
-        add_settings_section ( 'layf_base', __ ( 'General', 'layf' ), array (
+        add_settings_section ( 'layf_base', __ ( 'General', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'layf_base_section_screen' 
         ), 'layf_settings' );
         
-        add_settings_field ( 'layf_custom_url', __ ( 'URL for feed', 'layf' ), array (
+        add_settings_field ( 'layf_custom_url', __ ( 'URL for feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settngs_custom_url_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_post_types', __ ( 'Post types for feed', 'layf' ), array (
+        add_settings_field ( 'layf_post_types', __ ( 'Post types for feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settngs_post_types_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_feed_logo', __ ( 'Logo URL for feed description', 'layf' ), array (
+        add_settings_field ( 'layf_feed_logo', __ ( 'Logo URL for feed description', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_feed_logo_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_feed_logo_square', __ ( 'Square Logo URL for feed description', 'layf' ), array (
+        add_settings_field ( 'layf_feed_logo_square', __ ( 'Square Logo URL for feed description', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_feed_logo_square_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_filter_taxonomy', __ ( 'Taxonomy to filter entries for feed', 'layf' ), array (
+        add_settings_field ( 'layf_filter_taxonomy', __ ( 'Taxonomy to filter entries for feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_filter_taxonomy_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_filter_terms', __ ( 'Terms to filter entries for feed', 'layf' ), array (
+        add_settings_field ( 'layf_filter_terms', __ ( 'Terms to filter entries for feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_filter_terms_callback' 
         ), 'layf_settings', 'layf_base' );
 	
 	add_settings_field(
 		'layf_exclude_taxonomy',
-		__('Taxonomy to exclude from feed', 'layf'),
+		__('Taxonomy to exclude from feed', 'yandexnews-feed-by-teplitsa'),
 		array($this, 'settings_exclude_taxonomy_callback'),
 		'layf_settings',
 		'layf_base'
@@ -121,33 +121,33 @@ class La_Yandex_Feed_Admin {
 
 	add_settings_field(
 		'layf_exclude_terms',
-		__('Terms exclude from feed', 'layf'),
+		__('Terms exclude from feed', 'yandexnews-feed-by-teplitsa'),
 		array($this, 'settings_exclude_terms_callback'),
 		'layf_settings',
 		'layf_base'
 	);
         
-        add_settings_field ( 'layf_include_post_thumbnail', __ ( 'Include post thumbnails into feed', 'layf' ), array (
+        add_settings_field ( 'layf_include_post_thumbnail', __ ( 'Include post thumbnails into feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_include_post_thumbnail_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_remove_pdalink', __ ( 'Remove pdalink tag from feed', 'layf' ), array (
+        add_settings_field ( 'layf_remove_pdalink', __ ( 'Remove pdalink tag from feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_remove_pdalink_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_remove_shortcodes', __ ( 'Remove all unexecuted shortcodes', 'layf' ), array (
+        add_settings_field ( 'layf_remove_shortcodes', __ ( 'Remove all unexecuted shortcodes', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_remove_shortcodes_callback' 
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_remove_teaser_from_fulltext', __ ( 'Remove teaser from yandex:full-text tag', 'layf' ), array (
+        add_settings_field ( 'layf_remove_teaser_from_fulltext', __ ( 'Remove teaser from yandex:full-text tag', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_remove_teaser_from_fulltext_callback'
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_feed_items_limit', __ ( 'Feed items limit', 'layf' ), array (
+        add_settings_field ( 'layf_feed_items_limit', __ ( 'Feed items limit', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_feed_items_limit_callback'
         ), 'layf_settings', 'layf_base' );
@@ -171,7 +171,7 @@ class La_Yandex_Feed_Admin {
 		
 	?>
 <div class="wrap">
-    <h2><?php _e('Yandex.News Feed Settings', 'layf');?></h2>
+    <h2><?php _e('Yandex.News Feed Settings', 'yandexnews-feed-by-teplitsa');?></h2>
 
     <div class="layf-columns">
         <div class="layf-form">
@@ -205,7 +205,7 @@ class La_Yandex_Feed_Admin {
     id="layf_custom_url" type="text" class="regular-text code"
     value="<?php echo $value;?>">
 </label>
-<p class="description"><?php echo sprintf(__('Customoze the URL of the feed if needed', 'layf'), '<a href="'.home_url('/index.php?yandex_feed=news').'">'.home_url('/index.php?yandex_feed=news').'</a>');?></p>
+<p class="description"><?php echo sprintf(__('Customoze the URL of the feed if needed', 'yandexnews-feed-by-teplitsa'), '<a href="'.home_url('/index.php?yandex_feed=news').'">'.home_url('/index.php?yandex_feed=news').'</a>');?></p>
 <?php	
 	}
  
@@ -216,7 +216,7 @@ class La_Yandex_Feed_Admin {
 <label for="layf_post_types"><input name="layf_post_types"
     id="layf_post_types" type="text" class="regular-text code"
     value="<?php echo $value;?>"> </label>
-<p class="description"><?php _e('Comma separated list of post types', 'layf');?></p>
+<p class="description"><?php _e('Comma separated list of post types', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 	}
 	
@@ -227,7 +227,7 @@ class La_Yandex_Feed_Admin {
 <label for="layf_feed_logo_square"><input name="layf_feed_logo"
     id="layf_feed_logo" type="text" class="code widefat"
     value="<?php echo $value;?>"> </label>
-<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (100px size of max side)', 'layf');?></p>
+<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (100px size of max side)', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 	}
 	
@@ -238,7 +238,7 @@ class La_Yandex_Feed_Admin {
 <label for="layf_feed_logo_square"><input name="layf_feed_logo_square"
     id="layf_feed_logo_square" type="text" class="code widefat"
     value="<?php echo $value;?>"> </label>
-<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (180x180px size as min)', 'layf');?></p>
+<p class="description"><?php _e('Direct link to .jpg, .png, .gif file (180x180px size as min)', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 	}
 	
@@ -265,7 +265,7 @@ class La_Yandex_Feed_Admin {
 <label for="layf_filter_terms"><input name="layf_filter_terms"
     id="layf_filter_terms" type="text" class="code regular-text"
     value="<?php echo $value;?>"> </label>
-<p class="description"><?php _e('Comma separated list of term IDs', 'layf');?></p>
+<p class="description"><?php _e('Comma separated list of term IDs', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 		
 	}
@@ -290,7 +290,7 @@ class La_Yandex_Feed_Admin {
 		$value = esc_attr(get_option('layf_exclude_terms', ''));
 	?>
 		<label for="layf_exclude_terms"><input name="layf_exclude_terms" id="layf_exclude_terms" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
-		<p class="description"><?php _e('Comma separated list of term IDs', 'layf');?></p>
+		<p class="description"><?php _e('Comma separated list of term IDs', 'yandexnews-feed-by-teplitsa');?></p>
 	<?php
 
 	}
@@ -333,7 +333,7 @@ class La_Yandex_Feed_Admin {
 <label for="layf_feed_items_limit"><input name="layf_feed_items_limit"
     id="layf_post_types" type="text" class="regular-text code"
     value="<?php echo $value;?>"> </label>
-<p class="description"><?php _e('Numeric limit or empty for no limit', 'layf');?></p>
+<p class="description"><?php _e('Numeric limit or empty for no limit', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 	}
 		
@@ -355,7 +355,7 @@ class La_Yandex_Feed_Admin {
 		$callback = array($this, 'setting_metabox');
 		
 		if(!empty($pt)){ foreach($pt as $post_type){
-			add_meta_box('layf_related_links', __('Yandex.News settings', 'layf'), $callback, $post_type, 'advanced');
+			add_meta_box('layf_related_links', __('Yandex.News settings', 'yandexnews-feed-by-teplitsa'), $callback, $post_type, 'advanced');
 		}}
 			
 	}
@@ -375,15 +375,15 @@ class La_Yandex_Feed_Admin {
 }
 </style>
 <fieldset class="layf">
-    <label for="layf_related_links" class="label-title"><?php _e('Related links','layf');?></label>
+    <label for="layf_related_links" class="label-title"><?php _e('Related links', 'yandexnews-feed-by-teplitsa');?></label>
     <textarea id="layf_related_links" name="layf_related_links"
         cols="40" rows="4" class="widefat"><?php echo $value;?></textarea>
-    <p><?php _e('Enter related links URL and descrioption separated by space, one link per string.', 'layf');?></p>
+    <p><?php _e('Enter related links URL and descrioption separated by space, one link per string.', 'yandexnews-feed-by-teplitsa');?></p>
 </fieldset>
 <fieldset>
-    <label class="label-title"><?php _e('Exclude entry from Yandex.News feed', 'layf');?></label><br>
+    <label class="label-title"><?php _e('Exclude entry from Yandex.News feed', 'yandexnews-feed-by-teplitsa');?></label><br>
     <label for=""><input type="checkbox" name="layf_exclude_from_feed"
-        value="1" <?php checked($exclude, 1);?>><?php _e('Exclude despite the global settings', 'layf');?></label>
+        value="1" <?php checked($exclude, 1);?>><?php _e('Exclude despite the global settings', 'yandexnews-feed-by-teplitsa');?></label>
 </fieldset>
 <?php
 	}

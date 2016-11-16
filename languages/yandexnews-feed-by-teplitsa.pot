@@ -1,0 +1,152 @@
+# Copyright (C) 2016 Yandex.News Feed by Teplitsa
+# This file is distributed under the same license as the Yandex.News Feed by Teplitsa package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Yandex.News Feed by Teplitsa 1.8.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/yandexnews-feed-"
+"by-teplitsa\n"
+"POT-Creation-Date: 2016-11-16 20:36:55+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: inc/admin.php:51
+msgid "Settings"
+msgstr ""
+
+#: inc/admin.php:61
+msgid "GitHub"
+msgstr ""
+
+#: inc/admin.php:71 inc/admin.php:174
+msgid "Yandex.News Feed Settings"
+msgstr ""
+
+#: inc/admin.php:72
+msgid "Yandex.News"
+msgstr ""
+
+#: inc/admin.php:79
+msgid "General"
+msgstr ""
+
+#: inc/admin.php:84
+msgid "URL for feed"
+msgstr ""
+
+#: inc/admin.php:89
+msgid "Post types for feed"
+msgstr ""
+
+#: inc/admin.php:94
+msgid "Logo URL for feed description"
+msgstr ""
+
+#: inc/admin.php:99
+msgid "Square Logo URL for feed description"
+msgstr ""
+
+#: inc/admin.php:104
+msgid "Taxonomy to filter entries for feed"
+msgstr ""
+
+#: inc/admin.php:109
+msgid "Terms to filter entries for feed"
+msgstr ""
+
+#: inc/admin.php:116
+msgid "Taxonomy to exclude from feed"
+msgstr ""
+
+#: inc/admin.php:124
+msgid "Terms exclude from feed"
+msgstr ""
+
+#: inc/admin.php:130
+msgid "Include post thumbnails into feed"
+msgstr ""
+
+#: inc/admin.php:135
+msgid "Remove pdalink tag from feed"
+msgstr ""
+
+#: inc/admin.php:140
+msgid "Remove all unexecuted shortcodes"
+msgstr ""
+
+#: inc/admin.php:145
+msgid "Remove teaser from yandex:full-text tag"
+msgstr ""
+
+#: inc/admin.php:150
+msgid "Feed items limit"
+msgstr ""
+
+#: inc/admin.php:208
+msgid "Customoze the URL of the feed if needed"
+msgstr ""
+
+#: inc/admin.php:219
+msgid "Comma separated list of post types"
+msgstr ""
+
+#: inc/admin.php:230
+msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
+msgstr ""
+
+#: inc/admin.php:241
+msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
+msgstr ""
+
+#: inc/admin.php:268 inc/admin.php:293
+msgid "Comma separated list of term IDs"
+msgstr ""
+
+#: inc/admin.php:336
+msgid "Numeric limit or empty for no limit"
+msgstr ""
+
+#: inc/admin.php:358
+msgid "Yandex.News settings"
+msgstr ""
+
+#: inc/admin.php:378
+msgid "Related links"
+msgstr ""
+
+#: inc/admin.php:381
+msgid ""
+"Enter related links URL and descrioption separated by space, one link per "
+"string."
+msgstr ""
+
+#: inc/admin.php:384
+msgid "Exclude entry from Yandex.News feed"
+msgstr ""
+
+#: inc/admin.php:386
+msgid "Exclude despite the global settings"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (Yandex.News Feed by Teplitsa 1.8.8)  #-#-#-#-#
+#. Description of the plugin/theme
+#: tst-yandex-feed.php:68
+msgid "The plugin creates feed for Yandex.News service"
+msgstr ""
+
+#. #-#-#-#-#  plugin.pot (Yandex.News Feed by Teplitsa 1.8.8)  #-#-#-#-#
+#. Author of the plugin/theme
+#: tst-yandex-feed.php:69
+msgid "Teplitsa"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Yandex.News Feed by Teplitsa"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://te-st.ru/"
+msgstr ""

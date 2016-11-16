@@ -5,7 +5,7 @@ Description: The plugin creates feed for Yandex.News service
 Version: 1.8.8
 Author: Teplitsa
 Author URI: http://te-st.ru/
-Text Domain: layf
+Text Domain: yandexnews-feed-by-teplitsa
 Domain Path: /languages
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Contributors:	
@@ -51,8 +51,10 @@ if( !defined('LAYF_PLUGIN_BASE_URL') )
 if( !defined('LAYF_PLUGIN_BASE_NAME') )
     define('LAYF_PLUGIN_BASE_NAME', plugin_basename(__FILE__));
 
-load_plugin_textdomain('layf', false, '/'.basename(LAYF_PLUGIN_DIR).'/languages');
-
+function yandexnews_feed_by_teplitsa_load_plugin_textdomain() {
+    load_plugin_textdomain('yandexnews-feed-by-teplitsa', false, '/'.basename(LAYF_PLUGIN_DIR).'/languages/');
+}
+add_action( 'plugins_loaded', 'yandexnews_feed_by_teplitsa_load_plugin_textdomain' );
 
 /** Init **/
 require_once(plugin_dir_path(__FILE__).'inc/tst-yandex-feed-core.php');
@@ -65,6 +67,6 @@ register_deactivation_hook(__FILE__, array( 'La_Yandex_Feed_Core', 'on_deactivat
 
 /** strings to be translated **/
 $strings = array(
-__('The plugin creates feed for Yandex.News service', 'layf'),
-__('Teplitsa', 'layf'),
+__('The plugin creates feed for Yandex.News service', 'yandexnews-feed-by-teplitsa'),
+__('Teplitsa', 'yandexnews-feed-by-teplitsa'),
 );
