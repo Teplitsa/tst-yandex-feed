@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Yandex.News Feed by Teplitsa\n"
-"POT-Creation-Date: 2016-04-28 19:26+0200\n"
-"PO-Revision-Date: 2016-04-28 20:20+0200\n"
+"POT-Creation-Date: 2016-11-16 19:24+0200\n"
+"PO-Revision-Date: 2016-11-16 19:26+0200\n"
 "Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
@@ -27,7 +27,7 @@ msgstr "Настройки"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: inc/admin.php:71 inc/admin.php:156
+#: inc/admin.php:71 inc/admin.php:174
 msgid "Yandex.News Feed Settings"
 msgstr "Настройки трансляции Яндекс.Новости"
 
@@ -63,68 +63,76 @@ msgstr "Таксономия для фильтрации трансляции"
 msgid "Terms to filter entries for feed"
 msgstr "Термины для фильтрации трансляции"
 
-#: inc/admin.php:114
+#: inc/admin.php:116
+msgid "Taxonomy to exclude from feed"
+msgstr "Таксономия, термины которой нужно исключить"
+
+#: inc/admin.php:124
+msgid "Terms exclude from feed"
+msgstr "Термины для исключения"
+
+#: inc/admin.php:130
 msgid "Include post thumbnails into feed"
 msgstr "Включить миниатюру в трансляцию Яндекс.Новости"
 
-#: inc/admin.php:119
+#: inc/admin.php:135
 msgid "Remove pdalink tag from feed"
 msgstr "Не показывать pdalink"
 
-#: inc/admin.php:124
+#: inc/admin.php:140
 msgid "Remove all unexecuted shortcodes"
 msgstr "Удалить все неиспользованные шорткоды (тэги типа [...])"
 
-#: inc/admin.php:129
+#: inc/admin.php:145
 msgid "Remove teaser from yandex:full-text tag"
 msgstr "Убрать тизер из тэга yandex:full-text"
 
-#: inc/admin.php:134
+#: inc/admin.php:150
 msgid "Feed items limit"
 msgstr "Лимит количества записей в ленте"
 
-#: inc/admin.php:190
+#: inc/admin.php:208
 msgid "Customoze the URL of the feed if needed"
 msgstr ""
 "При необходимости укажите собственный URL-адрес трансляции.<br />\n"
 "Если включены простые постоянные ссылки, URL-адрес ленты будет<br />\n"
 "%s"
 
-#: inc/admin.php:201
+#: inc/admin.php:219
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/admin.php:212
+#: inc/admin.php:230
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/admin.php:223
+#: inc/admin.php:241
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (минимальный размер 180х180рх, "
 "строго квадратное изображение)"
 
-#: inc/admin.php:250
+#: inc/admin.php:268 inc/admin.php:293
 msgid "Comma separated list of term IDs"
 msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/admin.php:293
+#: inc/admin.php:336
 msgid "Numeric limit or empty for no limit"
 msgstr ""
 "Введите число чтобы ограничить, или оставьте пустым для вывода без "
 "ограничений"
 
-#: inc/admin.php:315
+#: inc/admin.php:358
 msgid "Yandex.News settings"
 msgstr "Настройки Яндекс.Новости"
 
-#: inc/admin.php:335
+#: inc/admin.php:378
 msgid "Related links"
 msgstr "Связанные ссылки"
 
-#: inc/admin.php:338
+#: inc/admin.php:381
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
 "string."
@@ -132,11 +140,11 @@ msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
 "описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: inc/admin.php:341
+#: inc/admin.php:384
 msgid "Exclude entry from Yandex.News feed"
 msgstr "Исключить запись из трансляции Яндекс.Новости"
 
-#: inc/admin.php:343
+#: inc/admin.php:386
 msgid "Exclude despite the global settings"
 msgstr "Исключить, не смотря на глобальные настройки"
 
