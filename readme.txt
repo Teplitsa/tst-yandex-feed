@@ -104,8 +104,11 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 == Changelog ==
 
-= 1.8.7 =
+= 1.8.8 =
 * New: Exclude terms feature added from h8every1 pull request: https://github.com/Teplitsa/tst-yandex-feed/pull/11
+
+= 1.8.7 =
+* Fix: Feed optimized
 
 = 1.8.6 =
 * New: Remove unused shortcodes option added
