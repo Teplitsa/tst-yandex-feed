@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo,Yandex.News
 Requires at least: 3.9
-Tested up to: 4.5.3
+Tested up to: 4.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -103,6 +103,9 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Changelog ==
+
+= 1.8.7 =
+* New: Exclude terms feature added from h8every1 pull request: https://github.com/Teplitsa/tst-yandex-feed/pull/11
 
 = 1.8.6 =
 * New: Remove unused shortcodes option added
