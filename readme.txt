@@ -28,6 +28,7 @@ _For English description scroll down, please._
 * Настройка пользовательских (кастомных) типов записей, попадающих в трансляцию.
 * Фильтрация по категории (или кастомной таксономии), попадающих в трансляцию.
 * При редактировании записей доступен метабокс для перечня ссылок на источники, упомянутые в статье, а также для индивидуального исключения записи из трансляции.
+* В случае если генерация ленты чрезмерно нагружает ваш сервер БД, вы можете включить кэш, установив время его жизни в настройках.
 
 После установки настройки плагина доступны через меню _Настройки -> Яндекс.Новости_.
 
@@ -68,6 +69,7 @@ The plugin is developed and maintained by [Teplitsa of social technologies](http
 * Custom post types support in feed.
 * Filtering by category or custom taxonomy term.
 * Individual settings for posts in feed.
+* If the feed generation process overloads your DB server, you can enable cache. Just set cache lifetime value.
 
 After installing the plugin settings are available under menu _Settings -> Yandex.Novosti_.
 
@@ -103,6 +105,10 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Changelog ==
+
+= 1.8.9 =
+* New: Feed cache added. Generated feed cache is stored in WP options table. Try to turn it on if feed generation overloads you DB server.
+* New: Cache lifetime option added.
 
 = 1.8.8 =
 * New: Exclude terms feature added from h8every1 pull request: https://github.com/Teplitsa/tst-yandex-feed/pull/11

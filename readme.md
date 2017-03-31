@@ -18,7 +18,7 @@ _For English description scroll down, please._
 * Настройка пользовательских (кастомных) типов записей, попадающих в трансляцию.
 * Фильтрация по категории (или кастомной таксономии), попадающих в трансляцию.
 * При редактировании записей доступен метабокс для перечня ссылок на источники, упомянутые в статье, а также для индивидуального исключения записи из трансляции.
-
+* В случае если генерация ленты чрезмерно нагружает ваш сервер БД, вы можете включить кэш, установив время его жизни в настройках.
 
 ## Установка и использование ##
 
@@ -68,7 +68,7 @@ The plugin is developed and maintained by [Teplitsa of social technologies](http
 * Custom post types support in feed.
 * Filtering by category or custom taxonomy term.
 * Individual settings for posts in feed.
-
+* If the feed generation process overloads your DB server, you can enable cache. Just set cache lifetime value.
 
 ## Installation and usage ##
 

@@ -152,17 +152,23 @@ class La_Yandex_Feed_Admin {
             'settings_feed_items_limit_callback'
         ), 'layf_settings', 'layf_base' );
         
+        add_settings_field ( 'layf_feed_cache_ttl', __ ( 'Feed cache lifetime', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_feed_cache_ttl_callback'
+        ), 'layf_settings', 'layf_base' );
+        
         register_setting ( 'layf_settings', 'layf_post_types' );
         register_setting ( 'layf_settings', 'layf_feed_logo' );
         register_setting ( 'layf_settings', 'layf_feed_logo_square' );
         register_setting ( 'layf_settings', 'layf_filter_taxonomy' );
         register_setting ( 'layf_settings', 'layf_filter_terms' );
-	register_setting( 'layf_settings', 'layf_exclude_taxonomy' );
-	register_setting( 'layf_settings', 'layf_exclude_terms' );
+        register_setting ( 'layf_settings', 'layf_exclude_taxonomy' );
+        register_setting ( 'layf_settings', 'layf_exclude_terms' );
         register_setting ( 'layf_settings', 'layf_custom_url' );
         register_setting ( 'layf_settings', 'layf_include_post_thumbnail' );
         register_setting ( 'layf_settings', 'layf_remove_pdalink' );
         register_setting ( 'layf_settings', 'layf_feed_items_limit' );
+        register_setting ( 'layf_settings', 'layf_feed_cache_ttl' );
         register_setting ( 'layf_settings', 'layf_remove_shortcodes' );
         register_setting ( 'layf_settings', 'layf_remove_teaser_from_fulltext' );
     }
@@ -331,9 +337,19 @@ class La_Yandex_Feed_Admin {
 	    $value = get_option('layf_feed_items_limit', '');
 	    ?>
 <label for="layf_feed_items_limit"><input name="layf_feed_items_limit"
-    id="layf_post_types" type="text" class="regular-text code"
+    id="layf_feed_items_limit" type="text" class="regular-text code"
     value="<?php echo $value;?>"> </label>
 <p class="description"><?php _e('Numeric limit or empty for no limit', 'yandexnews-feed-by-teplitsa');?></p>
+<?php
+	}
+	
+	function settings_feed_cache_ttl_callback() {
+	    $value = get_option('layf_feed_cache_ttl', '');
+	    ?>
+<label for="layf_feed_cache_ttl"><input name="layf_feed_cache_ttl"
+    id="layf_feed_cache_ttl" type="text" class="regular-text code"
+    value="<?php echo $value;?>"> </label>
+<p class="description"><?php _e('Cache lifetime in hours. Leave it empty to disable cache.', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
 	}
 		

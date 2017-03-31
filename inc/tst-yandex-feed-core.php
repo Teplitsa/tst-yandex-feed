@@ -3,6 +3,10 @@ if(!defined('ABSPATH')) die; // Die if accessed directly
 
 class La_Yandex_Feed_Core {
 	
+    private $query_cache_key = 'tst_yandex_news_cache';
+    private $query_cache_data = NULL;
+    private $query_cache_expire = 0;
+    
 	private static $instance = NULL; //instance store
 		
 	private function __construct() {
@@ -12,7 +16,10 @@ class La_Yandex_Feed_Core {
         add_action('template_redirect', array($this, 'custom_templates_redirect'));
 		add_action('parse_query', array($this, 'custom_request'));
 		add_filter( 'status_header', array($this, 'set_empty_feed_20ok_status'), 10, 2 );
-
+		
+		/* cache */
+		add_filter( 'posts_results', array($this, 'cache_post_query'), 10, 2 );
+		add_filter( 'posts_request', array($this, 'cache_pre_query'), 10, 2 );
 				
 		/* formatting */
 		add_filter('the_title_rss', array($this, 'full_text_formatting'), 15);
@@ -30,6 +37,77 @@ class La_Yandex_Feed_Core {
 		$this->admin_setup();
 		
 		
+    }
+    
+    public function cache_pre_query( $request, $query ){
+    
+        if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
+            
+            $feed_cache_ttl = (int)get_option('layf_feed_cache_ttl', 0);
+            
+            if( $feed_cache_ttl ) {
+                
+                if ( $this->cache_get() !== NULL ){
+                    $request = NULL;
+                }
+            }
+        }
+    
+        return $request;
+    }
+    
+    public function cache_post_query( $posts, $query ){
+        if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
+            
+            $feed_cache_ttl = (int)get_option('layf_feed_cache_ttl', 0);
+            
+            if( $feed_cache_ttl ) {
+                
+                $cached_posts = $this->cache_get();
+                
+                if ( $cached_posts !== NULL ) {
+                    $posts = $cached_posts;
+                }
+                else {
+                    $this->cache_set( $posts, $feed_cache_ttl * 60 * 60 );
+                }
+            }
+        }
+    
+        return $posts;
+    }
+    
+    public function cache_get() {
+        $key = $this->query_cache_key;
+        
+        if( $this->query_cache_data === NULL ) {
+            
+            $data = get_option( $key, NULL );
+            $data = maybe_unserialize( $data );
+            
+            if( $data ) {
+                
+                $this->query_cache_data = $data['data'];
+                $this->query_cache_expire = $data['expire'];
+                
+                if( time() > $data['expire'] ) {
+                    update_option( $key, '' );
+                    $this->query_cache_data = NULL;
+                    $this->query_cache_expire = 0;
+                }
+            }
+            else {
+                $this->query_cache_data = NULL;
+            }
+        }
+        
+        return $this->query_cache_data;
+    }
+    
+    public function cache_set( $data, $ttl ) {
+        $key = $this->query_cache_key;
+        $data = array( 'data' => $data, 'expire' => time() + $ttl );
+        update_option( $key, maybe_serialize( $data ) );
     }
 	
 	public function set_empty_feed_20ok_status($status_header, $header) {
