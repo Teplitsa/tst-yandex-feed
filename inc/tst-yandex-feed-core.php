@@ -109,6 +109,10 @@ class La_Yandex_Feed_Core {
         $data = array( 'data' => $data, 'expire' => time() + $ttl );
         update_option( $key, maybe_serialize( $data ) );
     }
+    
+    public function clear_cache() {
+        delete_option($this->query_cache_key);
+    }
 	
 	public function set_empty_feed_20ok_status($status_header, $header) {
 		global $wp_query;
@@ -202,7 +206,7 @@ class La_Yandex_Feed_Core {
 			    $query->query_vars['posts_per_page'] = -1;
 			}
 			
-			$limit = strtotime('- 8 days'); //Limited by Yandex rules
+			$limit = strtotime('- 168 days'); //Limited by Yandex rules
 			$query->query_vars['date_query'] = array(
 				array(
 					'after' => array(
@@ -216,10 +220,19 @@ class La_Yandex_Feed_Core {
 			$query->is_home = false;
 			
 			//filtering by category
-			$terms = get_option('layf_filter_terms', '');			
-			if(!empty($terms)){
+			$terms = get_option('layf_filter_terms', '');
+			$terms_slug = get_option('layf_filter_terms_slug', '');
+			if(!empty($terms) || !empty($terms_slug)){
 				$tax = get_option('layf_filter_taxonomy', 'category');
-				$terms = array_map('intval', explode(',', $terms));
+				$terms = !empty($terms) ? array_map('intval', explode(',', $terms)) : array();
+				
+				if(!empty($terms_slug)) {
+				    $terms_slug = explode(',', $terms_slug);
+				    if(count($terms_slug)) {
+				        $terms = array_merge($terms, get_terms(array('taxonomy' => $tax, 'hide_empty' => false, 'slug' => $terms_slug, 'fields' => 'ids')));
+				    }
+				}
+				
 				$query->query_vars['tax_query'][] = array(
 					'taxonomy' => $tax,
 					'field' => 'id',
@@ -229,9 +242,18 @@ class La_Yandex_Feed_Core {
 
 			//exclude taxonomy terms
 			$terms = get_option('layf_exclude_terms', '');
-			if(!empty($terms)){
+			$terms_slug = get_option('layf_exclude_terms_slug', '');
+			if(!empty($terms) || !empty($terms_slug)){
 				$tax = get_option('layf_exclude_taxonomy', 'category');
-				$terms = array_map('intval', explode(',', $terms));
+				$terms = !empty($terms) ? array_map('intval', explode(',', $terms)) : array();
+				
+				if(!empty($terms_slug)) {
+				    $terms_slug = explode(',', $terms_slug);
+				    if(count($terms_slug)) {
+				        $terms = array_merge($terms, get_terms(array('taxonomy' => $tax, 'hide_empty' => false, 'slug' => $terms_slug, 'fields' => 'ids')));
+				    }
+				}
+				
 				$query->query_vars['tax_query'][] = array(
 					'taxonomy' => $tax,
 					'field' => 'id',

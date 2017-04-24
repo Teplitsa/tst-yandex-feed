@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor
 Tags: yandex,news,xml,rss,seo,Yandex.News
 Requires at least: 3.9
-Tested up to: 4.6.1
+Tested up to: 4.7.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -93,18 +93,23 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 
 == Installation ==
-Процесс инсталляции плагина стандартен для WordPress.
+Installation process is typical for WordPress.
 
-Если у вас установлен GIT, то вы можете клонировать репозиторий: https://github.com/Teplitsa/tst-yandex-feed.git
-или скачать его в виде ZIP архива: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
+You can also use GIT: https://github.com/Teplitsa/tst-yandex-feed.git
+or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
 
 == Screenshots ==
 
-1. Пример формата выдачи
-2. Пример страницы настроек плагина
+1. Feed sample
+2. Settings page sample
 
 
 == Changelog ==
+
+= 1.8.10 =
+* New: Terms slug support added in tax filter.
+* New: Terms slug support added in tax exclude filter.
+* New: Clear cache occurs when save empty cache lifetime.
 
 = 1.8.9 =
 * New: Feed cache added. Generated feed cache is stored in WP options table. Try to turn it on if feed generation overloads you DB server.
@@ -112,6 +117,7 @@ If you have questions about the plugin, then ask for support through [GitHub](ht
 
 = 1.8.8 =
 * New: Exclude terms feature added from h8every1 pull request: https://github.com/Teplitsa/tst-yandex-feed/pull/11
+* Fix: Text domain changed
 
 = 1.8.7 =
 * Fix: Feed optimized

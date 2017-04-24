@@ -17,6 +17,8 @@ class La_Yandex_Feed_Admin {
 		
 		/* options */
 		add_action( 'admin_init', array($this, 'settings_init'));
+		add_action('update_option_layf_feed_cache_ttl', array($this, 'update_option_feed_cache_ttl'), 10, 2);
+		
 				
 		/* metabox */
 		add_action('add_meta_boxes', array($this, 'create_metaboxes'));
@@ -110,23 +112,27 @@ class La_Yandex_Feed_Admin {
             $this,
             'settings_filter_terms_callback' 
         ), 'layf_settings', 'layf_base' );
-	
-	add_settings_field(
-		'layf_exclude_taxonomy',
-		__('Taxonomy to exclude from feed', 'yandexnews-feed-by-teplitsa'),
-		array($this, 'settings_exclude_taxonomy_callback'),
-		'layf_settings',
-		'layf_base'
-	);
-
-	add_settings_field(
-		'layf_exclude_terms',
-		__('Terms exclude from feed', 'yandexnews-feed-by-teplitsa'),
-		array($this, 'settings_exclude_terms_callback'),
-		'layf_settings',
-		'layf_base'
-	);
         
+        add_settings_field ( 'layf_filter_terms_slug', __ ( 'Terms slug to filter entries for feed', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_filter_terms_slug_callback'
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field( 'layf_exclude_taxonomy', __('Taxonomy to exclude from feed', 'yandexnews-feed-by-teplitsa'), array(
+            $this,
+            'settings_exclude_taxonomy_callback'
+        ), 'layf_settings', 'layf_base' );
+
+        add_settings_field( 'layf_exclude_terms', __('Terms exclude from feed', 'yandexnews-feed-by-teplitsa'), array(
+            $this, 
+            'settings_exclude_terms_callback'
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field ( 'layf_exclude_terms_slug', __ ( 'Terms slugs exclude from feed', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_exclude_terms_slug_callback'
+        ), 'layf_settings', 'layf_base' );
+	
         add_settings_field ( 'layf_include_post_thumbnail', __ ( 'Include post thumbnails into feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_include_post_thumbnail_callback' 
@@ -162,8 +168,10 @@ class La_Yandex_Feed_Admin {
         register_setting ( 'layf_settings', 'layf_feed_logo_square' );
         register_setting ( 'layf_settings', 'layf_filter_taxonomy' );
         register_setting ( 'layf_settings', 'layf_filter_terms' );
+        register_setting ( 'layf_settings', 'layf_filter_terms_slug' );
         register_setting ( 'layf_settings', 'layf_exclude_taxonomy' );
         register_setting ( 'layf_settings', 'layf_exclude_terms' );
+        register_setting ( 'layf_settings', 'layf_exclude_terms_slug' );
         register_setting ( 'layf_settings', 'layf_custom_url' );
         register_setting ( 'layf_settings', 'layf_include_post_thumbnail' );
         register_setting ( 'layf_settings', 'layf_remove_pdalink' );
@@ -276,6 +284,18 @@ class La_Yandex_Feed_Admin {
 		
 	}
 	
+	function settings_filter_terms_slug_callback() {
+	
+	    $value = esc_attr(get_option('layf_filter_terms_slug', ''));
+	    ?>
+	<label for="layf_filter_terms_slug"><input name="layf_filter_terms_slug"
+	    id="layf_filter_terms_slug" type="text" class="code regular-text"
+	    value="<?php echo $value;?>"> </label>
+	<p class="description"><?php _e('Comma separated list of term slugs', 'yandexnews-feed-by-teplitsa');?></p>
+	<?php
+			
+	}
+	
 	function settings_exclude_taxonomy_callback() {
 
 		$value = get_option('layf_exclude_taxonomy', 'category');
@@ -297,6 +317,16 @@ class La_Yandex_Feed_Admin {
 	?>
 		<label for="layf_exclude_terms"><input name="layf_exclude_terms" id="layf_exclude_terms" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
 		<p class="description"><?php _e('Comma separated list of term IDs', 'yandexnews-feed-by-teplitsa');?></p>
+	<?php
+
+	}
+	
+	function settings_exclude_terms_slug_callback() {
+	
+	    $value = esc_attr(get_option('layf_exclude_terms_slug', ''));
+    ?>
+		<label for="layf_exclude_terms_slug"><input name="layf_exclude_terms_slug" id="layf_exclude_terms_slug" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Comma separated list of term slugs', 'yandexnews-feed-by-teplitsa');?></p>
 	<?php
 
 	}
@@ -426,7 +456,12 @@ class La_Yandex_Feed_Admin {
 		return $layf->get_supported_post_types();
 	}
 	
-	
+	function update_option_feed_cache_ttl($feed_cache_ttl, $feed_cache_ttl_new) {
+	    if(!$feed_cache_ttl_new) {
+	        $layf = La_Yandex_Feed_Core::get_instance();
+	        $layf->clear_cache();
+	    }
+	}
 	
 	
 } //class
