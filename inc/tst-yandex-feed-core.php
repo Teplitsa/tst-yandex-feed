@@ -206,7 +206,7 @@ class La_Yandex_Feed_Core {
 			    $query->query_vars['posts_per_page'] = -1;
 			}
 			
-			$limit = strtotime('- 168 days'); //Limited by Yandex rules
+			$limit = strtotime('- 8 days'); //Limited by Yandex rules
 			$query->query_vars['date_query'] = array(
 				array(
 					'after' => array(

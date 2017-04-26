@@ -106,6 +106,9 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.8.11 =
+* Fix: Feed limit fixed.
+
 = 1.8.10 =
 * New: Terms slug support added in tax filter.
 * New: Terms slug support added in tax exclude filter.
