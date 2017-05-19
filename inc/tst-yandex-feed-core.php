@@ -407,7 +407,6 @@ Allow: /yandex/news/
 		
 		if(isset($matches[4]) && !empty($matches)){
 		    foreach($matches[4] as $k => $v) {
-		        echo $v;
 		        if(preg_match('/^(http[s]?:)?\/\/.*/', $v)) {
 		            if(strpos($v, $site_domain) !== false) {
 		                $enclosure_from_content[] = $v;
