@@ -106,6 +106,9 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.8.12 =
+* Update: External URLs removed from enclosures list.
+
 = 1.8.11 =
 * Fix: Feed limit fixed.
 

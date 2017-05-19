@@ -388,7 +388,7 @@ Allow: /yandex/news/
 	static function item_enclosure(){ 
 		global $post;
 		
-		$enclosure = $matches = $res = array();
+		$enclosure_from_content = $enclosure = $matches = $res = array();
 		
 		if(get_option('layf_include_post_thumbnail')) {
 		    $thumb_id = get_post_thumbnail_id($post->ID);
@@ -401,21 +401,24 @@ Allow: /yandex/news/
 		
 		//preg_match_all('!http://.+\.(?:jpe?g|png|gif)!Ui' , $out , $matches);
 		preg_match_all('!<img(.*)src(.*)=(.*)"(.*)"!U', $out, $matches);
-		if(isset($matches[4]) && !empty($matches)){
-		    $enclosure = array_merge($enclosure, $matches[4]);
-		}
 		
-		if(preg_match('/youtube\.com/', $post->post_content) || preg_match('/youtu\.be/', $post->post_content)) {
-			preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $post->post_content, $urls_match);
-			if($urls_match && count($urls_match) && $urls_match[0]) {
-				foreach($urls_match[0] as $url) {
-					$thumbnail_url = self::get_youtube_thumbnail_url($url);
-					if($thumbnail_url) {
-						$enclosure[] = $thumbnail_url;
-					}
-				}
-			}
+		$site_domain = preg_replace('/http[s]?:\/\//', '', site_url());
+		$site_domain = preg_replace('/\/.*/', '', $site_domain);
+		
+		if(isset($matches[4]) && !empty($matches)){
+		    foreach($matches[4] as $k => $v) {
+		        echo $v;
+		        if(preg_match('/^(http[s]?:)?\/\/.*/', $v)) {
+		            if(strpos($v, $site_domain) !== false) {
+		                $enclosure_from_content[] = $v;
+		            }
+		        }
+		        else {
+		            $enclosure_from_content[] = $v;
+		        }
+		    }
 		}
+		$enclosure = array_merge($enclosure, $enclosure_from_content);
 		
 		if(empty($enclosure))
 			return $enclosure;
