@@ -138,6 +138,11 @@ class La_Yandex_Feed_Admin {
             'settings_include_post_thumbnail_callback' 
         ), 'layf_settings', 'layf_base' );
         
+        add_settings_field ( 'layf_enable_turbo', __ ( 'Enable Yandex.Turbo Pages', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_enable_turbo_callback'
+        ), 'layf_settings', 'layf_base' );
+        
         add_settings_field ( 'layf_remove_pdalink', __ ( 'Remove pdalink tag from feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_remove_pdalink_callback' 
@@ -174,6 +179,7 @@ class La_Yandex_Feed_Admin {
         register_setting ( 'layf_settings', 'layf_exclude_terms_slug' );
         register_setting ( 'layf_settings', 'layf_custom_url' );
         register_setting ( 'layf_settings', 'layf_include_post_thumbnail' );
+        register_setting ( 'layf_settings', 'layf_enable_turbo' );
         register_setting ( 'layf_settings', 'layf_remove_pdalink' );
         register_setting ( 'layf_settings', 'layf_feed_items_limit' );
         register_setting ( 'layf_settings', 'layf_feed_cache_ttl' );
@@ -346,6 +352,15 @@ class La_Yandex_Feed_Admin {
     <?php if($value):?> checked="checked" <?php endif;?> />
 <?php	
 	}
+	
+	function settings_enable_turbo_callback() {
+	    $value = get_option('layf_enable_turbo', '');
+    ?>
+<input type="checkbox" name="layf_enable_turbo" value="1"
+    <?php if($value):?> checked="checked" <?php endif;?> />
+<?php	
+	}
+		
 	
 	function settings_remove_shortcodes_callback() {
 	    $value = get_option('layf_remove_shortcodes', '');

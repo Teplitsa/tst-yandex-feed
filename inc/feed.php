@@ -5,6 +5,7 @@
  */
 
 header('Content-Type: ' . feed_content_type('rss') . '; charset=' . get_option('blog_charset'), true);
+$layf_enable_turbo = get_option('layf_enable_turbo');
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
@@ -17,6 +18,9 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	$logo = get_option('layf_feed_logo', '');	
 	if(!empty($logo)):
 ?>
+<?php if($layf_enable_turbo):?>
+<turbo:logo><?php echo esc_url($logo);?></turbo:logo>
+<?php endif?>
 <yandex:logo><?php echo esc_url($logo);?></yandex:logo>
 <?php endif;?>
 <?php
@@ -27,7 +31,7 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <?php endif;?>
 
 <?php while( have_posts()) : the_post(); ?>
-<item>
+<item<?php if($layf_enable_turbo):?> turbo="true"<?php endif;?>>
 <title><?php the_title_rss();?></title>
 <link><?php the_permalink_rss();?></link>
 
@@ -82,6 +86,9 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	$gmt_offset = ($gmt_offset > 9) ? $gmt_offset.'00' : ('0'.$gmt_offset.'00');
 ?>
 <pubDate><?php echo mysql2date('D, d M Y H:i:s +'.$gmt_offset, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
+<?php if($layf_enable_turbo):?>
+<turbo:content><?php echo La_Yandex_Feed_Core::get_the_turbo_content();?></turbo:content>
+<?php endif?>
 <yandex:full-text><?php echo La_Yandex_Feed_Core::get_the_content_feed(); ?></yandex:full-text>
 </item>
 <?php endwhile; ?>

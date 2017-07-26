@@ -6,6 +6,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_key = 'tst_yandex_news_cache';
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
+    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><ﬁgure><img><ﬁgcaption><header><ul><ol><li><video><source>';
     
 	private static $instance = NULL; //instance store
 		
@@ -375,6 +376,38 @@ Allow: /yandex/news/
 		}
 		
 		return apply_filters('layf_content_feed', $content);		
+	}
+	
+	static function get_the_turbo_content() {
+	    $post = get_post();
+	    $content = $post->post_content;
+	    
+	    if(get_option('layf_remove_teaser_from_fulltext', '')) {
+	        if ( preg_match( '/<!--more(.*?)?-->/', $content, $matches ) ) {
+	            $content_parts = explode( $matches[0], $content, 2 );
+	            if(count($content_parts) > 1 && !empty($content_parts[1])) {
+	                $content = $content_parts[1];
+	            }
+	        }
+	    }
+	    $content = str_replace(']]>', ']]&gt;', $content);
+	    
+	    add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
+	    add_filter( 'layf_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
+	    
+	    add_filter( 'layf_content_feed', 'wptexturize'        );
+	    add_filter( 'layf_content_feed', 'convert_smilies'    );
+	    add_filter( 'layf_content_feed', 'convert_chars'      );
+	    add_filter( 'layf_content_feed', 'wpautop'            );
+	    add_filter( 'layf_content_feed', 'shortcode_unautop'  );
+        add_filter( 'layf_content_feed', 'strip_all_shortcodes' );
+        
+	    $turbo_content = apply_filters('layf_content_feed', $content);
+	    
+	    $turbo_content = strip_tags( $turbo_content, self::$yandex_turbo_allowed_tags );
+	    $turbo_content = layf_wxr_cdata( $turbo_content );
+	    
+	    return $turbo_content;
 	}
 	
 	static function custom_the_excerpt_rss() {
@@ -840,6 +873,16 @@ function layf_filter_image_caption($out, $attr, $content) {
 function strip_all_shortcodes($text){
     $text = preg_replace("/\[[^\]]+\]/", '', $text);  #strip shortcode
     return $text;
+}
+
+function layf_wxr_cdata( $str ) {
+    if ( ! seems_utf8( $str ) ) {
+        $str = utf8_encode( $str );
+    }
+    // $str = ent2ncr(esc_html($str));
+    $str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
+
+    return $str;
 }
 
 ?>
