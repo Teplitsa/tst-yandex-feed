@@ -2,7 +2,7 @@
 /*
 Plugin Name: Yandex.News Feed by Teplitsa
 Description: The plugin creates feed for Yandex.News service
-Version: 1.8.12
+Version: 1.9
 Author: Teplitsa
 Author URI: http://te-st.ru/
 Text Domain: yandexnews-feed-by-teplitsa
@@ -37,7 +37,7 @@ if(!defined('ABSPATH')) die; // Die if accessed directly
 
 // Plugin version:
 if( !defined('LAYF_VERSION') )
-    define('LAYF_VERSION', '1.8.10');
+    define('LAYF_VERSION', '1.9');
 	
 // Plugin DIR, with trailing slash:
 if( !defined('LAYF_PLUGIN_DIR') )

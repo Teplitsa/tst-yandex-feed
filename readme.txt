@@ -1,8 +1,8 @@
 === Yandex.News Feed by Teplitsa ===
 Contributors: foralien, denis.cherniatev, ahaenor
-Tags: yandex,news,xml,rss,seo,Yandex.News
+Tags: yandex,news,xml,rss,seo,Yandex.News,turbo pages
 Requires at least: 3.9
-Tested up to: 4.7.4
+Tested up to: 4.8.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -25,6 +25,7 @@ _For English description scroll down, please._
 **Основные функции**
 
 * Обеспечение строгой и точной поддержки [формата трансляции Яндекс.Новостей](http://help.yandex.ru/news/info-for-mass-media.xml).
+* Обеспечение поддержки турбо-страниц Яндекса.
 * Настройка пользовательских (кастомных) типов записей, попадающих в трансляцию.
 * Фильтрация по категории (или кастомной таксономии), попадающих в трансляцию.
 * При редактировании записей доступен метабокс для перечня ссылок на источники, упомянутые в статье, а также для индивидуального исключения записи из трансляции.
@@ -66,6 +67,7 @@ The plugin is developed and maintained by [Teplitsa of social technologies](http
 **Features**
 
 * Compatibility with Yandex.News [guidelines](http://help.yandex.ru/news/info-for-mass-media.xml).
+* Yandex turbo-pages support.
 * Custom post types support in feed.
 * Filtering by category or custom taxonomy term.
 * Individual settings for posts in feed.
@@ -105,6 +107,9 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 
 == Changelog ==
+
+= 1.9 =
+* Update: Yandex turbo-pages support added.
 
 = 1.8.12 =
 * Update: External URLs removed from enclosures list.

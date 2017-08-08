@@ -15,6 +15,7 @@ _For English description scroll down, please._
 ##Основные функции##
 
 * Обеспечение строгой и точной поддержки [формата трансляции Яндекс.Новостей](http://help.yandex.ru/news/info-for-mass-media.xml).
+* Обеспечение поддержки турбо-страниц Яндекса.
 * Настройка пользовательских (кастомных) типов записей, попадающих в трансляцию.
 * Фильтрация по категории (или кастомной таксономии), попадающих в трансляцию.
 * При редактировании записей доступен метабокс для перечня ссылок на источники, упомянутые в статье, а также для индивидуального исключения записи из трансляции.
@@ -65,6 +66,7 @@ The plugin is developed and maintained by [Teplitsa of social technologies](http
 ##Features##
 
 * Compatibility with Yandex.News [guidelines](http://help.yandex.ru/news/info-for-mass-media.xml).
+* Yandex turbo-pages support.
 * Custom post types support in feed.
 * Filtering by category or custom taxonomy term.
 * Individual settings for posts in feed.
