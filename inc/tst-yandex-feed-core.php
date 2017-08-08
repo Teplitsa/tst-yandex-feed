@@ -6,7 +6,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_key = 'tst_yandex_news_cache';
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
-    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><ﬁgure><img><ﬁgcaption><header><ul><ol><li><video><source>';
+    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source>';
     
 	private static $instance = NULL; //instance store
 		
@@ -393,19 +393,81 @@ Allow: /yandex/news/
 	    $content = str_replace(']]>', ']]&gt;', $content);
 	    
 	    add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
-	    add_filter( 'layf_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
+	    add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
 	    
-	    add_filter( 'layf_content_feed', 'wptexturize'        );
-	    add_filter( 'layf_content_feed', 'convert_smilies'    );
-	    add_filter( 'layf_content_feed', 'convert_chars'      );
-	    add_filter( 'layf_content_feed', 'wpautop'            );
-	    add_filter( 'layf_content_feed', 'shortcode_unautop'  );
-        add_filter( 'layf_content_feed', 'strip_all_shortcodes' );
+	    add_filter( 'layf_turbo_content_feed', 'wptexturize'        );
+	    add_filter( 'layf_turbo_content_feed', 'convert_smilies'    );
+	    add_filter( 'layf_turbo_content_feed', 'convert_chars'      );
+	    add_filter( 'layf_turbo_content_feed', 'wpautop'            );
+	    add_filter( 'layf_turbo_content_feed', 'shortcode_unautop'  );
+        add_filter( 'layf_turbo_content_feed', 'strip_all_shortcodes' );
         
-	    $turbo_content = apply_filters('layf_content_feed', $content);
+	    $turbo_content = apply_filters('layf_turbo_content_feed', $content);
 	    
 	    $turbo_content = strip_tags( $turbo_content, self::$yandex_turbo_allowed_tags );
+	    
+	    $turbo_content = preg_replace('/class\s*=\s*".*?"/', '', $turbo_content );
+	    $turbo_content = preg_replace('/class\s*=\s*\'.*?\'/', '', $turbo_content );
+	    $turbo_content = preg_replace('/\s+>/', '>', $turbo_content );
+	    
+	    $turbo_content = self::wrap_turbo_images($turbo_content);
+	    $turbo_content = self::add_header_with_thumbnail($turbo_content);
+	    
 	    $turbo_content = layf_wxr_cdata( $turbo_content );
+	    
+	    return $turbo_content;
+	}
+	
+	static function wrap_turbo_images($turbo_content) {
+	    
+	    preg_match_all('!(<img.*>)!Ui', $turbo_content, $matches);
+	    
+	    if(isset($matches[1]) && !empty($matches)){
+	        foreach($matches[1] as $k => $v) {
+	            #var_dump(preg_match('!<figure>(?:(?!<figure>).)*'. preg_quote($v).'.*?</figure>!is', $turbo_content));
+	            if(!preg_match('!<figure>.*?'. preg_quote($v).'.*?</figure>!is', $turbo_content)) {
+	                $turbo_content = str_replace($v, "<figure>{$v}</figure>", $turbo_content);
+	            }
+	        }
+	    }
+	     
+	    return $turbo_content;
+	}
+	
+	static function add_header_with_thumbnail($turbo_content) {
+	    $thumb_id = get_post_thumbnail_id($post->ID);
+	    if(!empty($thumb_id)){
+	        
+	        $attachment = get_post( $thumb_id );
+	        if($attachment) {
+	            $caption = $attachment->post_excerpt;
+	            if(!$caption) {
+	                $caption = $attachment->post_content;
+	            }
+	        }
+	        
+	        if($caption) {
+	            
+	            add_filter( 'layf_content_feed', 'wptexturize'        );
+	            add_filter( 'layf_content_feed', 'convert_smilies'    );
+	            add_filter( 'layf_content_feed', 'convert_chars'      );
+	            add_filter( 'layf_content_feed', 'wpautop'            );
+	            add_filter( 'layf_content_feed', 'shortcode_unautop'  );
+	            add_filter( 'layf_content_feed', 'do_shortcode'       );
+                add_filter( 'layf_content_feed', 'strip_all_shortcodes'   );
+	            
+                $caption = apply_filters('layf_content_feed', $caption);
+	        }
+	        
+	        if( $caption ) {
+	            $caption = '<figcaption>'.$caption.'</figcaption>';
+	        }
+	        
+	        
+	        $img_html = '<figure><img src="'.wp_get_attachment_url($thumb_id).'" />'.$caption.'</figure>';
+	        $header_html = '<header>'.$img_html.'<h1>'. get_the_title_rss() .'</h1></header>';
+	        $turbo_content = $header_html . $turbo_content;
+	    }
 	    
 	    return $turbo_content;
 	}

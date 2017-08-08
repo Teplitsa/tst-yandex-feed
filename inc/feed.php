@@ -9,7 +9,7 @@ $layf_enable_turbo = get_option('layf_enable_turbo');
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
-<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" <?php if($layf_enable_turbo):?> xmlns:turbo="http://turbo.yandex.ru"<?php endif?> version="2.0">
 <channel>
 <title><?php bloginfo_rss('name');?></title>
 <link><?php bloginfo_rss('url') ?></link>
