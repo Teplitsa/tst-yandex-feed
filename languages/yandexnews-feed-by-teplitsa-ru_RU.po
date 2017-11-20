@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Yandex.News Feed by Teplitsa\n"
-"POT-Creation-Date: 2017-07-27 00:23+0200\n"
-"PO-Revision-Date: 2017-07-27 00:23+0200\n"
+"POT-Creation-Date: 2017-11-21 00:58+0200\n"
+"PO-Revision-Date: 2017-11-21 00:58+0200\n"
 "Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
@@ -27,7 +27,7 @@ msgstr "Настройки"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: inc/admin.php:73 inc/admin.php:194
+#: inc/admin.php:73 inc/admin.php:200
 msgid "Yandex.News Feed Settings"
 msgstr "Настройки трансляции Яндекс.Новости"
 
@@ -48,117 +48,125 @@ msgid "Post types for feed"
 msgstr "Типы записей для трансляции"
 
 #: inc/admin.php:96
+msgid "Max posts age for feed"
+msgstr "Максимальный возраст записей ленты"
+
+#: inc/admin.php:101
 msgid "Logo URL for feed description"
 msgstr "Ссылка на логотип для описания сайта на сервисе Яндекс.Новости"
 
-#: inc/admin.php:101
+#: inc/admin.php:106
 msgid "Square Logo URL for feed description"
 msgstr "Ссылка на квадратный логотип"
 
-#: inc/admin.php:106
+#: inc/admin.php:111
 msgid "Taxonomy to filter entries for feed"
 msgstr "Таксономия для фильтрации трансляции"
 
-#: inc/admin.php:111
+#: inc/admin.php:116
 msgid "Terms to filter entries for feed"
 msgstr "Термины для фильтрации трансляции"
 
-#: inc/admin.php:116
+#: inc/admin.php:121
 msgid "Terms slug to filter entries for feed"
 msgstr "Ярлыки терминов для фильтрации трансляции"
 
-#: inc/admin.php:121
+#: inc/admin.php:126
 msgid "Taxonomy to exclude from feed"
 msgstr "Таксономия, термины которой нужно исключить"
 
-#: inc/admin.php:126
+#: inc/admin.php:131
 msgid "Terms exclude from feed"
 msgstr "Термины для исключения"
 
-#: inc/admin.php:131
+#: inc/admin.php:136
 msgid "Terms slugs exclude from feed"
 msgstr "Ярлыки терминов для исключения"
 
-#: inc/admin.php:136
+#: inc/admin.php:141
 msgid "Include post thumbnails into feed"
 msgstr "Включить миниатюру в трансляцию Яндекс.Новости"
 
-#: inc/admin.php:141
+#: inc/admin.php:146
 msgid "Enable Yandex.Turbo Pages"
 msgstr "Включить поддержку турбо-страниц"
 
-#: inc/admin.php:146
+#: inc/admin.php:151
 msgid "Remove pdalink tag from feed"
 msgstr "Не показывать pdalink"
 
-#: inc/admin.php:151
+#: inc/admin.php:156
 msgid "Remove all unexecuted shortcodes"
 msgstr "Удалить все неиспользованные шорткоды (тэги типа [...])"
 
-#: inc/admin.php:156
+#: inc/admin.php:161
 msgid "Remove teaser from yandex:full-text tag"
 msgstr "Убрать тизер из тэга yandex:full-text"
 
-#: inc/admin.php:161
+#: inc/admin.php:166
 msgid "Feed items limit"
 msgstr "Лимит количества записей в ленте"
 
-#: inc/admin.php:166
+#: inc/admin.php:171
 msgid "Feed cache lifetime"
 msgstr "Время жизни кэша ленты"
 
-#: inc/admin.php:228
+#: inc/admin.php:234
 msgid "Customoze the URL of the feed if needed"
 msgstr ""
 "При необходимости укажите собственный URL-адрес трансляции.<br />\n"
 "Если включены простые постоянные ссылки, URL-адрес ленты будет<br />\n"
 "%s"
 
-#: inc/admin.php:239
+#: inc/admin.php:245
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/admin.php:250
+#: inc/admin.php:256
+msgid "Max age of feed posts in days"
+msgstr "Максимальный возраст записей, которые попадают в ленту, в днях"
+
+#: inc/admin.php:267
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/admin.php:261
+#: inc/admin.php:278
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (минимальный размер 180х180рх, "
 "строго квадратное изображение)"
 
-#: inc/admin.php:288 inc/admin.php:325
+#: inc/admin.php:305 inc/admin.php:342
 msgid "Comma separated list of term IDs"
 msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/admin.php:300 inc/admin.php:335
+#: inc/admin.php:317 inc/admin.php:352
 msgid "Comma separated list of term slugs"
 msgstr "Список ярлыков терминов, разделенных запятыми"
 
-#: inc/admin.php:387
+#: inc/admin.php:404
 msgid "Numeric limit or empty for no limit"
 msgstr ""
 "Введите число чтобы ограничить, или оставьте пустым для вывода без "
 "ограничений"
 
-#: inc/admin.php:397
+#: inc/admin.php:414
 msgid "Cache lifetime in hours. Leave it empty to disable cache."
 msgstr ""
 "Время, на которое лента кэшируется, в часах. Оставьте пустым чтобы отключить "
 "кэш."
 
-#: inc/admin.php:419
+#: inc/admin.php:436
 msgid "Yandex.News settings"
 msgstr "Настройки Яндекс.Новости"
 
-#: inc/admin.php:439
+#: inc/admin.php:456
 msgid "Related links"
 msgstr "Связанные ссылки"
 
-#: inc/admin.php:442
+#: inc/admin.php:459
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
 "string."
@@ -166,19 +174,19 @@ msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
 "описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: inc/admin.php:445
+#: inc/admin.php:462
 msgid "Exclude entry from Yandex.News feed"
 msgstr "Исключить запись из трансляции Яндекс.Новости"
 
-#: inc/admin.php:447
+#: inc/admin.php:464
 msgid "Exclude despite the global settings"
 msgstr "Исключить, не смотря на глобальные настройки"
 
-#: tst-yandex-feed.php:70
+#: tst-yandex-feed.php:74
 msgid "The plugin creates feed for Yandex.News service"
 msgstr "Плагин создает трансляцию материалов сайта для сервиса Яндекс.Новости"
 
-#: tst-yandex-feed.php:71
+#: tst-yandex-feed.php:75
 msgid "Teplitsa"
 msgstr "Теплица социальных технологий"
 

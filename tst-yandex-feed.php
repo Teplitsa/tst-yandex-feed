@@ -2,9 +2,9 @@
 /*
 Plugin Name: Yandex.News Feed by Teplitsa
 Description: The plugin creates feed for Yandex.News service
-Version: 1.9
+Version: 1.9.1
 Author: Teplitsa
-Author URI: http://te-st.ru/
+Author URI: https://te-st.ru/
 Text Domain: yandexnews-feed-by-teplitsa
 Domain Path: /languages
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -37,7 +37,7 @@ if(!defined('ABSPATH')) die; // Die if accessed directly
 
 // Plugin version:
 if( !defined('LAYF_VERSION') )
-    define('LAYF_VERSION', '1.9');
+    define('LAYF_VERSION', '1.9.1');
 	
 // Plugin DIR, with trailing slash:
 if( !defined('LAYF_PLUGIN_DIR') )
@@ -50,6 +50,10 @@ if( !defined('LAYF_PLUGIN_BASE_URL') )
 // Plugin ID:
 if( !defined('LAYF_PLUGIN_BASE_NAME') )
     define('LAYF_PLUGIN_BASE_NAME', plugin_basename(__FILE__));
+
+// Default max age of feed posts:
+if( !defined('LAYF_DEFAULT_MAX_POST_AGE') )
+    define('LAYF_DEFAULT_MAX_POST_AGE', '8');
 
 function yandexnews_feed_by_teplitsa_load_plugin_textdomain() {
     load_plugin_textdomain('yandexnews-feed-by-teplitsa', false, '/'.basename(LAYF_PLUGIN_DIR).'/languages/');

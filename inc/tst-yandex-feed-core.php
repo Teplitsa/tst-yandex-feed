@@ -207,7 +207,9 @@ class La_Yandex_Feed_Core {
 			    $query->query_vars['posts_per_page'] = -1;
 			}
 			
-			$limit = strtotime('- 8 days'); //Limited by Yandex rules
+			$layf_post_max_age = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
+			
+			$limit = strtotime(sprintf('- %s days', $layf_post_max_age)); //Limited by Yandex rules
 			$query->query_vars['date_query'] = array(
 				array(
 					'after' => array(
@@ -435,7 +437,12 @@ Allow: /yandex/news/
 	}
 	
 	static function add_header_with_thumbnail($turbo_content) {
+		
+		$img_html = '';
+		
+		$post = get_post();
 	    $thumb_id = get_post_thumbnail_id($post->ID);
+	    
 	    if(!empty($thumb_id)){
 	        
 	        $attachment = get_post( $thumb_id );
@@ -465,10 +472,11 @@ Allow: /yandex/news/
 	        
 	        
 	        $img_html = '<figure><img src="'.wp_get_attachment_url($thumb_id).'" />'.$caption.'</figure>';
-	        $header_html = '<header>'.$img_html.'<h1>'. get_the_title_rss() .'</h1></header>';
-	        $turbo_content = $header_html . $turbo_content;
 	    }
 	    
+	    $header_html = '<header>'.$img_html.'<h1>'. get_the_title_rss() .'</h1></header>';
+	    $turbo_content = $header_html . $turbo_content;
+	     
 	    return $turbo_content;
 	}
 	

@@ -35,8 +35,8 @@ _For English description scroll down, please._
 ![](http://itv.te-st.ru/wp-content/uploads/screen-1.png)
 
 Плагин имеет минимум необходимых настроек. Подробнее о его использовании можно узнать на сайте разработчиков:
-* [руководство](http://te-st.ru/2014/12/02/wordpress-and-yandex-news/) по использованию плагина;
-* [скринкаст](http://te-st.ru/2014/04/08/screencast-yandex-news-plugin/) по использованию плагина; 
+* [руководство](https://te-st.ru/2014/12/02/wordpress-and-yandex-news/) по использованию плагина;
+* [скринкаст](https://te-st.ru/2014/04/08/screencast-yandex-news-plugin/) по использованию плагина; 
 
 
 ## Помощь проекту ##
@@ -85,8 +85,8 @@ Feed is accessible at the link _domain.ru/yandex/news/_. A custom URL could be s
 
 The plugin has the minimum of settings. Read more about it's usage at the developers' website:
 
-* [detailed guide](http://te-st.EN/2014/12/02/wordpress-and-yandex-news/);
-* [screencast](http://te-st.EN/2014/04/08/screencast-yandex-news-plugin/);
+* [detailed guide](https://te-st.ru/2014/12/02/wordpress-and-yandex-news/);
+* [screencast](https://te-st.ru/2014/04/08/screencast-yandex-news-plugin/);
 
 
 ## Help us  ##

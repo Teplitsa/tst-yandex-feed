@@ -1,8 +1,8 @@
 === Yandex.News Feed by Teplitsa ===
 Contributors: foralien, denis.cherniatev, ahaenor
-Tags: yandex,news,xml,rss,seo,Yandex.News,turbo pages
+Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
-Tested up to: 4.8.1
+Tested up to: 4.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -32,8 +32,8 @@ Feed is accessible at the link _domain.ru/yandex/news/_. A custom URL could be s
 
 The plugin has the minimum of settings. Read more about it's usage at the developers' website:
 
-* [detailed guide](http://te-st.EN/2014/12/02/wordpress-and-yandex-news/) about plugin usage;
-* [screencast](http://te-st.EN/2014/04/08/screencast-yandex-news-plugin/) about plugin usage;
+* [detailed guide](https://te-st.ru/2014/12/02/wordpress-and-yandex-news/) about plugin usage;
+* [screencast](https://te-st.ru/2014/04/08/screencast-yandex-news-plugin/) about plugin usage;
 
 
 **Help us**
@@ -60,6 +60,11 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 
 == Changelog ==
+
+= 1.9.1 =
+* New: Option to set max age of the feed posts added.
+* Update: Yandex turbo-content header composition even for posts without thumbnails.
+* Update: Links to useful articles fixed.
 
 = 1.9 =
 * Update: Yandex turbo-pages support added.

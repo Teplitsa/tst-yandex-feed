@@ -93,6 +93,11 @@ class La_Yandex_Feed_Admin {
             'settngs_post_types_callback' 
         ), 'layf_settings', 'layf_base' );
         
+        add_settings_field ( 'layf_post_max_age', __ ( 'Max posts age for feed', 'yandexnews-feed-by-teplitsa' ), array (
+        	$this,
+        	'settngs_post_max_age_callback'
+        ), 'layf_settings', 'layf_base' );
+        
         add_settings_field ( 'layf_feed_logo', __ ( 'Logo URL for feed description', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_feed_logo_callback' 
@@ -169,6 +174,7 @@ class La_Yandex_Feed_Admin {
         ), 'layf_settings', 'layf_base' );
         
         register_setting ( 'layf_settings', 'layf_post_types' );
+        register_setting ( 'layf_settings', 'layf_post_max_age' );
         register_setting ( 'layf_settings', 'layf_feed_logo' );
         register_setting ( 'layf_settings', 'layf_feed_logo_square' );
         register_setting ( 'layf_settings', 'layf_filter_taxonomy' );
@@ -238,6 +244,17 @@ class La_Yandex_Feed_Admin {
     value="<?php echo $value;?>"> </label>
 <p class="description"><?php _e('Comma separated list of post types', 'yandexnews-feed-by-teplitsa');?></p>
 <?php
+	}
+	
+	function settngs_post_max_age_callback() {
+		
+		$value = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
+		?>
+		<label for="layf_post_max_age"><input name="layf_post_max_age"
+		    id="layf_post_max_age" type="text" class="regular-text code"
+		    value="<?php echo $value;?>"> </label>
+		<p class="description"><?php _e('Max age of feed posts in days', 'yandexnews-feed-by-teplitsa');?></p>
+		<?php
 	}
 	
 	function settings_feed_logo_callback() {
