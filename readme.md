@@ -8,6 +8,7 @@ _For English description scroll down, please._
 
 * Плагин элементарно устанавливается и требует минимум настроек.
 * Функции трансляции записей в Яндекс.Новости доступны сразу после установки.
+* Поддерживает генерацию турбо-страниц.
 
 Плагин разработан и поддерживается [Теплицей социальных технологий](http://te-st.ru/).
 
@@ -29,10 +30,10 @@ _For English description scroll down, please._
 или скачать его в виде ZIP архива: https://github.com/Teplitsa/tst-yandex-feed/archive/master.zip
 
 После установки настройки плагина доступны через меню _Настройки -> Яндекс.Новости_. Пример страницы настроек
-![](http://itv.te-st.ru/wp-content/uploads/screen-2.png)
+![](https://itv.te-st.ru/wp-content/uploads/screen-2.png)
 
 Трансляция (фид) доступна для просмотра по ссылке _domain.ru/yandex/news/_. В настройках может быть указан собственный адрес, который работает при активных "красивых пермалинках". Пример выдачи
-![](http://itv.te-st.ru/wp-content/uploads/screen-1.png)
+![](https://itv.te-st.ru/wp-content/uploads/screen-1.png)
 
 Плагин имеет минимум необходимых настроек. Подробнее о его использовании можно узнать на сайте разработчиков:
 * [руководство](https://te-st.ru/2014/12/02/wordpress-and-yandex-news/) по использованию плагина;

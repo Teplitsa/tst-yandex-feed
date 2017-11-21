@@ -7,7 +7,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
-Yandex.News Feed by Teplitsa - is the plugin for WordPress that allows you to convert your site materials  into Yandex.News format.
+Yandex.News Feed by Teplitsa - allows you to convert your site materials into Yandex News format with turbo pages support.
 
 The goal of the plugin is to simplify the integration of any WordPress-powered website with Yandex.News.
 
