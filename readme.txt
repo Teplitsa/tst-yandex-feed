@@ -61,6 +61,13 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.10.0 =
+* New: Yandex Ad Network blocks support added.
+* New: Analytics support added.
+* Update: mp4 video support added.
+* Fix: Protocol issue in enclosure resolved.
+* Fix: "More" tag removed from short description.
+
 = 1.9.1 =
 * New: Option to set max age of the feed posts added.
 * Update: Yandex turbo-content header composition even for posts without thumbnails.

@@ -15,6 +15,24 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <link><?php bloginfo_rss('url') ?></link>
 <description><?php bloginfo_rss("description") ?></description>
 <?php
+    $layf_analytics_id = trim(get_option('layf_analytics_id', ''));
+    if(!empty($layf_analytics_id)):
+?>
+<yandex:analytics type="<?php echo get_option('layf_analytics_type', 'Yandex')?>" id="<?php echo $layf_analytics_id?>"></yandex:analytics>
+<?php endif?>
+<?php
+    $layf_adnetwork_id_header = trim(get_option('layf_adnetwork_id_header', ''));
+    if(!empty($layf_adnetwork_id_header)):
+?>
+<yandex:adNetwork type="Yandex" id="<?php echo $layf_adnetwork_id_header?>" turbo-ad-id="header_ad_place"></yandex:adNetwork>
+<?php endif?>
+<?php
+    $layf_adnetwork_id_footer = trim(get_option('layf_adnetwork_id_footer', ''));
+    if(!empty($layf_adnetwork_id_footer)):
+?>
+<yandex:adNetwork type="Yandex" id="<?php echo $layf_adnetwork_id_footer?>" turbo-ad-id="footer_ad_place"></yandex:adNetwork>
+<?php endif?>
+<?php
 	$logo = get_option('layf_feed_logo', '');	
 	if(!empty($logo)):
 ?>
@@ -40,7 +58,10 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <?php endif ?>
 <description><?php La_Yandex_Feed_Core::custom_the_excerpt_rss();?></description>
 <?php
-	$layf_author = apply_filters('layf_author', get_the_author(), get_the_ID()); 
+    $layf_author = '';
+    if(!get_option('layf_hide_author', '')) {
+        $layf_author = apply_filters('layf_author', get_the_author(), get_the_ID());
+    }
 	if($layf_author):
 ?>
 <author><?php echo $layf_author; ?></author>
@@ -56,18 +77,26 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
 <enclosure url="<?php echo esc_url($img['url']);?>" type="<?php echo esc_attr($img['mime']);?>"/>
 <?php endforeach; endif;?>
+
 <?php
 	$media = La_Yandex_Feed_Core::item_media();
 	if(!empty($media)):
 	//media group 
 ?>
 <?php foreach($media as $media_obj):?>
+<?php if(!empty($media_obj['content']) || !empty($media_obj['player'])):?>
 <media:group>
-<media:player url="<?php echo esc_url($media_obj['url']);?>" />
+<?php if(!empty($media_obj['content'])):?>
+<media:content url="<?php echo esc_url($media_obj['content']);?>" />
+<?php endif?>
+<?php if(!empty($media_obj['player'])):?>
+<media:player url="<?php echo esc_url($media_obj['player']);?>" />
+<?php endif?>
 <?php if(!empty($media_obj['thumb'])) { ?>
 <media:thumbnail url="<?php echo esc_url($media_obj['thumb']);?>"/>
 <?php }?>
 </media:group>
+<?php endif?>
 <?php endforeach; ?>
 <?php endif;?>
 <?php

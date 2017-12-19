@@ -6,7 +6,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_key = 'tst_yandex_news_cache';
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
-    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source>';
+    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br>';
     
 	private static $instance = NULL; //instance store
 		
@@ -36,8 +36,6 @@ class La_Yandex_Feed_Core {
 		
 		/* admin */
 		$this->admin_setup();
-		
-		
     }
     
     public function cache_pre_query( $request, $query ){
@@ -330,6 +328,7 @@ Allow: /yandex/news/
 		
 		
 		
+// 		return $text;
 		return self::_valid_characters($text);
 	}
 	
@@ -374,8 +373,10 @@ Allow: /yandex/news/
 		add_filter( 'layf_content_feed', 'do_shortcode'       );
 		
 		if(get_option('layf_remove_shortcodes', '')) {
-		    add_filter( 'layf_content_feed', 'strip_all_shortcodes'   );
+		    add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes'   );
 		}
+		
+		$content = preg_replace('/<p>\s*<\/p>/', '', $content );
 		
 		return apply_filters('layf_content_feed', $content);		
 	}
@@ -394,6 +395,7 @@ Allow: /yandex/news/
 	    }
 	    $content = str_replace(']]>', ']]&gt;', $content);
 	    
+	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_shortcodes' );
 	    add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
 	    add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
 	    
@@ -402,17 +404,19 @@ Allow: /yandex/news/
 	    add_filter( 'layf_turbo_content_feed', 'convert_chars'      );
 	    add_filter( 'layf_turbo_content_feed', 'wpautop'            );
 	    add_filter( 'layf_turbo_content_feed', 'shortcode_unautop'  );
-        add_filter( 'layf_turbo_content_feed', 'strip_all_shortcodes' );
+        add_filter( 'layf_turbo_content_feed', 'layf_strip_all_shortcodes' );
         
 	    $turbo_content = apply_filters('layf_turbo_content_feed', $content);
 	    
 	    $turbo_content = strip_tags( $turbo_content, self::$yandex_turbo_allowed_tags );
 	    
+	    $turbo_content = preg_replace('/<p>\s*<\/p>/', '', $turbo_content );
 	    $turbo_content = preg_replace('/class\s*=\s*".*?"/', '', $turbo_content );
 	    $turbo_content = preg_replace('/class\s*=\s*\'.*?\'/', '', $turbo_content );
 	    $turbo_content = preg_replace('/\s+>/', '>', $turbo_content );
 	    
 	    $turbo_content = self::wrap_turbo_images($turbo_content);
+	    $turbo_content = self::add_ads_blocks($turbo_content);
 	    $turbo_content = self::add_header_with_thumbnail($turbo_content);
 	    
 	    $turbo_content = layf_wxr_cdata( $turbo_content );
@@ -422,17 +426,44 @@ Allow: /yandex/news/
 	
 	static function wrap_turbo_images($turbo_content) {
 	    
-	    preg_match_all('!(<img.*>)!Ui', $turbo_content, $matches);
+	    $post = get_post();
+	    $thumb_id = get_post_thumbnail_id($post->ID);
+	    $thumb_url_no_suffix = '';
+	    if(!empty($thumb_id)){
+	        $thumb_url_no_suffix = wp_get_attachment_url($thumb_id);
+	        $thumb_url_no_suffix = preg_replace('/(?:-\d+x\d+)?\.\w+$/', '', $thumb_url_no_suffix);
+	        $thumb_url_no_suffix = preg_replace('/http[s]?:/', '', $thumb_url_no_suffix);
+	    }
 	    
+	    preg_match_all('!(<img.*>)!Ui', $turbo_content, $matches);
+	     
 	    if(isset($matches[1]) && !empty($matches)){
 	        foreach($matches[1] as $k => $v) {
+	            if($thumb_url_no_suffix && strpos($v, $thumb_url_no_suffix)) {
+	                $turbo_content = str_replace($v, "", $turbo_content);
+	            }
 	            #var_dump(preg_match('!<figure>(?:(?!<figure>).)*'. preg_quote($v).'.*?</figure>!is', $turbo_content));
-	            if(!preg_match('!<figure>.*?'. preg_quote($v).'.*?</figure>!is', $turbo_content)) {
+	            elseif(!preg_match('!<figure>.*?'. preg_quote($v).'.*?</figure>!is', $turbo_content)) {
 	                $turbo_content = str_replace($v, "<figure>{$v}</figure>", $turbo_content);
 	            }
 	        }
 	    }
 	     
+	    return $turbo_content;
+	}
+	
+	static function add_ads_blocks($turbo_content) {
+	    
+	    $layf_adnetwork_id_header = trim(get_option('layf_adnetwork_id_header', ''));
+	    if($layf_adnetwork_id_header) {
+	        $turbo_content = '<figure data-turbo-ad-id="header_ad_place"></figure>'.$turbo_content;
+	    }
+	    
+	    $layf_adnetwork_id_footer = trim(get_option('layf_adnetwork_id_footer', ''));
+	    if($layf_adnetwork_id_footer) {
+	        $turbo_content = $turbo_content . '<figure data-turbo-ad-id="footer_ad_place"></figure>';
+	    }
+	    
 	    return $turbo_content;
 	}
 	
@@ -461,7 +492,7 @@ Allow: /yandex/news/
 	            add_filter( 'layf_content_feed', 'wpautop'            );
 	            add_filter( 'layf_content_feed', 'shortcode_unautop'  );
 	            add_filter( 'layf_content_feed', 'do_shortcode'       );
-                add_filter( 'layf_content_feed', 'strip_all_shortcodes'   );
+                add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes'   );
 	            
                 $caption = apply_filters('layf_content_feed', $caption);
 	        }
@@ -481,10 +512,16 @@ Allow: /yandex/news/
 	}
 	
 	static function custom_the_excerpt_rss() {
-	    if(get_option('layf_remove_shortcodes', '')) {
-	        add_filter( 'the_excerpt_rss', 'strip_all_shortcodes' );
-	    }
-	    the_excerpt_rss();
+	    
+	    $excerpt = get_the_excerpt();
+	    $excerpt = wp_strip_all_tags( $excerpt );
+	    
+	    add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes' );
+	    add_filter( 'layf_content_feed', 'layf_remove_more_tag', 1 );
+	    
+	    $excerpt = apply_filters('layf_content_feed', $excerpt);
+	    
+	    echo $excerpt;
 	}
 	
 	/* @to-do: add support for support video files */
@@ -535,7 +572,7 @@ Allow: /yandex/news/
 			
 			$mime = self::_get_mime($img);
 			if(!empty($mime)){
-				$res[] = array('url' => $img, 'mime' => $mime);
+				$res[] = array('url' => self::add_protocol($img), 'mime' => $mime);
 			}
 		}
 		
@@ -560,12 +597,24 @@ Allow: /yandex/news/
 		return $mime;
 	}
 	
+	public static function add_protocol( $url ) {
+	    $url = preg_replace( '/^(http:|https:)/', '', $url );
+	    $url = self::get_site_protocol() . $url;
+	    return $url;
+	}
+	
+	public static function get_site_protocol() {
+	    $site_protocol = preg_replace( '/(.*?)\/\/.*/', '\1', site_url() );
+	    return $site_protocol ? $site_protocol : ( is_ssl() ? 'https' : 'http' );
+	}
 	
 	/* videos */
 	static function item_media(){
 		global $post;
 		
 		$matches = $res = array();
+		$return = array();
+		
 		//include shorcodes and oembeds
 		$out = do_shortcode($post->post_content);
 		$out = $GLOBALS['wp_embed']->autoembed($out);
@@ -576,19 +625,22 @@ Allow: /yandex/news/
 		if(isset($matches[0]) && !empty($matches[0]))
 			$res = array_merge($res, $matches[0]); //append links
 		
-		//@to_do: add another video providers
-		
 		//modify $res to be able add thumbnails
-		$return = array();
 		if(!empty($res)){ foreach($res as $i => $url) {
 			$thumbnail_url = self::get_youtube_thumbnail_url($url);
-			$return[] = array('url' => $url, 'thumb' => $thumbnail_url);
+			$return[] = array('player' => $url, 'thumb' => $thumbnail_url);
 		}}
+		// youtube end
+		
+		$videos = get_attached_media( 'video', $post->ID );
+		foreach($videos as $video) {
+		    $return[] = array('content' => $video->guid, 'type' => $video->post_mime_type);
+		}
+		
+		//@to_do: add another video providers
 		
 		return apply_filters('layf_video_embeds', $return, $post->ID);
 	}
-	
-	
 	
 	/* build related links block */	
 	static function item_related() {
@@ -896,10 +948,10 @@ $table = array(
     '&clubs;'    => '&#9827;', # black club suit = shamrock, U+2663 ISOpub
     '&hearts;'   => '&#9829;', # black heart suit = valentine, U+2665 ISOpub
     '&diams;'    => '&#9830;', # black diamond suit, U+2666 ISOpub
-    '&quot;'     => '&#34;',   # quotation mark = APL quote, U+0022 ISOnum
-    '&amp;'      => '&#38;',   # ampersand, U+0026 ISOnum
-    '&lt;'       => '&#60;',   # less-than sign, U+003C ISOnum
-    '&gt;'       => '&#62;',   # greater-than sign, U+003E ISOnum
+//     '&quot;'     => '&#34;',   # quotation mark = APL quote, U+0022 ISOnum
+//     '&amp;'      => '&#38;',   # ampersand, U+0026 ISOnum
+//     '&lt;'       => '&#60;',   # less-than sign, U+003C ISOnum
+//     '&gt;'       => '&#62;',   # greater-than sign, U+003E ISOnum
     '&OElig;'    => '&#338;',  # latin capital ligature OE, U+0152 ISOlat2
     '&oelig;'    => '&#339;',  # latin small ligature oe, U+0153 ISOlat2
     '&Scaron;'   => '&#352;',  # latin capital letter S with caron, U+0160 ISOlat2
@@ -928,7 +980,7 @@ $table = array(
     '&lsaquo;'   => '&#8249;', # single left-pointing angle quotation mark, U+2039 ISO proposed
     '&rsaquo;'   => '&#8250;', # single right-pointing angle quotation mark, U+203A ISO proposed
     '&euro;'     => '&#8364;', # euro sign, U+20AC NEW
-    '&apos;'     => '&#39;',   # apostrophe = APL quote, U+0027 ISOnum
+//     '&apos;'     => '&#39;',   # apostrophe = APL quote, U+0027 ISOnum
 );
 
 return $table;
@@ -940,10 +992,36 @@ function layf_filter_image_caption($out, $attr, $content) {
 	return $content;			
 }
 
-function strip_all_shortcodes($text){
+
+function layf_strip_all_shortcodes($text){
     $text = preg_replace("/\[[^\]]+\]/", '', $text);  #strip shortcode
     return $text;
 }
+
+
+function layf_process_site_video_shortcodes($turbo_content) {
+    
+    preg_match_all('!(\[video.*mp4="(.*?)".*\]\[/video\])!Ui', $turbo_content, $matches);
+    
+    if(isset($matches[2]) && !empty($matches)){
+        foreach($matches[2] as $k => $v) {
+            $shortcode = isset($matches[1][$k]) ? $matches[1][$k] : null;
+            if($shortcode) {
+                $turbo_content = str_replace($shortcode, "<figure><video><source src=\"{$v}\" type=\"video/mp4\"/></video></figure>", $turbo_content);
+            }
+        }
+    }
+    
+    return $turbo_content;
+}
+
+
+function layf_remove_more_tag($text) {
+    $text = preg_replace("/<!--more-->/i", '', $text);
+    $text = preg_replace("/&nbsp;more&nbsp;&raquo;/i", '', $text);
+    return $text;
+}
+
 
 function layf_wxr_cdata( $str ) {
     if ( ! seems_utf8( $str ) ) {

@@ -9,6 +9,7 @@ class La_Yandex_Feed_Admin {
 	
 	private static $instance = NULL; //instance store
 	
+	private static $analytics_types = array('Yandex', 'LiveInternet', 'Google', 'MailRu', 'Rambler', 'Mediascope');
 	
 	private function __construct() {
 				
@@ -148,9 +149,34 @@ class La_Yandex_Feed_Admin {
             'settings_enable_turbo_callback'
         ), 'layf_settings', 'layf_base' );
         
+        add_settings_field ( 'layf_analytics_type', __ ( 'Analytics type', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_analytics_type_callback'
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field ( 'layf_analytics_id', __ ( 'Analytics ID', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_analytics_id_callback'
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field ( 'layf_adnetwork_id_header', __ ( 'Yandex Ad Network ID for header', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_adnetwork_id_header_callback'
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field ( 'layf_adnetwork_id_footer', __ ( 'Yandex Ad Network ID for footer', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_adnetwork_id_footer_callback'
+        ), 'layf_settings', 'layf_base' );
+        
         add_settings_field ( 'layf_remove_pdalink', __ ( 'Remove pdalink tag from feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_remove_pdalink_callback' 
+        ), 'layf_settings', 'layf_base' );
+        
+        add_settings_field ( 'layf_hide_author', __ ( 'Remove post author name from feed', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_hide_author_callback'
         ), 'layf_settings', 'layf_base' );
         
         add_settings_field ( 'layf_remove_shortcodes', __ ( 'Remove all unexecuted shortcodes', 'yandexnews-feed-by-teplitsa' ), array (
@@ -186,7 +212,12 @@ class La_Yandex_Feed_Admin {
         register_setting ( 'layf_settings', 'layf_custom_url' );
         register_setting ( 'layf_settings', 'layf_include_post_thumbnail' );
         register_setting ( 'layf_settings', 'layf_enable_turbo' );
+        register_setting ( 'layf_settings', 'layf_analytics_type' );
+        register_setting ( 'layf_settings', 'layf_analytics_id' );
+        register_setting ( 'layf_settings', 'layf_adnetwork_id_header' );
+        register_setting ( 'layf_settings', 'layf_adnetwork_id_footer' );
         register_setting ( 'layf_settings', 'layf_remove_pdalink' );
+        register_setting ( 'layf_settings', 'layf_hide_author' );
         register_setting ( 'layf_settings', 'layf_feed_items_limit' );
         register_setting ( 'layf_settings', 'layf_feed_cache_ttl' );
         register_setting ( 'layf_settings', 'layf_remove_shortcodes' );
@@ -362,7 +393,44 @@ class La_Yandex_Feed_Admin {
 <?php	
 	}
 	
-	function settings_remove_pdalink_callback() {
+	function settings_analytics_type_callback() {
+	
+	    $analytics_types = self::$analytics_types;
+	    $analytics_type = get_option('layf_analytics_type', $analytics_types[0]);
+	    
+	    if(!empty($analytics_types)){
+        ?>
+			<select name="layf_analytics_type">
+			<?php foreach($analytics_types as $key => $val) { ?>
+				<option value="<?php echo esc_attr($val);?>" <?php selected($val, $analytics_type);?>><?php echo esc_attr($val);?></option>
+			<?php } ?>
+			</select>
+		<?php
+		}
+	}
+	
+	function settings_analytics_id_callback() {
+	    $value = esc_attr(get_option('layf_analytics_id', ''));
+	    ?>
+    	<label for="layf_analytics_id"><input name="layf_analytics_id" id="layf_analytics_id" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
+    <?php
+    }
+		
+    function settings_adnetwork_id_header_callback() {
+        $value = esc_attr(get_option('layf_adnetwork_id_header', ''));
+        ?>
+        	<label for="layf_adnetwork_id_header"><input name="layf_adnetwork_id_header" id="layf_adnetwork_id_header" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
+        <?php
+    }
+    
+    function settings_adnetwork_id_footer_callback() {
+        $value = esc_attr(get_option('layf_adnetwork_id_footer', ''));
+        ?>
+        	<label for="layf_adnetwork_id_footer"><input name="layf_adnetwork_id_footer" id="layf_adnetwork_id_footer" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
+        <?php
+    }
+
+    function settings_remove_pdalink_callback() {
 	    $value = get_option('layf_remove_pdalink', '');
 	    ?>
 <input type="checkbox" name="layf_remove_pdalink" value="1"
@@ -370,6 +438,14 @@ class La_Yandex_Feed_Admin {
 <?php	
 	}
 	
+	function settings_hide_author_callback() {
+	    $value = get_option('layf_hide_author', '');
+	    ?>
+	<input type="checkbox" name="layf_hide_author" value="1"
+	    <?php if($value):?> checked="checked" <?php endif;?> />
+	<?php	
+	}
+		
 	function settings_enable_turbo_callback() {
 	    $value = get_option('layf_enable_turbo', '');
     ?>
@@ -460,7 +536,7 @@ class La_Yandex_Feed_Admin {
 </fieldset>
 <fieldset>
     <label class="label-title"><?php _e('Exclude entry from Yandex.News feed', 'yandexnews-feed-by-teplitsa');?></label><br>
-    <label for=""><input type="checkbox" name="layf_exclude_from_feed"
+    <label for="layf_exclude_from_feed"><input type="checkbox" name="layf_exclude_from_feed"
         value="1" <?php checked($exclude, 1);?>><?php _e('Exclude despite the global settings', 'yandexnews-feed-by-teplitsa');?></label>
 </fieldset>
 <?php
