@@ -61,6 +61,10 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.10.1 =
+* Fix: Timezone negative UTC offset bug fixed.
+* Update: Authors list extended.
+
 = 1.10.0 =
 * New: Yandex Ad Network blocks support added.
 * New: Analytics support added.

@@ -112,9 +112,12 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	endif;
 	
 	$gmt_offset = get_option('gmt_offset');
-	$gmt_offset = ($gmt_offset > 9) ? $gmt_offset.'00' : ('0'.$gmt_offset.'00');
+	
+	$gmt_offset_abs = floor(abs($gmt_offset));
+	$gmt_offset_str = ($gmt_offset_abs > 9) ? $gmt_offset_abs.'00' : ('0'.$gmt_offset_abs.'00');
+	$gmt_offset_str = $gmt_offset >= 0 ? '+' . $gmt_offset_str : '-' . $gmt_offset_str;
 ?>
-<pubDate><?php echo mysql2date('D, d M Y H:i:s +'.$gmt_offset, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
+<pubDate><?php echo mysql2date('D, d M Y H:i:s '.$gmt_offset_str, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
 <?php if($layf_enable_turbo):?>
 <turbo:content><?php echo La_Yandex_Feed_Core::get_the_turbo_content();?></turbo:content>
 <?php endif?>
