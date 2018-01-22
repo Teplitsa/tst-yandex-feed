@@ -12,6 +12,7 @@ Contributors:
 	Anna Ladoshkina aka foralien (webdev@foralien.com)
 	Denis Cherniatev (denis.cherniatev@gmail.com)
 	Lev Zvyagincev (ahaenor@gmail.com)
+	Teplitsa Support Team (suptestru@gmail.com)
 
 License: GPLv2 or later
 	Copyright (C) 2012-2017 by Teplitsa of Social Technologies (http://te-st.ru).

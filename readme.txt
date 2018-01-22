@@ -1,5 +1,5 @@
 === Yandex.News Feed by Teplitsa ===
-Contributors: foralien, denis.cherniatev, ahaenor
+Contributors: foralien, denis.cherniatev, ahaenor, teplosup
 Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
 Tested up to: 4.9.1
