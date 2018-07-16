@@ -15,26 +15,26 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 <link><?php bloginfo_rss('url') ?></link>
 <description><?php bloginfo_rss("description") ?></description>
 <?php
-    $layf_analytics_id = trim(get_option('layf_analytics_id', ''));
-    if(!empty($layf_analytics_id)):
+$layf_analytics_id = trim(get_option('layf_analytics_id', ''));
+if(!empty($layf_analytics_id)):
 ?>
 <yandex:analytics type="<?php echo get_option('layf_analytics_type', 'Yandex')?>" id="<?php echo $layf_analytics_id?>"></yandex:analytics>
 <?php endif?>
 <?php
-    $layf_adnetwork_id_header = trim(get_option('layf_adnetwork_id_header', ''));
-    if(!empty($layf_adnetwork_id_header)):
+$layf_adnetwork_id_header = trim(get_option('layf_adnetwork_id_header', ''));
+if(!empty($layf_adnetwork_id_header)):
 ?>
 <yandex:adNetwork type="Yandex" id="<?php echo $layf_adnetwork_id_header?>" turbo-ad-id="header_ad_place"></yandex:adNetwork>
 <?php endif?>
 <?php
-    $layf_adnetwork_id_footer = trim(get_option('layf_adnetwork_id_footer', ''));
-    if(!empty($layf_adnetwork_id_footer)):
+$layf_adnetwork_id_footer = trim(get_option('layf_adnetwork_id_footer', ''));
+if(!empty($layf_adnetwork_id_footer)):
 ?>
 <yandex:adNetwork type="Yandex" id="<?php echo $layf_adnetwork_id_footer?>" turbo-ad-id="footer_ad_place"></yandex:adNetwork>
 <?php endif?>
 <?php
-	$logo = get_option('layf_feed_logo', '');	
-	if(!empty($logo)):
+$logo = get_option('layf_feed_logo', '');	
+if(!empty($logo)):
 ?>
 <?php if($layf_enable_turbo):?>
 <turbo:logo><?php echo esc_url($logo);?></turbo:logo>
@@ -47,6 +47,9 @@ echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
 <yandex:logo  type="square"><?php echo esc_url($logo_square);?></yandex:logo>
 <?php endif;?>
+<?php if($layf_enable_turbo):?>
+<turbo:cms_plugin><?php echo LAYF_YANDEX_CMS_PLUGIN_ID?></turbo:cms_plugin>
+<?php endif?>
 
 <?php while( have_posts()) : the_post(); ?>
 <item<?php if($layf_enable_turbo):?> turbo="true"<?php endif;?>>

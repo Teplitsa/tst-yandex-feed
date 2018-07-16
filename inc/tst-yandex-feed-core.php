@@ -6,7 +6,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_key = 'tst_yandex_news_cache';
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
-    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br>';
+    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
     
 	private static $instance = NULL; //instance store
 		

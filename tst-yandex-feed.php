@@ -55,6 +55,10 @@ if( !defined('LAYF_PLUGIN_BASE_NAME') )
 // Default max age of feed posts:
 if( !defined('LAYF_DEFAULT_MAX_POST_AGE') )
     define('LAYF_DEFAULT_MAX_POST_AGE', '8');
+    
+// Plugin version:
+if( !defined('LAYF_YANDEX_CMS_PLUGIN_ID') )
+    define('LAYF_YANDEX_CMS_PLUGIN_ID', '6987189DB81CB618F223396A679B6B05');
 
 function yandexnews_feed_by_teplitsa_load_plugin_textdomain() {
     load_plugin_textdomain('yandexnews-feed-by-teplitsa', false, '/'.basename(LAYF_PLUGIN_DIR).'/languages/');
