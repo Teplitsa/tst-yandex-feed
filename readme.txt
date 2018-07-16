@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor, teplosup
 Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
-Tested up to: 4.9.1
+Tested up to: 4.9.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -60,6 +60,10 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 
 == Changelog ==
+
+= 1.10.2 =
+* Update: New tags allowed.
+* Update: Yandex Plugin ID added.
 
 = 1.10.1 =
 * Fix: Timezone negative UTC offset bug fixed.
