@@ -7,6 +7,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
     private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
+    public static $yandex_turbo_feed_min_limit = 1000;
     
 	private static $instance = NULL; //instance store
 		
@@ -193,6 +194,7 @@ class La_Yandex_Feed_Core {
 	public function custom_request($query) {
 		
 		if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
+            $layf_enable_turbo = get_option('layf_enable_turbo');
 			$pt = $this->get_supported_post_types();			
 			
 			$query->query_vars['post_type'] = $pt;
@@ -205,18 +207,26 @@ class La_Yandex_Feed_Core {
 			    $query->query_vars['posts_per_page'] = -1;
 			}
 			
-			$layf_post_max_age = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
-			
-			$limit = strtotime(sprintf('- %s days', $layf_post_max_age)); //Limited by Yandex rules
-			$query->query_vars['date_query'] = array(
-				array(
-					'after' => array(
-						'year'  => date('Y', $limit),
-						'month' => date('m', $limit),
-						'day'   => date('d', $limit),
-					)
-				)
-			);
+            if($layf_enable_turbo) {
+                if(empty($query->query_vars['posts_per_page']) || $query->query_vars['posts_per_page'] < self::$yandex_turbo_feed_min_limit) {
+                    $query->query_vars['posts_per_page'] = self::$yandex_turbo_feed_min_limit;
+                }
+            }
+            else {
+                $layf_post_max_age = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
+                
+                $limit = strtotime(sprintf('- %s days', $layf_post_max_age)); //Limited by Yandex rules
+                $query->query_vars['date_query'] = array(
+                    array(
+                        'after' => array(
+                            'year'  => date('Y', $limit),
+                            'month' => date('m', $limit),
+                            'day'   => date('d', $limit),
+                        )
+                    )
+                );
+            }
+            
 			$query->is_page = false;
 			$query->is_home = false;
 			

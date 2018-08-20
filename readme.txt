@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor, teplosup
 Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
-Tested up to: 4.9.7
+Tested up to: 4.9.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -60,6 +60,10 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 
 == Changelog ==
+
+= 1.10.3 =
+* Update: Some Turbo settings moved to Yandex.Webmaster.
+* Update: Turbo-pages limit settings updated.
 
 = 1.10.2 =
 * Update: New tags allowed.

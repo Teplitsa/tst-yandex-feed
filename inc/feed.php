@@ -36,9 +36,6 @@ if(!empty($layf_adnetwork_id_footer)):
 $logo = get_option('layf_feed_logo', '');	
 if(!empty($logo)):
 ?>
-<?php if($layf_enable_turbo):?>
-<turbo:logo><?php echo esc_url($logo);?></turbo:logo>
-<?php endif?>
 <yandex:logo><?php echo esc_url($logo);?></yandex:logo>
 <?php endif;?>
 <?php

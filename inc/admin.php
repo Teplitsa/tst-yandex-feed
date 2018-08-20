@@ -10,6 +10,7 @@ class La_Yandex_Feed_Admin {
 	private static $instance = NULL; //instance store
 	
 	private static $analytics_types = array('Yandex', 'LiveInternet', 'Google', 'MailRu', 'Rambler', 'Mediascope');
+	private static $turbo_logo_settings_url = 'https://webmaster.yandex.ru/site/turbo/settings/';
 	
 	private function __construct() {
 				
@@ -149,24 +150,9 @@ class La_Yandex_Feed_Admin {
             'settings_enable_turbo_callback'
         ), 'layf_settings', 'layf_base' );
         
-        add_settings_field ( 'layf_analytics_type', __ ( 'Analytics type', 'yandexnews-feed-by-teplitsa' ), array (
+        add_settings_field ( 'layf_analytics_type', __ ( 'Analytics and ads', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_analytics_type_callback'
-        ), 'layf_settings', 'layf_base' );
-        
-        add_settings_field ( 'layf_analytics_id', __ ( 'Analytics ID', 'yandexnews-feed-by-teplitsa' ), array (
-            $this,
-            'settings_analytics_id_callback'
-        ), 'layf_settings', 'layf_base' );
-        
-        add_settings_field ( 'layf_adnetwork_id_header', __ ( 'Yandex Ad Network ID for header', 'yandexnews-feed-by-teplitsa' ), array (
-            $this,
-            'settings_adnetwork_id_header_callback'
-        ), 'layf_settings', 'layf_base' );
-        
-        add_settings_field ( 'layf_adnetwork_id_footer', __ ( 'Yandex Ad Network ID for footer', 'yandexnews-feed-by-teplitsa' ), array (
-            $this,
-            'settings_adnetwork_id_footer_callback'
         ), 'layf_settings', 'layf_base' );
         
         add_settings_field ( 'layf_remove_pdalink', __ ( 'Remove pdalink tag from feed', 'yandexnews-feed-by-teplitsa' ), array (
@@ -285,6 +271,7 @@ class La_Yandex_Feed_Admin {
 		    id="layf_post_max_age" type="text" class="regular-text code"
 		    value="<?php echo $value;?>"> </label>
 		<p class="description"><?php _e('Max age of feed posts in days', 'yandexnews-feed-by-teplitsa');?></p>
+		<p class="description"><?php printf( __('For Yandex.Turbo this parameter will be ignored. Numeric feed limit will be used instead it.', 'yandexnews-feed-by-teplitsa'), La_Yandex_Feed_Core::$yandex_turbo_feed_min_limit, La_Yandex_Feed_Core::$yandex_turbo_feed_min_limit);?></p>
 		<?php
 	}
 	
@@ -296,6 +283,7 @@ class La_Yandex_Feed_Admin {
     id="layf_feed_logo" type="text" class="code widefat"
     value="<?php echo $value;?>"> </label>
 <p class="description"><?php _e('Direct link to .jpg, .png, .gif file (100px size of max side)', 'yandexnews-feed-by-teplitsa');?></p>
+<p class="description"><?php printf( __('Logo for Yandex.Turbo should be set directly in Yandex.Webmaster: <a href="%s" target="_blank">%s</a>', 'yandexnews-feed-by-teplitsa'), self::$turbo_logo_settings_url, self::$turbo_logo_settings_url);?></p>
 <?php
 	}
 	
@@ -394,42 +382,11 @@ class La_Yandex_Feed_Admin {
 	}
 	
 	function settings_analytics_type_callback() {
-	
-	    $analytics_types = self::$analytics_types;
-	    $analytics_type = get_option('layf_analytics_type', $analytics_types[0]);
-	    
-	    if(!empty($analytics_types)){
         ?>
-			<select name="layf_analytics_type">
-			<?php foreach($analytics_types as $key => $val) { ?>
-				<option value="<?php echo esc_attr($val);?>" <?php selected($val, $analytics_type);?>><?php echo esc_attr($val);?></option>
-			<?php } ?>
-			</select>
+<p class="description"><?php printf( __('Analytics and ads should be set up directly in Yandex.Webmaster: <a href="%s" target="_blank">%s</a>', 'yandexnews-feed-by-teplitsa'), self::$turbo_logo_settings_url, self::$turbo_logo_settings_url);?></p>
 		<?php
-		}
 	}
 	
-	function settings_analytics_id_callback() {
-	    $value = esc_attr(get_option('layf_analytics_id', ''));
-	    ?>
-    	<label for="layf_analytics_id"><input name="layf_analytics_id" id="layf_analytics_id" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
-    <?php
-    }
-		
-    function settings_adnetwork_id_header_callback() {
-        $value = esc_attr(get_option('layf_adnetwork_id_header', ''));
-        ?>
-        	<label for="layf_adnetwork_id_header"><input name="layf_adnetwork_id_header" id="layf_adnetwork_id_header" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
-        <?php
-    }
-    
-    function settings_adnetwork_id_footer_callback() {
-        $value = esc_attr(get_option('layf_adnetwork_id_footer', ''));
-        ?>
-        	<label for="layf_adnetwork_id_footer"><input name="layf_adnetwork_id_footer" id="layf_adnetwork_id_footer" type="text" class="code regular-text" value="<?php echo $value;?>"> </label>
-        <?php
-    }
-
     function settings_remove_pdalink_callback() {
 	    $value = get_option('layf_remove_pdalink', '');
 	    ?>
@@ -478,6 +435,7 @@ class La_Yandex_Feed_Admin {
     id="layf_feed_items_limit" type="text" class="regular-text code"
     value="<?php echo $value;?>"> </label>
 <p class="description"><?php _e('Numeric limit or empty for no limit', 'yandexnews-feed-by-teplitsa');?></p>
+<p class="description"><?php printf( __('For Yandex.Turbo it should be %s or more. If not, %s will be used.', 'yandexnews-feed-by-teplitsa'), La_Yandex_Feed_Core::$yandex_turbo_feed_min_limit, La_Yandex_Feed_Core::$yandex_turbo_feed_min_limit);?></p>
 <?php
 	}
 	
