@@ -7,7 +7,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
     private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
-    public static $yandex_turbo_feed_min_limit = 1000;
+    public static $yandex_turbo_feed_min_limit = 300;
     
 	private static $instance = NULL; //instance store
 		
@@ -16,7 +16,7 @@ class La_Yandex_Feed_Core {
 		/* request */
         add_action('init', array($this,'custom_query_vars') );
         add_action('template_redirect', array($this, 'custom_templates_redirect'));
-		add_action('parse_query', array($this, 'custom_request'));
+		add_action('parse_query', array($this, 'custom_request'), 11 );
 		add_filter( 'status_header', array($this, 'set_empty_feed_20ok_status'), 10, 2 );
 		
 		/* cache */

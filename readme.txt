@@ -61,6 +61,9 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.10.4 =
+* Update: Compatibility with WP Multilang plugin added.
+
 = 1.10.3 =
 * Update: Some Turbo settings moved to Yandex.Webmaster.
 * Update: Turbo-pages limit settings updated.
