@@ -381,6 +381,7 @@ Allow: /yandex/news/
 		add_filter( 'layf_content_feed', 'wpautop'            );
 		add_filter( 'layf_content_feed', 'shortcode_unautop'  );
 		add_filter( 'layf_content_feed', 'do_shortcode'       );
+        add_filter( 'layf_content_feed', array( $GLOBALS['wp_embed'], 'run_shortcode' ), 8 ); //embed media to HTML
 		
 		if(get_option('layf_remove_shortcodes', '')) {
 		    add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes'   );
@@ -414,6 +415,8 @@ Allow: /yandex/news/
 	    add_filter( 'layf_turbo_content_feed', 'convert_chars'      );
 	    add_filter( 'layf_turbo_content_feed', 'wpautop'            );
 	    add_filter( 'layf_turbo_content_feed', 'shortcode_unautop'  );
+        add_filter( 'layf_turbo_content_feed', 'do_shortcode'       );
+        add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'run_shortcode' ), 8 ); //embed media to HTML
         add_filter( 'layf_turbo_content_feed', 'layf_strip_all_shortcodes' );
         
 	    $turbo_content = apply_filters('layf_turbo_content_feed', $content);
@@ -496,15 +499,15 @@ Allow: /yandex/news/
 	        
 	        if($caption) {
 	            
-	            add_filter( 'layf_content_feed', 'wptexturize'        );
-	            add_filter( 'layf_content_feed', 'convert_smilies'    );
-	            add_filter( 'layf_content_feed', 'convert_chars'      );
-	            add_filter( 'layf_content_feed', 'wpautop'            );
-	            add_filter( 'layf_content_feed', 'shortcode_unautop'  );
-	            add_filter( 'layf_content_feed', 'do_shortcode'       );
-                add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes'   );
+	            add_filter( 'layf_figure_caption_content_feed', 'wptexturize'        );
+	            add_filter( 'layf_figure_caption_content_feed', 'convert_smilies'    );
+	            add_filter( 'layf_figure_caption_content_feed', 'convert_chars'      );
+	            add_filter( 'layf_figure_caption_content_feed', 'wpautop'            );
+	            add_filter( 'layf_figure_caption_content_feed', 'shortcode_unautop'  );
+	            add_filter( 'layf_figure_caption_content_feed', 'do_shortcode'       );
+                add_filter( 'layf_figure_caption_content_feed', 'layf_strip_all_shortcodes'   );
 	            
-                $caption = apply_filters('layf_content_feed', $caption);
+                $caption = apply_filters('layf_figure_caption_content_feed', $caption);
 	        }
 	        
 	        if( $caption ) {
@@ -526,10 +529,10 @@ Allow: /yandex/news/
 	    $excerpt = get_the_excerpt();
 	    $excerpt = wp_strip_all_tags( $excerpt );
 	    
-	    add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes' );
-	    add_filter( 'layf_content_feed', 'layf_remove_more_tag', 1 );
+	    add_filter( 'layf_excerpt_feed', 'layf_strip_all_shortcodes' );
+	    add_filter( 'layf_excerpt_feed', 'layf_remove_more_tag', 1 );
 	    
-	    $excerpt = apply_filters('layf_content_feed', $excerpt);
+	    $excerpt = apply_filters('layf_excerpt_feed', $excerpt);
 	    
 	    echo $excerpt;
 	}
@@ -626,17 +629,23 @@ Allow: /yandex/news/
 		$return = array();
 		
 		//include shorcodes and oembeds
-		$out = do_shortcode($post->post_content);
+        $out = $post->post_content;
+		$out = do_shortcode($out);
 		$out = $GLOBALS['wp_embed']->autoembed($out);
+        
+        //youtube
+        $content_list = array($post->post_content, $out);
+        $youtube_videos = array();
+        foreach($content_list as $youtube_out) {
+            $youtube_regexp = "/(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([\w-]{10,12})/";
+            preg_match_all($youtube_regexp, $youtube_out, $matches);		
+            if(isset($matches[0]) && !empty($matches[0]))
+                $youtube_videos = array_merge($res, $matches[0]); //append links
+        }
+        $youtube_videos = array_unique($youtube_videos);
 			
-		//youtube
-		$youtube_regexp = "/(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([\w-]{10,12})/";
-		preg_match_all($youtube_regexp, $out, $matches);		
-		if(isset($matches[0]) && !empty($matches[0]))
-			$res = array_merge($res, $matches[0]); //append links
-		
-		//modify $res to be able add thumbnails
-		if(!empty($res)){ foreach($res as $i => $url) {
+		//modify $youtube_videos to be able add thumbnails
+		if(!empty($youtube_videos)){ foreach($youtube_videos as $i => $url) {
 			$thumbnail_url = self::get_youtube_thumbnail_url($url);
 			$return[] = array('player' => $url, 'thumb' => $thumbnail_url);
 		}}
