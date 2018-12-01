@@ -529,11 +529,14 @@ Allow: /yandex/news/
 	    $excerpt = get_the_excerpt();
 	    $excerpt = wp_strip_all_tags( $excerpt );
 	    
+        add_filter( 'layf_excerpt_feed', 'wptexturize', 99 );
 	    add_filter( 'layf_excerpt_feed', 'layf_strip_all_shortcodes' );
 	    add_filter( 'layf_excerpt_feed', 'layf_remove_more_tag', 1 );
-	    
+        
 	    $excerpt = apply_filters('layf_excerpt_feed', $excerpt);
-	    
+        
+        $excerpt = preg_replace( '/&(?!#(?:\d+|x[a-f0-9]+);|[a-z1-4]{1,8};)/i', '&#038;', $excerpt );
+        
 	    echo $excerpt;
 	}
 	
