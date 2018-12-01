@@ -388,6 +388,8 @@ Allow: /yandex/news/
 		}
 		
 		$content = preg_replace('/<p>\s*<\/p>/', '', $content );
+        
+        $content = preg_replace( '/&(?!#(?:\d+|x[a-f0-9]+);|[a-z1-4]{1,8};)/i', '&#038;', $content );
 		
 		return apply_filters('layf_content_feed', $content);		
 	}
