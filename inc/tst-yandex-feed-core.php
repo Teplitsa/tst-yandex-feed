@@ -174,13 +174,13 @@ class La_Yandex_Feed_Core {
         
         $wp->add_query_var('yandex_feed');
 		//deafult
-		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+		add_rewrite_rule('^yandex/([^/]*)/?(page/(\d+)/?)?', 'index.php?yandex_feed=$matches[1]&paged=$matches[3]', 'top');
 		
 		//custom
 		$slug = trailingslashit(get_option('layf_custom_url', 'yandex/news')); //var_dump($slug);
 		
 		if(!empty($slug) && $slug != '/' && $slug != 'yandex/news/'){
-			add_rewrite_rule("^$slug?", 'index.php?yandex_feed=news', 'top');
+			add_rewrite_rule("^$slug?(page/(\d+)/?)?", 'index.php?yandex_feed=news&paged=$matches[2]', 'top');
 		}
 		
 		if( !get_option('layf_permalinks_flushed') ) {
