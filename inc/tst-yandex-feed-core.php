@@ -386,11 +386,9 @@ Allow: /yandex/news/
 		if(get_option('layf_remove_shortcodes', '')) {
 		    add_filter( 'layf_content_feed', 'layf_strip_all_shortcodes'   );
 		}
-		
+        
 		$content = preg_replace('/<p>\s*<\/p>/', '', $content );
         
-        $content = preg_replace( '/&(?!#(?:\d+|x[a-f0-9]+);|[a-z1-4]{1,8};)/i', '&#038;', $content );
-		
 		return apply_filters('layf_content_feed', $content);		
 	}
 	
@@ -531,13 +529,11 @@ Allow: /yandex/news/
 	    $excerpt = get_the_excerpt();
 	    $excerpt = wp_strip_all_tags( $excerpt );
 	    
-        add_filter( 'layf_excerpt_feed', 'wptexturize', 99 );
 	    add_filter( 'layf_excerpt_feed', 'layf_strip_all_shortcodes' );
 	    add_filter( 'layf_excerpt_feed', 'layf_remove_more_tag', 1 );
         
 	    $excerpt = apply_filters('layf_excerpt_feed', $excerpt);
-        
-        $excerpt = preg_replace( '/&(?!#(?:\d+|x[a-f0-9]+);|[a-z1-4]{1,8};)/i', '&#038;', $excerpt );
+        $excerpt = apply_filters('the_title_rss', $excerpt);
         
 	    echo $excerpt;
 	}
@@ -658,7 +654,7 @@ Allow: /yandex/news/
 		
 		$videos = get_attached_media( 'video', $post->ID );
 		foreach($videos as $video) {
-		    $return[] = array('content' => $video->guid, 'type' => $video->post_mime_type);
+		    $return[] = array('content' => set_url_scheme($video->guid), 'type' => $video->post_mime_type);
 		}
 		
 		//@to_do: add another video providers
