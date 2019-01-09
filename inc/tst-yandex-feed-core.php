@@ -208,7 +208,7 @@ class La_Yandex_Feed_Core {
 			}
 			
             if($layf_enable_turbo) {
-                if(empty($query->query_vars['posts_per_page']) || $query->query_vars['posts_per_page'] < self::$yandex_turbo_feed_min_limit) {
+                if(empty($query->query_vars['posts_per_page'])) {
                     $query->query_vars['posts_per_page'] = self::$yandex_turbo_feed_min_limit;
                 }
             }
@@ -407,6 +407,7 @@ Allow: /yandex/news/
 	    $content = str_replace(']]>', ']]&gt;', $content);
 	    
 	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_shortcodes' );
+	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_tags' );
 	    add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
 	    add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
 	    
@@ -443,20 +444,20 @@ Allow: /yandex/news/
 	    $thumb_id = get_post_thumbnail_id($post->ID);
 	    $thumb_url_no_suffix = '';
 	    if(!empty($thumb_id)){
-	        $thumb_url_no_suffix = wp_get_attachment_url($thumb_id);
-	        $thumb_url_no_suffix = preg_replace('/(?:-\d+x\d+)?\.\w+$/', '', $thumb_url_no_suffix);
-	        $thumb_url_no_suffix = preg_replace('/http[s]?:/', '', $thumb_url_no_suffix);
+	        $thumb_url = wp_get_attachment_url($thumb_id);
+	        $thumb_url = preg_replace('/http[s]?:/', '', $thumb_url);
+	        $thumb_url_no_suffix = preg_replace('/(?:-\d+x\d+)?(\.\w+)$/', '$1', $thumb_url);
 	    }
 	    
 	    preg_match_all('!(<img.*>)!Ui', $turbo_content, $matches);
 	     
 	    if(isset($matches[1]) && !empty($matches)){
 	        foreach($matches[1] as $k => $v) {
-	            if($thumb_url_no_suffix && strpos($v, $thumb_url_no_suffix)) {
+	            if($thumb_url_no_suffix && strpos($v, $thumb_url_no_suffix) && $thumb_url != $thumb_url_no_suffix) {
 	                $turbo_content = str_replace($v, "", $turbo_content);
 	            }
 	            #var_dump(preg_match('!<figure>(?:(?!<figure>).)*'. preg_quote($v).'.*?</figure>!is', $turbo_content));
-	            elseif(!preg_match('!<figure>.*?'. preg_quote($v).'.*?</figure>!is', $turbo_content)) {
+	            elseif(!preg_match('!'. preg_quote($v).'\s*?</figure>!is', $turbo_content)) {
 	                $turbo_content = str_replace($v, "<figure>{$v}</figure>", $turbo_content);
 	            }
 	        }
@@ -1018,16 +1019,47 @@ function layf_strip_all_shortcodes($text){
     return $text;
 }
 
+function layf_get_post_thumbnail_img($post_id) {
+    $thumb_id = get_post_thumbnail_id($post_id);
+    if($thumb_id) {
+        $thumb_url = wp_get_attachment_url($thumb_id);
+    }
+    else {
+        $thumb_url = site_url(); // dirty hack, that works in sandbox
+    }
+    
+    $thumb_url = preg_replace('/http[s]?:/', '', $thumb_url);
+    $video_preview_img = "<img src=\"{$thumb_url}\" />";
+    
+    return $video_preview_img;
+}
+
+function layf_compose_video_figure($video_url, $video_preview_img, $video_mime_type=null) {
+    if(!$video_mime_type) {
+        $video_mime_type = "video/mp4";
+    }
+    return "<figure><video><source src=\"{$video_url}\" type=\"{$video_mime_type}\"/></video>{$video_preview_img}</figure>";
+}
+
+function layf_get_post_mime_type_by_guid($guid) {
+    global $wpdb;    
+    return $wpdb->get_var( $wpdb->prepare( "SELECT post_mime_type FROM $wpdb->posts WHERE guid=%s", $guid ) );            
+}
 
 function layf_process_site_video_shortcodes($turbo_content) {
     
     preg_match_all('!(\[video.*mp4="(.*?)".*\]\[/video\])!Ui', $turbo_content, $matches);
     
     if(isset($matches[2]) && !empty($matches)){
+        
+        $post = get_post();
+        $video_preview_img = layf_get_post_thumbnail_img($post->ID);
+        
         foreach($matches[2] as $k => $v) {
             $shortcode = isset($matches[1][$k]) ? $matches[1][$k] : null;
             if($shortcode) {
-                $turbo_content = str_replace($shortcode, "<figure><video><source src=\"{$v}\" type=\"video/mp4\"/></video></figure>", $turbo_content);
+                $mime_type = layf_get_post_mime_type_by_guid($v);
+                $turbo_content = str_replace($shortcode, layf_compose_video_figure($v, $video_preview_img, $mime_type), $turbo_content);
             }
         }
     }
@@ -1035,6 +1067,26 @@ function layf_process_site_video_shortcodes($turbo_content) {
     return $turbo_content;
 }
 
+function layf_process_site_video_tags($turbo_content) {
+    
+    preg_match_all('!(<figure.*?><video.*?\s+src="(.*?)">\s*?</video></figure>)!Ui', $turbo_content, $matches);
+    
+    if(isset($matches[2]) && !empty($matches)){
+        
+        $post = get_post();
+        $video_preview_img = layf_get_post_thumbnail_img($post->ID);
+
+        foreach($matches[2] as $k => $v) {
+            $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
+            if($video_tag) {
+                $mime_type = layf_get_post_mime_type_by_guid($v);
+                $turbo_content = str_replace($video_tag, layf_compose_video_figure($v, $video_preview_img, $mime_type), $turbo_content);
+            }
+        }
+    }
+    
+    return $turbo_content;
+}
 
 function layf_remove_more_tag($text) {
     $text = preg_replace("/<!--more-->/i", '', $text);

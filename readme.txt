@@ -61,6 +61,10 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.10.7 =
+* Update: Default min feed items limit removed. Now less than 300 records allowed.
+* Update: Figure video tags support added.
+
 = 1.10.6 =
 * Update: Escape special chars in item description improved.
 
