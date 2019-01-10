@@ -1167,16 +1167,6 @@ function layf_process_site_video_tags($turbo_content) {
         }
     }
     
-    //if(@$_GET['debug'] && get_the_ID() == 104747) {
-    //    echo "\n\n\n=================================\n\n\n";
-    //    echo $turbo_content;
-    //    echo "\n\n\n=================================\n\n\n";
-    //    print_r($ok_video_tags);
-    //    echo "\n\n\n=================================\n\n\n";
-    //    print_r($video_tags);
-    //    echo "\n\n\n=================================\n\n\n";
-    //}
-    
     if(!empty($video_tags)) {
         
         $post = layf_get_post();
