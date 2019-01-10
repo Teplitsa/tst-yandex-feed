@@ -8,6 +8,7 @@ class La_Yandex_Feed_Core {
     private $query_cache_expire = 0;
     private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
     public static $yandex_turbo_feed_min_limit = 300;
+    public static $get_post_cache = null;
     
 	private static $instance = NULL; //instance store
 		
@@ -359,7 +360,7 @@ Allow: /yandex/news/
 	/** template helpers */
 	static function get_the_content_feed() {
 	    
-		$post = get_post();
+		$post = layf_get_post();
 		$content = $post->post_content;
 		
 		if(get_option('layf_remove_teaser_from_fulltext', '')) {
@@ -393,7 +394,7 @@ Allow: /yandex/news/
 	}
 	
 	static function get_the_turbo_content() {
-	    $post = get_post();
+	    $post = layf_get_post();
 	    $content = $post->post_content;
 	    
 	    if(get_option('layf_remove_teaser_from_fulltext', '')) {
@@ -440,7 +441,7 @@ Allow: /yandex/news/
 	
 	static function wrap_turbo_images($turbo_content) {
 	    
-	    $post = get_post();
+	    $post = layf_get_post();
 	    $thumb_id = get_post_thumbnail_id($post->ID);
 	    $thumb_url_no_suffix = '';
 	    if(!empty($thumb_id)){
@@ -485,12 +486,12 @@ Allow: /yandex/news/
 		
 		$img_html = '';
 		
-		$post = get_post();
+		$post = layf_get_post();
 	    $thumb_id = get_post_thumbnail_id($post->ID);
 	    
 	    if(!empty($thumb_id)){
 	        
-	        $attachment = get_post( $thumb_id );
+	        $attachment = layf_get_post( $thumb_id );
 	        if($attachment) {
 	            $caption = $attachment->post_excerpt;
 	            if(!$caption) {
@@ -1052,7 +1053,7 @@ function layf_process_site_video_shortcodes($turbo_content) {
     
     if(isset($matches[2]) && !empty($matches)){
         
-        $post = get_post();
+        $post = layf_get_post();
         $video_preview_img = layf_get_post_thumbnail_img($post->ID);
         
         foreach($matches[2] as $k => $v) {
@@ -1073,7 +1074,7 @@ function layf_process_site_video_tags($turbo_content) {
     
     if(isset($matches[2]) && !empty($matches)){
         
-        $post = get_post();
+        $post = layf_get_post();
         $video_preview_img = layf_get_post_thumbnail_img($post->ID);
 
         foreach($matches[2] as $k => $v) {
@@ -1103,6 +1104,23 @@ function layf_wxr_cdata( $str ) {
     $str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
 
     return $str;
+}
+
+function layf_get_post($post_id = null) {
+    
+    if(!La_Yandex_Feed_Core::$get_post_cache) {
+        La_Yandex_Feed_Core::$get_post_cache = array();
+    }
+    
+    if(!$post_id) {
+        $post_id = get_the_ID();
+    }
+    
+    if($post_id && !isset(La_Yandex_Feed_Core::$get_post_cache[$post_id])) {
+        La_Yandex_Feed_Core::$get_post_cache[$post_id] = get_post($post_id);
+    }
+    
+    return $post_id ? La_Yandex_Feed_Core::$get_post_cache[$post_id] : null;
 }
 
 ?>
