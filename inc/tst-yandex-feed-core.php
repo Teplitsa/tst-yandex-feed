@@ -408,7 +408,6 @@ Allow: /yandex/news/
 	    $content = str_replace(']]>', ']]&gt;', $content);
 	    
 	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_shortcodes' );
-	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_tags' );
 	    add_filter('img_caption_shortcode', 'layf_filter_image_caption', 20, 3); //filter caption text
 	    add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'autoembed' ), 8 ); //embed media to HTML
 	    
@@ -420,6 +419,7 @@ Allow: /yandex/news/
         add_filter( 'layf_turbo_content_feed', 'do_shortcode'       );
         add_filter( 'layf_turbo_content_feed', array( $GLOBALS['wp_embed'], 'run_shortcode' ), 8 ); //embed media to HTML
         add_filter( 'layf_turbo_content_feed', 'layf_strip_all_shortcodes' );
+	    add_filter( 'layf_turbo_content_feed', 'layf_process_site_video_tags', 12 );
         
 	    $turbo_content = apply_filters('layf_turbo_content_feed', $content);
 	    
@@ -1068,21 +1068,124 @@ function layf_process_site_video_shortcodes($turbo_content) {
     return $turbo_content;
 }
 
-function layf_process_site_video_tags($turbo_content) {
+function layf_is_in_tags($video_tag, $video_tags) {
+    $tag_already_exist = false;
     
-    preg_match_all('!(<figure.*?><video.*?\s+src="(.*?)">\s*?</video></figure>)!Ui', $turbo_content, $matches);
+    foreach($video_tags as $tag) {
+        if(strpos($tag, $video_tag) !== false) {
+            $tag_already_exist = true;
+            break;
+        }
+    }
     
-    if(isset($matches[2]) && !empty($matches)){
-        
-        $post = layf_get_post();
-        $video_preview_img = layf_get_post_thumbnail_img($post->ID);
+    return $tag_already_exist;
+}
 
+function layf_process_site_video_tags($turbo_content) {
+
+    preg_match_all('!(<figure.*?>\s*<video.*?>\s*<source.*?src="(.*?)".*?>.*?</video>.*?</figure>)!i', $turbo_content, $matches);
+    $ok_video_tags = [];
+    if(isset($matches[2]) && !empty($matches)){
         foreach($matches[2] as $k => $v) {
             $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
             if($video_tag) {
-                $mime_type = layf_get_post_mime_type_by_guid($v);
-                $turbo_content = str_replace($video_tag, layf_compose_video_figure($v, $video_preview_img, $mime_type), $turbo_content);
+                $ok_video_tags[] = $video_tag;
             }
+        }
+    }
+
+    $video_tags = array();
+    
+    preg_match_all('!(<figure.*?>\s*<video[^>]*?\s+src="(.*?)">\s*?</video>.*?</figure>)!i', $turbo_content, $matches);
+    if(isset($matches[2]) && !empty($matches)){
+        foreach($matches[2] as $k => $v) {
+            $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
+            if($video_tag) {
+                if(layf_is_in_tags($video_tag, $ok_video_tags)) {
+                    continue;
+                }
+                
+                $video_tags[] = array('tag' => $video_tag, 'src' => $v);
+            }
+        }
+    }
+        
+    preg_match_all('!(<video[^>]*?\s+src="(.*?)">\s*?</video>)!i', $turbo_content, $matches);
+    if(isset($matches[2]) && !empty($matches)){
+        foreach($matches[2] as $k => $v) {
+            $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
+            
+            if($video_tag) {
+                if(layf_is_in_tags($video_tag, $ok_video_tags)) {
+                    continue;
+                }
+                
+                $tag_already_exist = false;
+                foreach($video_tags as $v) {
+                    if(strpos($v['tag'], $video_tag) !== false) {
+                        $tag_already_exist = true;
+                        break;
+                    }
+                }
+                
+                if(!$tag_already_exist) {
+                    $video_tags[] = array('tag' => $video_tag, 'src' => $v);
+                }
+            }
+        }
+    }
+
+    preg_match_all('!(<video.*?>\s*<source.*?src="(.*?)".*?>.*?</video>)!i', $turbo_content, $matches);
+    if(isset($matches[2]) && !empty($matches)){
+        foreach($matches[2] as $k => $v) {
+            $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
+            
+            if($video_tag) {
+                if(layf_is_in_tags($video_tag, $ok_video_tags)) {
+                    
+                    if(@$_GET['debug'] && get_the_ID() == 104747) {
+                        echo "\n\n\n=================================\n\n\n";
+                        echo "skip in ok";
+                    }
+                    continue;
+                }
+            
+                $video_params = array('tag' => $video_tag, 'src' => $v);
+                
+                preg_match_all('!type="(video/.*?)"!i', $video_tag, $mime_type_matches);
+                if(isset($mime_type_matches[1]) && !empty($mime_type_matches[1])){
+                    $video_params['mime_type'] = $mime_type_matches[1][0];
+                }
+
+                preg_match_all('!<img[^>]*src="(.*?)"!i', $video_tag, $mime_type_matches);
+                if(isset($mime_type_matches[1]) && !empty($mime_type_matches[1])){
+                    $video_params['preview_url'] = $mime_type_matches[1][0];
+                }
+                
+                $video_tags[] = $video_params;
+            }
+        }
+    }
+    
+    //if(@$_GET['debug'] && get_the_ID() == 104747) {
+    //    echo "\n\n\n=================================\n\n\n";
+    //    echo $turbo_content;
+    //    echo "\n\n\n=================================\n\n\n";
+    //    print_r($ok_video_tags);
+    //    echo "\n\n\n=================================\n\n\n";
+    //    print_r($video_tags);
+    //    echo "\n\n\n=================================\n\n\n";
+    //}
+    
+    if(!empty($video_tags)) {
+        
+        $post = layf_get_post();
+        $preview_img = layf_get_post_thumbnail_img($post->ID);
+
+        foreach($video_tags as $v) {
+            $mime_type = empty($v['mime_type']) ? layf_get_post_mime_type_by_guid($v['src']) : $v['mime_type'];
+            $video_preview_img = empty($v['preview_url']) ? $preview_img : "<img src=\"{$v['preview_url']}\" />";
+            $turbo_content = str_replace($v['tag'], layf_compose_video_figure($v['src'], $video_preview_img, $mime_type), $turbo_content);
         }
     }
     
