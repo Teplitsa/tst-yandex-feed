@@ -9,6 +9,7 @@ class La_Yandex_Feed_Core {
     private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
     public static $yandex_turbo_feed_min_limit = 300;
     public static $get_post_cache = null;
+    public static $get_post_cache_max_length = 50;
     
 	private static $instance = NULL; //instance store
 		
@@ -1084,7 +1085,7 @@ function layf_is_in_tags($video_tag, $video_tags) {
 function layf_process_site_video_tags($turbo_content) {
 
     preg_match_all('!(<figure.*?>\s*<video.*?>\s*<source.*?src="(.*?)".*?>.*?</video>.*?</figure>)!i', $turbo_content, $matches);
-    $ok_video_tags = [];
+    $ok_video_tags = array();
     if(isset($matches[2]) && !empty($matches)){
         foreach($matches[2] as $k => $v) {
             $video_tag = isset($matches[1][$k]) ? $matches[1][$k] : null;
@@ -1210,6 +1211,11 @@ function layf_get_post($post_id = null) {
     }
     
     if($post_id && !isset(La_Yandex_Feed_Core::$get_post_cache[$post_id])) {
+        # clean cache array to save memory
+        if(count(La_Yandex_Feed_Core::$get_post_cache) > La_Yandex_Feed_Core::$get_post_cache_max_length) {
+            La_Yandex_Feed_Core::$get_post_cache = array();
+        }
+        
         La_Yandex_Feed_Core::$get_post_cache[$post_id] = get_post($post_id);
     }
     
