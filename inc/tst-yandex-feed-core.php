@@ -176,13 +176,22 @@ class La_Yandex_Feed_Core {
         
         $wp->add_query_var('yandex_feed');
 		//deafult
-		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+// 		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+		add_rewrite_rule('^yandex/news/?', 'index.php?yandex_feed=news', 'top');
+		add_rewrite_rule('^yandex/turbo/?', 'index.php?yandex_feed=turbo', 'top');
 		
 		//custom
 		$slug = trailingslashit(get_option('layf_custom_url', 'yandex/news')); //var_dump($slug);
 		
 		if(!empty($slug) && $slug != '/' && $slug != 'yandex/news/'){
 			add_rewrite_rule("^$slug?", 'index.php?yandex_feed=news', 'top');
+		}
+		
+		//custom turbo feed url
+		$slug = trailingslashit(get_option('layf_custom_turbo_url', 'yandex/turbo')); //var_dump($slug);
+		
+		if(!empty($slug) && $slug != '/' && $slug != 'yandex/turbo/'){
+		    add_rewrite_rule("^$slug?", 'index.php?yandex_feed=turbo', 'top');
 		}
 		
 		if( !get_option('layf_permalinks_flushed') ) {
@@ -194,28 +203,36 @@ class La_Yandex_Feed_Core {
     }
 	
 	public function custom_request($query) {
-		
-		if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
-            $layf_enable_turbo = get_option('layf_enable_turbo');
-			$pt = $this->get_supported_post_types();			
+//         var_dump($query->query_vars); die();
+	    
+	    if(isset($query->query_vars['yandex_feed']) && (in_array($query->query_vars['yandex_feed'], array('news', 'turbo')))) {
+	        $is_turbo = $query->query_vars['yandex_feed'] == 'turbo';
+			$pt = $this->get_supported_post_types();
+			
+			if(empty($query->query_vars['paged'])) {
+			    $paged = layf_get_url_var( 'page' );
+			    if(!empty($paged)) {
+			        $paged = (int)$paged;
+			        if($paged) {
+			            $query->query_vars['paged'] = $paged;
+			        }
+			    }
+			}
 			
 			$query->query_vars['post_type'] = $pt;
 			
-			$feed_items_limit_option = (int)get_option('layf_feed_items_limit', '');
-			if($feed_items_limit_option > 0) {
-			    $query->query_vars['posts_per_page'] = $feed_items_limit_option;
+			if($is_turbo) {
+			    $feed_items_limit_option = (int)get_option('layf_feed_items_limit', '');
+			    if($feed_items_limit_option > 0) {
+			        $query->query_vars['posts_per_page'] = $feed_items_limit_option;
+			    }
+			    else {
+			        $query->query_vars['posts_per_page'] = self::$yandex_turbo_feed_min_limit;
+			    }
 			}
 			else {
-			    $query->query_vars['posts_per_page'] = -1;
-			}
-			
-            if($layf_enable_turbo) {
-                if(empty($query->query_vars['posts_per_page'])) {
-                    $query->query_vars['posts_per_page'] = self::$yandex_turbo_feed_min_limit;
-                }
-            }
-            else {
-                $layf_post_max_age = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
+			    $query->query_vars['posts_per_page'] = self::$yandex_turbo_feed_min_limit;
+			    $layf_post_max_age = get_option('layf_post_max_age', LAYF_DEFAULT_MAX_POST_AGE);
                 
                 $limit = strtotime(sprintf('- %s days', $layf_post_max_age)); //Limited by Yandex rules
                 $query->query_vars['date_query'] = array(
@@ -276,31 +293,28 @@ class La_Yandex_Feed_Core {
 			}
 
 			//filtering by exclusion
-			$query->query_vars['meta_query'] = array(
-				array(
-					'key' => 'layf_exclude_from_feed',
-					'compare' => 'NOT EXISTS'
-				),
-				array(
-					'key' => 'layf_exclude_from_feed',
-					'value' => 1,
-					'compare' => '!='
-				),
-				'relation' => 'OR'
-			);
-			
-			//var_dump($query->query_vars); die();
+			if(!$is_turbo) {
+			    $query->query_vars['meta_query'] = array(
+			        array(
+			            'key' => 'layf_exclude_from_feed',
+			            'compare' => 'NOT EXISTS'
+			        ),
+			        array(
+			            'key' => 'layf_exclude_from_feed',
+			            'value' => 1,
+			            'compare' => '!='
+			        ),
+			        'relation' => 'OR'
+			    );
+			}
+//             var_dump($query->query_vars); die();
 		}
 		
 	}
 
 	public function custom_templates_redirect(){
-		global $wp_query;
-        
-		$qv = get_query_var('yandex_feed'); 
-		
-		if('news' == $qv){
-			
+		$qv = get_query_var('yandex_feed');
+		if('news' == $qv || $qv == 'turbo') {
 			include(LAYF_PLUGIN_DIR.'inc/feed.php');
 			die();
 		}
@@ -488,11 +502,17 @@ Allow: /yandex/news/
 		$img_html = '';
 		
 		$post = layf_get_post();
-	    $thumb_id = get_post_thumbnail_id($post->ID);
+		
+		if(get_option('layf_include_post_thumbnail')) {
+	       $thumb_id = get_post_thumbnail_id($post->ID);
+		}
+		else {
+		    $thumb_id = NULL;
+		}
 	    
-	    if(!empty($thumb_id)){
+	    if(!empty($thumb_id)) {
 	        
-	        $attachment = layf_get_post( $thumb_id );
+            $attachment = layf_get_post( $thumb_id );
 	        if($attachment) {
 	            $caption = $attachment->post_excerpt;
 	            if(!$caption) {
@@ -1220,6 +1240,16 @@ function layf_get_post($post_id = null) {
     }
     
     return $post_id ? La_Yandex_Feed_Core::$get_post_cache[$post_id] : null;
+}
+
+function layf_get_url_var($name) {
+    $strURL = $_SERVER['REQUEST_URI'];
+    $arrVals = explode("/", $strURL);
+    $found = array_search($name, $arrVals);
+    if($found !== FALSE) {
+        $place = $found + 1;
+    }
+    return $found && !empty($arrVals[$place]) ? $arrVals[$place] : null;
 }
 
 ?>

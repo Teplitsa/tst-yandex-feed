@@ -1,8 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Yandex.News Feed by Teplitsa\n"
-"POT-Creation-Date: 2018-08-20 08:22+0200\n"
-"PO-Revision-Date: 2018-08-20 08:28+0200\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/yandexnews-feed-"
+"by-teplitsa\n"
+"POT-Creation-Date: 2019-09-24T14:17:02+03:00\n"
+"PO-Revision-Date: 2019-09-24 13:42+0200\n"
 "Last-Translator: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language-Team: Anna Ladoshkina <webdev@foralien.com>\n"
 "Language: ru\n"
@@ -19,6 +21,24 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#. Plugin Name of the plugin
+msgid "Yandex.News Feed by Teplitsa"
+msgstr "Yandex.News Feed by Teplitsa"
+
+#. Description of the plugin
+#: tst-yandex-feed.php:79
+msgid "The plugin creates feed for Yandex.News service"
+msgstr "Плагин создает трансляцию материалов сайта для сервиса Яндекс.Новости"
+
+#. Author of the plugin
+#: tst-yandex-feed.php:80
+msgid "Teplitsa"
+msgstr "Теплица социальных технологий"
+
+#. Author URI of the plugin
+msgid "https://te-st.ru/"
+msgstr "https://te-st.ru/"
+
 #: inc/admin.php:55
 msgid "Settings"
 msgstr "Настройки"
@@ -27,7 +47,7 @@ msgstr "Настройки"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: inc/admin.php:75 inc/admin.php:217
+#: inc/admin.php:75 inc/admin.php:223
 msgid "Yandex.News Feed Settings"
 msgstr "Настройки трансляции Яндекс.Новости"
 
@@ -40,101 +60,134 @@ msgid "General"
 msgstr "Общие"
 
 #: inc/admin.php:88
-msgid "URL for feed"
-msgstr "URL трансляции"
+msgid "URL for news feed"
+msgstr "URL трансляции новостей"
 
 #: inc/admin.php:93
+msgid "URL for turbo pages feed"
+msgstr "URL трансляции турбо-страниц"
+
+#: inc/admin.php:98
 msgid "Post types for feed"
 msgstr "Типы записей для трансляции"
 
-#: inc/admin.php:98
+#: inc/admin.php:103
 msgid "Max posts age for feed"
 msgstr "Максимальный возраст записей ленты"
 
-#: inc/admin.php:103
+#: inc/admin.php:108
 msgid "Logo URL for feed description"
 msgstr "Ссылка на логотип для описания сайта на сервисе Яндекс.Новости"
 
-#: inc/admin.php:108
+#: inc/admin.php:113
 msgid "Square Logo URL for feed description"
 msgstr "Ссылка на квадратный логотип"
 
-#: inc/admin.php:113
+#: inc/admin.php:118
 msgid "Taxonomy to filter entries for feed"
 msgstr "Таксономия для фильтрации трансляции"
 
-#: inc/admin.php:118
+#: inc/admin.php:123
 msgid "Terms to filter entries for feed"
 msgstr "Термины для фильтрации трансляции"
 
-#: inc/admin.php:123
+#: inc/admin.php:128
 msgid "Terms slug to filter entries for feed"
 msgstr "Ярлыки терминов для фильтрации трансляции"
 
-#: inc/admin.php:128
+#: inc/admin.php:133
 msgid "Taxonomy to exclude from feed"
 msgstr "Таксономия, термины которой нужно исключить"
 
-#: inc/admin.php:133
+#: inc/admin.php:138
 msgid "Terms exclude from feed"
 msgstr "Термины для исключения"
 
-#: inc/admin.php:138
+#: inc/admin.php:143
 msgid "Terms slugs exclude from feed"
 msgstr "Ярлыки терминов для исключения"
 
-#: inc/admin.php:143
-msgid "Include post thumbnails into feed"
-msgstr "Включить миниатюру в трансляцию Яндекс.Новости"
-
 #: inc/admin.php:148
+msgid "Include post thumbnails into feed"
+msgstr "Включить миниатюру в трансляцию"
+
+#: inc/admin.php:153
 msgid "Enable Yandex.Turbo Pages"
 msgstr "Включить поддержку турбо-страниц"
 
-#: inc/admin.php:153
+#: inc/admin.php:158
 msgid "Analytics and ads"
 msgstr "Аналитики и реклама"
 
-#: inc/admin.php:158
+#: inc/admin.php:163
 msgid "Remove pdalink tag from feed"
 msgstr "Не показывать pdalink"
 
-#: inc/admin.php:163
+#: inc/admin.php:168
 msgid "Remove post author name from feed"
 msgstr "Не показывать автора статьи"
 
-#: inc/admin.php:168
+#: inc/admin.php:173
 msgid "Remove all unexecuted shortcodes"
 msgstr "Удалить все неиспользованные шорткоды (тэги типа [...])"
 
-#: inc/admin.php:173
+#: inc/admin.php:178
 msgid "Remove teaser from yandex:full-text tag"
 msgstr "Убрать тизер из тэга yandex:full-text"
 
-#: inc/admin.php:178
+#: inc/admin.php:183
 msgid "Feed items limit"
 msgstr "Лимит количества записей в ленте"
 
-#: inc/admin.php:183
+#: inc/admin.php:188
 msgid "Feed cache lifetime"
 msgstr "Время жизни кэша ленты"
 
-#: inc/admin.php:251
-msgid "Customoze the URL of the feed if needed"
+#: inc/admin.php:257
+msgid ""
+"If necessary, enter your own broadcast URL.\n"
+"If simple permalinks are enabled, the feed URL will be\n"
+"%s"
 msgstr ""
-"При необходимости укажите собственный URL-адрес трансляции.<br />\n"
-"Если включены простые постоянные ссылки, URL-адрес ленты будет<br />\n"
+"При необходимости укажите собственный URL-адрес трансляции.\n"
+"Если включены простые постоянные ссылки, URL-адрес ленты будет\n"
 "%s"
 
-#: inc/admin.php:262
+#: inc/admin.php:276
+msgid ""
+"If necessary, enter your own broadcast URL.\n"
+"Next pages of the feed will be available by URLs:\n"
+"%s\n"
+"%s\n"
+"etc.\n"
+"If simple permalinks are enabled, the feed URL will be\n"
+"%s\n"
+"And the next pages of the feed are available by URLs:\n"
+"%s\n"
+"%s\n"
+"etc."
+msgstr ""
+"При необходимости укажите собственный URL-адрес трансляции.\n"
+"Следующие страницы канала будут доступны по URL:\n"
+"%s\n"
+"%s\n"
+"и т.д.\n"
+"Если включены простые постоянные ссылки, URL-адрес ленты будет\n"
+"%s\n"
+"И следующие страницы канала доступны по URL:\n"
+"%s\n"
+"%s\n"
+"и т.д."
+
+#: inc/admin.php:292
 msgid "Comma separated list of post types"
 msgstr "Список типов записей, разделенных запятыми"
 
-#: inc/admin.php:273
+#: inc/admin.php:303
 msgid "Max age of feed posts in days"
 msgstr "Максимальный возраст записей, которые попадают в ленту, в днях"
 
-#: inc/admin.php:274
+#: inc/admin.php:304
 msgid ""
 "For Yandex.Turbo this parameter will be ignored. Numeric feed limit will be "
 "used instead it."
@@ -142,14 +195,13 @@ msgstr ""
 "Для Турбо-страниц этот параметр не используется. Вместо него используется "
 "числовое ограничение длины ленты."
 
-#: inc/admin.php:285
+#: inc/admin.php:315
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (размер 100px по наибольшей "
 "стороне)"
 
-#: inc/admin.php:286
-#, php-format
+#: inc/admin.php:316
 msgid ""
 "Logo for Yandex.Turbo should be set directly in Yandex.Webmaster: <a href="
 "\"%s\" target=\"_blank\">%s</a>"
@@ -157,22 +209,21 @@ msgstr ""
 "Логотип для Турбо-страниц теперь нужно настраивать в Яндекс.Вебмастере: <a "
 "href=\"%s\" target=\"_blank\">%s</a>"
 
-#: inc/admin.php:297
+#: inc/admin.php:327
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 "Прямая ссылка на файл .jpg, .png, .gif file (минимальный размер 180х180рх, "
 "строго квадратное изображение)"
 
-#: inc/admin.php:324 inc/admin.php:361
+#: inc/admin.php:354 inc/admin.php:391
 msgid "Comma separated list of term IDs"
 msgstr "Список ID терминов, разделенных запятыми"
 
-#: inc/admin.php:336 inc/admin.php:371
+#: inc/admin.php:366 inc/admin.php:401
 msgid "Comma separated list of term slugs"
 msgstr "Список ярлыков терминов, разделенных запятыми"
 
-#: inc/admin.php:386
-#, php-format
+#: inc/admin.php:416
 msgid ""
 "Analytics and ads should be set up directly in Yandex.Webmaster: <a href=\"%s"
 "\" target=\"_blank\">%s</a>"
@@ -180,34 +231,33 @@ msgstr ""
 "Настраивать аналитику и рекламу теперь нужно непосредственно в Яндекс."
 "Вебмастере: <a href=\"%s\" target=\"_blank\">%s</a>"
 
-#: inc/admin.php:437
+#: inc/admin.php:467
 msgid "Numeric limit or empty for no limit"
 msgstr ""
 "Введите число чтобы ограничить, или оставьте пустым для вывода без "
 "ограничений"
 
-#: inc/admin.php:438
-#, php-format
+#: inc/admin.php:468
 msgid "For Yandex.Turbo it should be %s or more. If not, %s will be used."
 msgstr ""
 "Для Турбо-страниц этот параметр должен быть %s или больше. В противном "
 "случае он будет равен %s."
 
-#: inc/admin.php:448
+#: inc/admin.php:478
 msgid "Cache lifetime in hours. Leave it empty to disable cache."
 msgstr ""
 "Время, на которое лента кэшируется, в часах. Оставьте пустым чтобы отключить "
 "кэш."
 
-#: inc/admin.php:470
+#: inc/admin.php:500
 msgid "Yandex.News settings"
 msgstr "Настройки Яндекс.Новости"
 
-#: inc/admin.php:490
+#: inc/admin.php:520
 msgid "Related links"
 msgstr "Связанные ссылки"
 
-#: inc/admin.php:493
+#: inc/admin.php:523
 msgid ""
 "Enter related links URL and descrioption separated by space, one link per "
 "string."
@@ -215,21 +265,33 @@ msgstr ""
 "Укажите ссылки на упомянутые источники в формате: адрес ссылки пробел "
 "описание ссылки. Указывайте каждую ссылку на отдельной строке."
 
-#: inc/admin.php:496
+#: inc/admin.php:526
 msgid "Exclude entry from Yandex.News feed"
 msgstr "Исключить запись из трансляции Яндекс.Новости"
 
-#: inc/admin.php:498
+#: inc/admin.php:528
 msgid "Exclude despite the global settings"
 msgstr "Исключить, не смотря на глобальные настройки"
 
-#: tst-yandex-feed.php:79
-msgid "The plugin creates feed for Yandex.News service"
-msgstr "Плагин создает трансляцию материалов сайта для сервиса Яндекс.Новости"
+#: inc/admin.php:622
+msgid ""
+"Yandex.News Feed by Teplitsa added a separate turbo pages feed. If you "
+"previously added the feed URL to Yandex.Turbo in Yandex.Webmaster, please "
+"replace it with the feed URL of the <a href=\"%s\">turbo pages</a>."
+msgstr ""
+"В плагине Yandex.News Feed by Teplitsa добавлена отдельная лента турбо-"
+"страниц. Если вы ранее добавляли URL ленты новостей в Яндекс.Вебмастере, "
+"пожалуйста, замените его  на URL ленты  <a href=\"%s\">турбо страниц</a>."
 
-#: tst-yandex-feed.php:80
-msgid "Teplitsa"
-msgstr "Теплица социальных технологий"
+#: inc/admin.php:624
+msgid "Yes, I have already changed the feed URL in Yandex.Webmaster"
+msgstr "Да, я уже изменил URL ленты в Яндекс.Вебмастере"
+
+#~ msgid "Customoze the URL of the feed if needed"
+#~ msgstr ""
+#~ "При необходимости укажите собственный URL-адрес трансляции.\n"
+#~ "Если включены простые постоянные ссылки, URL-адрес ленты будет\n"
+#~ "%s"
 
 #~ msgid "Analytics type"
 #~ msgstr "Вид аналитики"

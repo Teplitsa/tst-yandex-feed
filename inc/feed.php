@@ -5,11 +5,13 @@
  */
 
 header('Content-Type: ' . feed_content_type('rss') . '; charset=' . get_option('blog_charset'), true);
+$is_turbo = get_query_var('yandex_feed') == 'turbo';
 $layf_enable_turbo = get_option('layf_enable_turbo');
+$is_show_turbo = $layf_enable_turbo || $is_turbo;
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
-<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" <?php if($layf_enable_turbo):?> xmlns:turbo="http://turbo.yandex.ru"<?php endif?> version="2.0">
+<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" <?php if($is_show_turbo):?> xmlns:turbo="http://turbo.yandex.ru"<?php endif?> version="2.0">
 <channel>
 <title><?php bloginfo_rss('name');?></title>
 <link><?php bloginfo_rss('url') ?></link>
@@ -44,12 +46,14 @@ if(!empty($logo)):
 ?>
 <yandex:logo  type="square"><?php echo esc_url($logo_square);?></yandex:logo>
 <?php endif;?>
-<?php if($layf_enable_turbo):?>
+<?php if($is_show_turbo):?>
 <turbo:cms_plugin><?php echo LAYF_YANDEX_CMS_PLUGIN_ID?></turbo:cms_plugin>
 <?php endif?>
 
-<?php while( have_posts()) : the_post(); ?>
-<item<?php if($layf_enable_turbo):?> turbo="true"<?php endif;?>>
+<?php while( have_posts()) : the_post();
+    $turbo_true_false = $layf_enable_turbo && !get_post_meta(get_the_ID(), 'layf_exclude_from_feed', true) ? 'true' : 'false';
+?>
+<item<?php if($is_show_turbo):?> turbo="<?php echo $turbo_true_false;?>"<?php endif;?>>
 <title><?php the_title_rss();?></title>
 <link><?php the_permalink_rss();?></link>
 
@@ -118,7 +122,7 @@ if(!empty($logo)):
 	$gmt_offset_str = $gmt_offset >= 0 ? '+' . $gmt_offset_str : '-' . $gmt_offset_str;
 ?>
 <pubDate><?php echo mysql2date('D, d M Y H:i:s '.$gmt_offset_str, get_date_from_gmt(get_post_time('Y-m-d H:i:s', true)), false); ?></pubDate>
-<?php if($layf_enable_turbo):?>
+<?php if($is_show_turbo):?>
 <turbo:content><?php echo La_Yandex_Feed_Core::get_the_turbo_content();?></turbo:content>
 <?php endif?>
 <yandex:full-text><?php echo La_Yandex_Feed_Core::get_the_content_feed(); ?></yandex:full-text>

@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor, teplosup
 Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
-Tested up to: 5.2
+Tested up to: 5.2.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -60,6 +60,12 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 
 == Changelog ==
+
+= 1.11.0 =
+* Update: Turbo=False option added for excluded turbo-pages when turbo-feed is on, and for all turbo-pages when turbo-feed is off.
+* Update: If "Include post thumbnails into feed" is off, then a post thumbnail will be removed from turbo-page header.
+* Update: Turbo pages feed pagination added.
+* Update: Separate turbo pages feed added.
 
 = 1.10.8 =
 * Update: Compatibility with PHP5.3 restored.

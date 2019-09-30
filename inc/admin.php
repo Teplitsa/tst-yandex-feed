@@ -85,9 +85,14 @@ class La_Yandex_Feed_Admin {
             'layf_base_section_screen' 
         ), 'layf_settings' );
         
-        add_settings_field ( 'layf_custom_url', __ ( 'URL for feed', 'yandexnews-feed-by-teplitsa' ), array (
+        add_settings_field ( 'layf_custom_url', __ ( 'URL for news feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settngs_custom_url_callback' 
+        ), 'layf_settings', 'layf_base' );
+
+        add_settings_field ( 'layf_custom_turbo_url', __ ( 'URL for turbo pages feed', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settngs_custom_turbo_url_callback'
         ), 'layf_settings', 'layf_base' );
         
         add_settings_field ( 'layf_post_types', __ ( 'Post types for feed', 'yandexnews-feed-by-teplitsa' ), array (
@@ -196,6 +201,7 @@ class La_Yandex_Feed_Admin {
         register_setting ( 'layf_settings', 'layf_exclude_terms' );
         register_setting ( 'layf_settings', 'layf_exclude_terms_slug' );
         register_setting ( 'layf_settings', 'layf_custom_url' );
+        register_setting ( 'layf_settings', 'layf_custom_turbo_url' );
         register_setting ( 'layf_settings', 'layf_include_post_thumbnail' );
         register_setting ( 'layf_settings', 'layf_enable_turbo' );
         register_setting ( 'layf_settings', 'layf_analytics_type' );
@@ -248,7 +254,31 @@ class La_Yandex_Feed_Admin {
     id="layf_custom_url" type="text" class="regular-text code"
     value="<?php echo $value;?>">
 </label>
-<p class="description"><?php echo sprintf(__('Customoze the URL of the feed if needed', 'yandexnews-feed-by-teplitsa'), '<a href="'.home_url('/index.php?yandex_feed=news').'">'.home_url('/index.php?yandex_feed=news').'</a>');?></p>
+<p class="description"><?php echo sprintf(nl2br(__("If necessary, enter your own broadcast URL.\nIf simple permalinks are enabled, the feed URL will be\n%s", 'yandexnews-feed-by-teplitsa')), '<a href="'.home_url('/index.php?yandex_feed=news').'">'.home_url('/index.php?yandex_feed=news').'</a>');?></p>
+<?php	
+	}
+ 
+	function settngs_custom_turbo_url_callback() {
+	    
+	    $value = trailingslashit(get_option('layf_custom_turbo_url', 'yandex/turbo'));
+	    
+	    update_option('layf_permalinks_flushed', 0); //is it ok?
+	    
+	    ?>
+<label for="layf_custom_turbo_url">
+			<?php echo home_url('/');?><input name="layf_custom_turbo_url"
+    id="layf_custom_turbo_url" type="text" class="regular-text code"
+    value="<?php echo $value;?>">
+</label>
+<?php
+    $turbo_url_slug = trailingslashit(get_option('layf_custom_turbo_url', 'yandex/turbo'));
+?>
+<p class="description"><?php echo sprintf(nl2br(__("If necessary, enter your own broadcast URL.\nNext pages of the feed will be available by URLs:\n%s\n%s\netc.\nIf simple permalinks are enabled, the feed URL will be\n%s\nAnd the next pages of the feed are available by URLs:\n%s\n%s\netc.", 'yandexnews-feed-by-teplitsa')),
+    '<a href="'.home_url(rtrim($turbo_url_slug, '/') . '/page/2/').'">'.home_url(rtrim($turbo_url_slug, '/') . '/page/2/').'</a>',
+    '<a href="'.home_url(rtrim($turbo_url_slug, '/') . '/page/3/').'">'.home_url(rtrim($turbo_url_slug, '/') . '/page/3/').'</a>',
+    '<a href="'.home_url('/index.php?yandex_feed=turbo').'">'.home_url('/index.php?yandex_feed=turbo').'</a>',
+    '<a href="'.home_url('/index.php?yandex_feed=turbo&paged=2').'">'.home_url('/index.php?yandex_feed=turbo&paged=2').'</a>',
+    '<a href="'.home_url('/index.php?yandex_feed=turbo&paged=3').'">'.home_url('/index.php?yandex_feed=turbo&paged=3').'</a>');?></p>
 <?php	
 	}
  
@@ -580,3 +610,28 @@ function layf_github_link(){
 	
 	return 'https://github.com/Teplitsa/tst-yandex-feed';
 }
+
+// admin notice
+function layf_admin_notice_two_feeds_update() {
+    $user_id = get_current_user_id();
+    if( get_user_meta( $user_id, 'layf_admin_notice_dismissed' ) ) {
+    	return;
+    }
+    ?>
+    <div class="notice notice-warning is-dismissible">
+        <p><?php echo sprintf(__( 'Yandex.News Feed by Teplitsa added a separate turbo pages feed. If you previously added the feed URL to Yandex.Turbo in Yandex.Webmaster, please replace it with the feed URL of the <a href="%s">turbo pages</a>.', 'yandexnews-feed-by-teplitsa' ), admin_url('/options-general.php?page=layf_settings')); ?></p>
+        <p>
+			<a class="button button-primary" href="<?php echo add_query_arg('layf_admin_notice_dismissed', 'true');?>"><?php _e('Yes, I have already changed the feed URL in Yandex.Webmaster', 'yandexnews-feed-by-teplitsa')?></a>
+		</p>        
+    </div>
+    <?php
+}
+add_action('admin_notices', 'layf_admin_notice_two_feeds_update');
+
+function layf_admin_notice_dismissed() {
+    $user_id = get_current_user_id();
+    if ( isset( $_GET['layf_admin_notice_dismissed'] ) ) {
+        add_user_meta( $user_id, 'layf_admin_notice_dismissed', 'true', true );
+    }
+}
+add_action( 'admin_init', 'layf_admin_notice_dismissed' );
