@@ -126,7 +126,7 @@ if(!empty($logo)):
 <turbo:content><?php echo La_Yandex_Feed_Core::get_the_turbo_content();?></turbo:content>
 <?php endif?>
 <yandex:full-text><?php echo La_Yandex_Feed_Core::get_the_content_feed(); ?></yandex:full-text>
-<?php do_action( 'layf_rss_item' ); ?>
+<?php do_action( 'layf_rss_item', get_the_ID(), $is_show_turbo ); ?>
 </item>
 <?php endwhile; ?>
 </channel>
