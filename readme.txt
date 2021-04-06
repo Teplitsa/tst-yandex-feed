@@ -2,7 +2,7 @@
 Contributors: foralien, denis.cherniatev, ahaenor, teplosup
 Tags: yandex,Турбо,Яндекс,новости,news,Турбо-страницы,xml,rss,seo,turbo,turbo pages
 Requires at least: 3.9
-Tested up to: 5.3
+Tested up to: 5.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt

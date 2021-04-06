@@ -6,7 +6,13 @@ class La_Yandex_Feed_Core {
     private $query_cache_key = 'tst_yandex_news_cache';
     private $query_cache_data = NULL;
     private $query_cache_expire = 0;
-    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><iframe><embed><object><param>';
+
+    private static $yandex_turbo_allowed_tags = '<p><a><h1><h2><h3><figure><img><figcaption><header><ul><ol><li><video><source><br><b><strong><i><em><sup><sub><ins><del><small><big><pre><abbr><u><table><tr><td><th><tbody><col><thead><tfoot><button><div>'
+        . '<iframe><embed><object><param>';
+    public static $yandex_turbo_allowed_extra_tags = '';
+
+    private static $yandex_strip_content_tags = '<script>';
+
     public static $yandex_turbo_feed_min_limit = 300;
     public static $get_post_cache = null;
     public static $get_post_cache_max_length = 50;
@@ -36,11 +42,11 @@ class La_Yandex_Feed_Core {
 				
 		/* robots txt */
 		add_filter('robots_txt', array($this, 'robots_txt_permission'), 2, 2);
-		
+
 		/* admin */
 		$this->admin_setup();
     }
-    
+
     public function cache_pre_query( $request, $query ){
     
         if(isset($query->query_vars['yandex_feed']) && $query->query_vars['yandex_feed'] == 'news') {
@@ -144,9 +150,7 @@ class La_Yandex_Feed_Core {
 	static function on_deactivation() {
 		/* forse rewrite flush on time */
 		delete_option('layf_permalinks_flushed');
-	}
-	
-	
+	}	
 	
 	public function admin_setup(){
 		
@@ -155,8 +159,7 @@ class La_Yandex_Feed_Core {
 		
 		require_once(LAYF_PLUGIN_DIR.'inc/admin.php');
 		La_Yandex_Feed_Admin::get_instance();
-	}
-	
+	}	
 	
 	public function get_supported_post_types() {
 		$pt = get_option('layf_post_types', 'post');
@@ -167,16 +170,15 @@ class La_Yandex_Feed_Core {
 		$pt = array_map('trim', $pt);
 		
 		return $pt;
-	}
-	
+	}	
 	
 	/** request */	
 	public function custom_query_vars(){
         global $wp;
         
         $wp->add_query_var('yandex_feed');
-		//deafult
-// 		add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
+		// default
+		// add_rewrite_rule('^yandex/([^/]*)/?', 'index.php?yandex_feed=$matches[1]', 'top');
 		add_rewrite_rule('^yandex/news/?', 'index.php?yandex_feed=news', 'top');
 		add_rewrite_rule('^yandex/turbo/?', 'index.php?yandex_feed=turbo', 'top');
 		
@@ -203,7 +205,7 @@ class La_Yandex_Feed_Core {
     }
 	
 	public function custom_request($query) {
-//         var_dump($query->query_vars); die();
+        // var_dump($query->query_vars); die();
 	    
 	    if(isset($query->query_vars['yandex_feed']) && (in_array($query->query_vars['yandex_feed'], array('news', 'turbo')))) {
 	        $is_turbo = $query->query_vars['yandex_feed'] == 'turbo';
@@ -307,7 +309,7 @@ class La_Yandex_Feed_Core {
 			        'relation' => 'OR'
 			    );
 			}
-//             var_dump($query->query_vars); die();
+            // var_dump($query->query_vars); die();
 		}
 		
 	}
@@ -315,6 +317,7 @@ class La_Yandex_Feed_Core {
 	public function custom_templates_redirect(){
 		$qv = get_query_var('yandex_feed');
 		if('news' == $qv || $qv == 'turbo') {
+            TstYandexNewsShortcodes::setup_shortcodes();
 			include(LAYF_PLUGIN_DIR.'inc/feed.php');
 			die();
 		}
@@ -325,15 +328,11 @@ class La_Yandex_Feed_Core {
 		if($public == 0)
 			return $output;
 		
-$dir = "User-agent: Yandex
-Allow: /yandex/news/
-
-";
+        $dir = "User-agent: Yandex\nAllow: /yandex/news/";
 		$output = $dir.$output;
 		
 		return $output;
-	}
-		
+	}		
 	
 	/** formatting */
 	function full_text_formatting($text){
@@ -354,7 +353,7 @@ Allow: /yandex/news/
 		
 		
 		
-// 		return $text;
+		// return $text;
 		return self::_valid_characters($text);
 	}
 	
@@ -367,10 +366,7 @@ Allow: /yandex/news/
 		
 		
 		return $text;
-	}
-	
-	
-	
+	}	
 	
 	/** template helpers */
 	static function get_the_content_feed() {
@@ -438,7 +434,10 @@ Allow: /yandex/news/
         
 	    $turbo_content = apply_filters('layf_turbo_content_feed', $content);
 	    
-	    $turbo_content = strip_tags( $turbo_content, self::$yandex_turbo_allowed_tags );
+	    if(!get_option('layf_allow_any_tags', false)) {
+            $turbo_content = layf_strip_tags_content( $turbo_content, self::$yandex_strip_content_tags );
+            $turbo_content = strip_tags( $turbo_content, self::$yandex_turbo_allowed_tags . self::$yandex_turbo_allowed_extra_tags );
+        }
 	    
 	    $turbo_content = preg_replace('/<p>\s*<\/p>/', '', $turbo_content );
 	    $turbo_content = preg_replace('/class\s*=\s*".*?"/', '', $turbo_content );
@@ -639,11 +638,25 @@ Allow: /yandex/news/
 	    $url = self::get_site_protocol() . $url;
 	    return $url;
 	}
-	
+
+	public static function add_port( $url ) {
+        $port = is_ssl() ? '443' : '80';
+	    $port = apply_filters( 'tst_yandex_news_filter_site_protocol', $port );
+        return $url . ":" . $port;
+	}
+    
 	public static function get_site_protocol() {
 	    $site_protocol = preg_replace( '/(.*?)\/\/.*/', '\1', site_url() );
 	    return $site_protocol ? $site_protocol : ( is_ssl() ? 'https' : 'http' );
 	}
+
+    public static function get_host_id() {
+        $protocol_domain = self::add_protocol(site_url());
+        $protocol_domain = str_replace('://', ':', $protocol_domain);
+        $protocol_domain = preg_replace('/\/$/', '', $protocol_domain);
+        $host_id = self::add_port($protocol_domain);
+        return apply_filters( 'tst_yandex_news_filter_host_id', $host_id );
+    }
 	
 	/* videos */
 	static function item_media(){
@@ -764,7 +777,14 @@ Allow: /yandex/news/
 		}
 		return $ret;
 	}
-	
+
+    public static function add_allowed_tag($tag_name) {
+        $tag = '<' . $tag_name . '>';
+        if(strpos(self::$yandex_turbo_allowed_extra_tags, $tag) === false) {
+            self::$yandex_turbo_allowed_extra_tags .= $tag;
+        }
+    }
+
 } //class
 
 
@@ -991,10 +1011,10 @@ $table = array(
     '&clubs;'    => '&#9827;', # black club suit = shamrock, U+2663 ISOpub
     '&hearts;'   => '&#9829;', # black heart suit = valentine, U+2665 ISOpub
     '&diams;'    => '&#9830;', # black diamond suit, U+2666 ISOpub
-//     '&quot;'     => '&#34;',   # quotation mark = APL quote, U+0022 ISOnum
-//     '&amp;'      => '&#38;',   # ampersand, U+0026 ISOnum
-//     '&lt;'       => '&#60;',   # less-than sign, U+003C ISOnum
-//     '&gt;'       => '&#62;',   # greater-than sign, U+003E ISOnum
+    // '&quot;'     => '&#34;',   # quotation mark = APL quote, U+0022 ISOnum
+    // '&amp;'      => '&#38;',   # ampersand, U+0026 ISOnum
+    // '&lt;'       => '&#60;',   # less-than sign, U+003C ISOnum
+    // '&gt;'       => '&#62;',   # greater-than sign, U+003E ISOnum
     '&OElig;'    => '&#338;',  # latin capital ligature OE, U+0152 ISOlat2
     '&oelig;'    => '&#339;',  # latin small ligature oe, U+0153 ISOlat2
     '&Scaron;'   => '&#352;',  # latin capital letter S with caron, U+0160 ISOlat2
@@ -1023,7 +1043,7 @@ $table = array(
     '&lsaquo;'   => '&#8249;', # single left-pointing angle quotation mark, U+2039 ISO proposed
     '&rsaquo;'   => '&#8250;', # single right-pointing angle quotation mark, U+203A ISO proposed
     '&euro;'     => '&#8364;', # euro sign, U+20AC NEW
-//     '&apos;'     => '&#39;',   # apostrophe = APL quote, U+0027 ISOnum
+    // '&apos;'     => '&#39;',   # apostrophe = APL quote, U+0027 ISOnum
 );
 
 return $table;
@@ -1250,6 +1270,289 @@ function layf_get_url_var($name) {
         $place = $found + 1;
     }
     return $found && !empty($arrVals[$place]) ? $arrVals[$place] : null;
+}
+
+function layf_strip_tags_content($text, $tags = '') {
+
+  preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
+  $tags = array_unique($tags[1]);
+   
+  if(is_array($tags) && count($tags) > 0) {
+    $text = preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text);
+  }
+
+  return $text;
+}
+
+class TstYandexNewsAPIClient {
+    private $auth_token = "";
+    private static $instance = NULL; //instance store
+
+	private function __construct() {
+        $this->auth_token = trim(get_option('layf_api_sync_token', ""));
+        error_log("api auth_token:" . $this->auth_token);
+    }
+
+    public static function get_instance(){
+        
+        if (NULL === self :: $instance) {
+            self :: $instance = new self;
+        }
+
+        return self :: $instance;
+    }
+    
+    public function update_current_post_in_yandex() {
+        if(!$this->auth_token) {
+            return;
+        }
+
+        $yandex_user_id = $this->get_user_id_from_yandex();
+        error_log("yandex_user_id:" . $yandex_user_id);
+
+        // $yandex_post_turbo_feed_url = $this->get_post_feed_url_from_yandex($yandex_user_id);
+        // error_log("yandex_post_turbo_feed_url:" . $yandex_post_turbo_feed_url);
+
+        $this->post_turbo_page_to_yandex();
+    }
+
+    public function post_turbo_page_to_yandex() {
+        ob_start();
+        include("feed-single.php");
+        $feed_content = ob_get_clean();
+        error_log("feed to post:\n\n===========================\n\n" . $feed_content . "\n\n");
+    }
+
+    private function get_user_id_from_yandex() {
+        $headers = array();
+        $headers[] = 'Content-length: 0';
+        $headers[] = 'Content-type: application/json';
+        $headers[] = 'Authorization: OAuth ' . $this->auth_token;
+        $url = 'https://api.webmaster.yandex.net/v4/user';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        
+        error_log("get_user_id_from_yandex api result:" . print_r($result, true));
+
+        try {
+            $result_data = json_decode($result);
+        }
+        catch(Exception $e) {
+            error_log("[TstYandexNews]: Parse JSON error in get_user_id_from_yandex:" . $e->getMessage());
+            $result_data = null;
+        }
+
+        error_log("data:" . print_r($result_data, true));
+
+        if(!empty($result_data->error_code)) {
+            if($result_data->error_code === 'INVALID_OAUTH_TOKEN') {
+                throw new TstYandexNewsInvalidAuthTokenException();
+            }
+            else {
+                throw new Exception();                
+            }
+        }
+
+        return !empty($result_data->user_id) ? $result_data->user_id : 0;
+    }
+
+    private function get_post_feed_url_from_yandex($yandex_user_id) {
+        $headers = array();
+        $headers[] = 'Content-length: 0';
+        $headers[] = 'Content-type: application/json';
+        $headers[] = 'Authorization: OAuth ' . $this->auth_token;
+
+        $host_id = La_Yandex_Feed_Core::get_host_id();
+        $url = 'https://api.webmaster.yandex.net/v4/user';
+        $url .= "/{$yandex_user_id}/hosts/{$host_id}/turbo/uploadAddress";
+
+        error_log("get_post_feed_url:" . $url);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        
+        error_log("api result:" . print_r($result, true));
+
+        try {
+            $result_data = json_decode($result);
+        }
+        catch(Exception $e) {
+            error_log("[TstYandexNews]: Parse JSON error in get_post_feed_url_from_yandex:" . $e->getMessage());
+            $result_data = null;
+        }
+
+        error_log("data:" . print_r($result_data, true));
+
+        if(!empty($result_data->error_code)) {
+            if($result_data->error_code === 'INVALID_OAUTH_TOKEN') {
+                throw new TstYandexNewsInvalidAuthTokenException();
+            }
+            elseif($result_data->error_code === 'HOST_NOT_VERIFIED') {
+                throw new TstYandexNewsHostNotVerifiedException();
+            }
+            else {
+                throw new Exception();                
+            }
+        }
+
+        return !empty($result_data->upload_address) ? $result_data->upload_address : "";
+    }
+
+}
+
+class TstYandexNewsInvalidAuthTokenException extends Exception {
+}
+
+class TstYandexNewsHostNotVerifiedException extends Exception {
+}
+
+// shortcodes
+class TstYandexNewsShortcodes {
+    public static $list = array(
+        'TstYandexNewsComponent', 'TstYandexNewsButton', 'TstYandexNewsSearch', 'TstYandexNewsShare', 'TstYandexNewsFeedback',
+    );
+
+    public static function shortcodeComponent($atts) {
+        $a = shortcode_atts( array(
+            'tag' => '',
+            'content' => '',
+        ), $atts );
+
+        if(empty($a['tag'])) {
+            return '';
+        }
+
+        $other_a_pairs = self::get_other_a_pairs($a);        
+        La_Yandex_Feed_Core::add_allowed_tag($a['tag']);
+
+        return self::get_tag_str($a['tag'], $a['content'], $other_a_pairs);
+    }
+
+    public static function shortcode_button($a, $content) {
+        // error_log("atts-IN:" . print_r($a, true));
+
+        $a = self::fix_no_val_atts($a);
+
+        // error_log("atts-FIXED:" . print_r($a, true));
+
+        $other_a_pairs = self::get_other_a_pairs($a);
+
+        // error_log("other_a_pairs: " . print_r($other_a_pairs, true));
+
+        $tag = 'button';
+        La_Yandex_Feed_Core::add_allowed_tag($tag);
+        return self::get_tag_str($tag, $content, $other_a_pairs);
+    }
+
+    public static function shortcode_search($a) {
+        if(!isset($a['palceholder'])) {
+            $a['palceholder'] = "";
+        }
+
+        $a['action'] = 'https://yandex.ru/search/?text={text}';
+        $a['method'] = 'GET';
+        $content = '<input type="search" name="text" placeholder="' . $a['palceholder'] . '" />';
+
+        $a = self::remove_a($a, array('palceholder'));
+        $other_a_pairs = self::get_other_a_pairs($a);
+
+        $tag = 'form';
+        La_Yandex_Feed_Core::add_allowed_tag($tag);
+        La_Yandex_Feed_Core::add_allowed_tag('input');
+        return self::get_tag_str($tag, $content, $other_a_pairs);
+    }
+
+    public static function shortcode_share($atts) {
+        $a = shortcode_atts( array(
+            'data-network' => '',
+        ), $atts );
+
+        if(empty($a['data-network'])) {
+            return '';
+        }
+
+        $a['data-block'] = 'share';
+
+        $other_a_pairs = self::get_other_a_pairs($a);
+
+        return self::get_tag_str('div', "", $other_a_pairs);
+    }
+
+    public static function shortcode_feedback($a, $content) {
+        $a['data-block'] = 'widget-feedback';
+        $other_a_pairs = self::get_other_a_pairs($a);
+        error_log('content: ' . $content);
+        return self::get_tag_str('div', $content, $other_a_pairs);
+    }
+
+    public static function setup_shortcodes() {
+        foreach(self::$list as $shortcode) {
+            add_shortcode( $shortcode, 'TstYandexNewsShortcodes::shortcode_' . strtolower(str_replace('TstYandexNews', '', $shortcode)) );
+        }
+    }
+
+    public static function is_shortcodes_setup() {
+        return shortcode_exists( self::$list[0] );
+    }
+
+    public static function strip_shortcodes($content) {
+        $pattern = get_shortcode_regex( self::$list );
+        // error_log("pattern:" . $pattern);
+        return preg_replace_callback( "/$pattern/", 'strip_shortcode_tag', $content );
+    }
+
+    private static function get_tag_str($tag, $content, $other_a_pairs) {
+        if($content) {
+            $content = preg_replace('/^\s*<\/p>/', '', $content);
+            $content = preg_replace('/<p>\s*$/', '', $content);
+        }
+        return '<' . $tag . ' ' . implode(" ", $other_a_pairs) . ($content ? '>' . $content . '</' . $tag . '>' : '/>');
+    }
+
+    private static function get_other_a_pairs($a, $filter_a=array('tag', 'content')) {
+        if(empty($a)) {
+            return array();
+        }
+
+        $other_a = array_filter($a, function($v, $k) use($filter_a) {
+            return !in_array($k, $filter_a);
+        }, ARRAY_FILTER_USE_BOTH);
+
+        $other_a_pairs = array();
+        foreach($other_a as $k => $v) {
+            $other_a_pairs[] = $k . '="' . addslashes($v) . '"';
+        };
+
+        return $other_a_pairs;
+    }
+
+    private static function remove_a($a, $a2remove) {
+        return array_filter($a, function($v, $k) use($a2remove) {
+            return !in_array($k, $a2remove);
+        }, ARRAY_FILTER_USE_BOTH);
+    }
+
+    private static function fix_no_val_atts($a) {
+        $ca = count($a);
+        for($i = 0; $i < $ca; $i++) {
+            if(isset($a[$i])) {
+                $a[$a[$i]] = true;
+                unset($a[$i]);
+            }
+        }
+        return $a;
+    }
 }
 
 ?>

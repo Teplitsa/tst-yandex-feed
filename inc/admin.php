@@ -94,6 +94,11 @@ class La_Yandex_Feed_Admin {
             $this,
             'settngs_custom_turbo_url_callback'
         ), 'layf_settings', 'layf_base' );
+
+        add_settings_field ( 'layf_api_sync_token', __ ( 'Yandex.Webmaster OAuth Token', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settngs_api_sync_token_callback' 
+        ), 'layf_settings', 'layf_base' );
         
         add_settings_field ( 'layf_post_types', __ ( 'Post types for feed', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
@@ -180,6 +185,11 @@ class La_Yandex_Feed_Admin {
             'settings_remove_teaser_from_fulltext_callback'
         ), 'layf_settings', 'layf_base' );
         
+        add_settings_field ( 'layf_allow_any_tags', __ ( 'Allow any tags in turbo-content', 'yandexnews-feed-by-teplitsa' ), array (
+            $this,
+            'settings_allow_any_tags_callback'
+        ), 'layf_settings', 'layf_base' );
+        
         add_settings_field ( 'layf_feed_items_limit', __ ( 'Feed items limit', 'yandexnews-feed-by-teplitsa' ), array (
             $this,
             'settings_feed_items_limit_callback'
@@ -214,6 +224,8 @@ class La_Yandex_Feed_Admin {
         register_setting ( 'layf_settings', 'layf_feed_cache_ttl' );
         register_setting ( 'layf_settings', 'layf_remove_shortcodes' );
         register_setting ( 'layf_settings', 'layf_remove_teaser_from_fulltext' );
+		register_setting ( 'layf_settings', 'layf_allow_any_tags' );
+		register_setting ( 'layf_settings', 'layf_api_sync_token' );
     }
 		
 	function layf_settings_screen(){
@@ -281,7 +293,18 @@ class La_Yandex_Feed_Admin {
     '<a href="'.home_url('/index.php?yandex_feed=turbo&paged=3').'">'.home_url('/index.php?yandex_feed=turbo&paged=3').'</a>');?></p>
 <?php	
 	}
- 
+
+	function settngs_api_sync_token_callback() {
+		
+		$value = get_option('layf_api_sync_token', '');
+		?>
+<label for="layf_api_sync_token"><input name="layf_api_sync_token"
+    id="layf_api_sync_token" type="text" class="regular-text code"
+    value="<?php echo $value;?>"> </label>
+<p class="description"><?php _e('You can get token in Yandex.Webmaster > Sources > Get token', 'yandexnews-feed-by-teplitsa');?></p>
+<?php
+	}
+	
 	function settngs_post_types_callback() {
 		
 		$value = get_option('layf_post_types', '');
@@ -454,6 +477,14 @@ class La_Yandex_Feed_Admin {
 	    $value = get_option('layf_remove_teaser_from_fulltext', '');
 	    ?>
 <input type="checkbox" name="layf_remove_teaser_from_fulltext" value="1"
+    <?php if($value):?> checked="checked" <?php endif;?> />
+<?php	
+	}
+
+	function settings_allow_any_tags_callback() {
+	    $value = get_option('layf_allow_any_tags', '');
+	    ?>
+<input type="checkbox" name="layf_allow_any_tags" value="1"
     <?php if($value):?> checked="checked" <?php endif;?> />
 <?php	
 	}
