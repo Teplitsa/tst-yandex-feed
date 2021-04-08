@@ -20,6 +20,10 @@ class TstYandexNewsHooks {
             return;
         }
 
+        if(!get_option('layf_enable_turbo')) {
+            return;
+        }
+
         // setup_postdata($post_id);
         global $post;
         if(!get_the_ID() && $post_id) {

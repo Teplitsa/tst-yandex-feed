@@ -71,5 +71,7 @@
 <?php if($is_show_turbo):?>
 <turbo:content><?php echo La_Yandex_Feed_Core::get_the_turbo_content();?></turbo:content>
 <?php endif?>
+<?php if(!$tstyn_is_single):?>
 <yandex:full-text><?php echo La_Yandex_Feed_Core::get_the_content_feed(); ?></yandex:full-text>
+<?php endif?>
 </item>

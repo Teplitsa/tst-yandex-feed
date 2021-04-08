@@ -3,6 +3,7 @@
 $is_turbo = true;
 $layf_enable_turbo = true;
 $is_show_turbo = true;
+$tstyn_is_single = true;
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>

@@ -1,9 +1,5 @@
 <?php
-
 header('Content-Type: ' . feed_content_type('rss') . '; charset=' . get_option('blog_charset'), true);
-$is_turbo = get_query_var('yandex_feed') == 'turbo';
-$layf_enable_turbo = get_option('layf_enable_turbo');
-$is_show_turbo = $layf_enable_turbo || $is_turbo;
 
 echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 ?>
