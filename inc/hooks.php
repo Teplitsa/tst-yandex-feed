@@ -104,11 +104,14 @@ class TstYandexNewsHooks {
     }
 
     public static function register_post_meta() {
-        register_post_meta( 'post', 'tstyn_error', array(
-            'show_in_rest' => true,
-            'single' => true,
-            'type' => 'string',
-        ) );        
+        $post_types = La_Yandex_Feed_Core::get_instance()->get_supported_post_types();
+        foreach($post_types as $post_type) {
+            register_post_meta( $post_type, 'tstyn_error', array(
+                'show_in_rest' => true,
+                'single' => true,
+                'type' => 'string',
+            ) );        
+        }
     }
 }
 
