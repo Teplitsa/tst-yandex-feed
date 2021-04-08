@@ -34,8 +34,6 @@ License: GPLv2 or later
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
-error_reporting(E_ERROR);
-
 if(!defined('ABSPATH')) die; // Die if accessed directly
 
 // Plugin version:
@@ -87,8 +85,3 @@ $strings = array(
 	__('The plugin creates feed for Yandex.News service', 'yandexnews-feed-by-teplitsa'),
 	__('Teplitsa', 'yandexnews-feed-by-teplitsa'),
 );
-
-function prefix_disable_gutenberg($current_status, $post_type) {
-    return false;
-}
-// add_filter('use_block_editor_for_post_type', 'prefix_disable_gutenberg', 10, 2);

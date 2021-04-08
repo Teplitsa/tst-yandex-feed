@@ -61,6 +61,11 @@ or download as ZIP: https://github.com/Teplitsa/tst-yandex-feed/archive/master.z
 
 == Changelog ==
 
+= 1.12.0 =
+* Update: PDA link deleted from feed.
+* New: Added shortcodes to place custom button, share widget, contact widget, feedback form etc.
+* New: Added inegration with Yandex by API. Not post will be updated in Yandex right after saving if you provide API Auth Token.
+
 = 1.11.0 =
 * Update: Turbo=False option added for excluded turbo-pages when turbo-feed is on, and for all turbo-pages when turbo-feed is off.
 * Update: If "Include post thumbnails into feed" is off, then a post thumbnail will be removed from turbo-page header.

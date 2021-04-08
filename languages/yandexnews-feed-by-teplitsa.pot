@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-04-08T14:45:39+03:00\n"
+"POT-Creation-Date: 2021-04-08T22:11:19+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.1.0\n"
 "X-Domain: yandexnews-feed-by-teplitsa\n"
@@ -19,12 +19,12 @@ msgid "Yandex.News Feed by Teplitsa"
 msgstr ""
 
 #. Description of the plugin
-#: tst-yandex-feed.php:80
+#: tst-yandex-feed.php:87
 msgid "The plugin creates feed for Yandex.News service"
 msgstr ""
 
 #. Author of the plugin
-#: tst-yandex-feed.php:81
+#: tst-yandex-feed.php:88
 msgid "Teplitsa"
 msgstr ""
 
@@ -32,16 +32,20 @@ msgstr ""
 msgid "https://te-st.ru/"
 msgstr ""
 
-#: inc/hooks.php:21
+#: inc/hooks.php:50
 msgid "Turbo page update error: invalid auth token error"
 msgstr ""
 
-#: inc/hooks.php:25
-msgid "Turbo page update error: hot not verified"
+#: inc/hooks.php:53
+msgid "Turbo page update error: host not verified"
 msgstr ""
 
-#: inc/hooks.php:29
-msgid "Turbo page post error: "
+#: inc/hooks.php:56
+msgid "Turbo page update error: resource not found"
+msgstr ""
+
+#: inc/hooks.php:59
+msgid "Turbo page update error:"
 msgstr ""
 
 #: inc/admin.php:55
@@ -53,7 +57,7 @@ msgid "GitHub"
 msgstr ""
 
 #: inc/admin.php:75
-#: inc/admin.php:240
+#: inc/admin.php:234
 msgid "Yandex.News Feed Settings"
 msgstr ""
 
@@ -134,41 +138,37 @@ msgid "Analytics and ads"
 msgstr ""
 
 #: inc/admin.php:173
-msgid "Remove pdalink tag from feed"
-msgstr ""
-
-#: inc/admin.php:178
 msgid "Remove post author name from feed"
 msgstr ""
 
-#: inc/admin.php:183
+#: inc/admin.php:178
 msgid "Remove all unexecuted shortcodes"
 msgstr ""
 
-#: inc/admin.php:188
+#: inc/admin.php:183
 msgid "Remove teaser from yandex:full-text tag"
 msgstr ""
 
-#: inc/admin.php:193
+#: inc/admin.php:188
 msgid "Allow any tags in turbo-content"
 msgstr ""
 
-#: inc/admin.php:198
+#: inc/admin.php:193
 msgid "Feed items limit"
 msgstr ""
 
-#: inc/admin.php:203
+#: inc/admin.php:198
 msgid "Feed cache lifetime"
 msgstr ""
 
-#: inc/admin.php:274
+#: inc/admin.php:268
 msgid ""
 "If necessary, enter your own broadcast URL.\n"
 "If simple permalinks are enabled, the feed URL will be\n"
 "%s"
 msgstr ""
 
-#: inc/admin.php:293
+#: inc/admin.php:287
 msgid ""
 "If necessary, enter your own broadcast URL.\n"
 "Next pages of the feed will be available by URLs:\n"
@@ -183,108 +183,108 @@ msgid ""
 "etc."
 msgstr ""
 
-#: inc/admin.php:312
+#: inc/admin.php:306
 msgid "Button"
 msgstr ""
 
-#: inc/admin.php:315
+#: inc/admin.php:309
 msgid "Share"
 msgstr ""
 
-#: inc/admin.php:318
+#: inc/admin.php:312
 msgid "Search"
 msgstr ""
 
-#: inc/admin.php:321
+#: inc/admin.php:315
 msgid "Feedback"
 msgstr ""
 
-#: inc/admin.php:324
+#: inc/admin.php:318
 msgid "Ads"
 msgstr ""
 
-#: inc/admin.php:327
+#: inc/admin.php:321
 msgid "User component"
 msgstr ""
 
-#: inc/admin.php:339
+#: inc/admin.php:333
 msgid "You can get token in Yandex.Webmaster > Sources > Get token"
 msgstr ""
 
-#: inc/admin.php:350
+#: inc/admin.php:344
 msgid "Comma separated list of post types"
 msgstr ""
 
-#: inc/admin.php:361
+#: inc/admin.php:355
 msgid "Max age of feed posts in days"
 msgstr ""
 
-#: inc/admin.php:362
+#: inc/admin.php:356
 msgid "For Yandex.Turbo this parameter will be ignored. Numeric feed limit will be used instead it."
 msgstr ""
 
-#: inc/admin.php:373
+#: inc/admin.php:367
 msgid "Direct link to .jpg, .png, .gif file (100px size of max side)"
 msgstr ""
 
-#: inc/admin.php:374
+#: inc/admin.php:368
 msgid "Logo for Yandex.Turbo should be set directly in Yandex.Webmaster: <a href=\"%s\" target=\"_blank\">%s</a>"
 msgstr ""
 
-#: inc/admin.php:385
+#: inc/admin.php:379
 msgid "Direct link to .jpg, .png, .gif file (180x180px size as min)"
 msgstr ""
 
-#: inc/admin.php:412
-#: inc/admin.php:449
+#: inc/admin.php:406
+#: inc/admin.php:443
 msgid "Comma separated list of term IDs"
 msgstr ""
 
-#: inc/admin.php:424
-#: inc/admin.php:459
+#: inc/admin.php:418
+#: inc/admin.php:453
 msgid "Comma separated list of term slugs"
 msgstr ""
 
-#: inc/admin.php:474
+#: inc/admin.php:468
 msgid "Analytics and ads should be set up directly in Yandex.Webmaster: <a href=\"%s\" target=\"_blank\">%s</a>"
 msgstr ""
 
-#: inc/admin.php:533
+#: inc/admin.php:519
 msgid "Numeric limit or empty for no limit"
 msgstr ""
 
-#: inc/admin.php:534
+#: inc/admin.php:520
 msgid "For Yandex.Turbo it should be %s or more. If not, %s will be used."
 msgstr ""
 
-#: inc/admin.php:544
+#: inc/admin.php:530
 msgid "Cache lifetime in hours. Leave it empty to disable cache."
 msgstr ""
 
-#: inc/admin.php:577
+#: inc/admin.php:563
 msgid "Yandex.News settings"
 msgstr ""
 
-#: inc/admin.php:597
+#: inc/admin.php:583
 msgid "Related links"
 msgstr ""
 
-#: inc/admin.php:600
+#: inc/admin.php:586
 msgid "Enter related links URL and descrioption separated by space, one link per string."
 msgstr ""
 
-#: inc/admin.php:603
+#: inc/admin.php:589
 msgid "Exclude entry from Yandex.News feed"
 msgstr ""
 
-#: inc/admin.php:605
+#: inc/admin.php:591
 msgid "Exclude despite the global settings"
 msgstr ""
 
-#: inc/admin.php:699
+#: inc/admin.php:685
 msgid "Yandex.News Feed by Teplitsa added a separate turbo pages feed. If you previously added the feed URL to Yandex.Turbo in Yandex.Webmaster, please replace it with the feed URL of the <a href=\"%s\">turbo pages</a>."
 msgstr ""
 
-#: inc/admin.php:701
+#: inc/admin.php:687
 msgid "Yes, I have already changed the feed URL in Yandex.Webmaster"
 msgstr ""
