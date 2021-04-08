@@ -6,9 +6,6 @@
 <title><?php the_title_rss();?></title>
 <link><?php the_permalink_rss();?></link>
 
-<?php if(!get_option('layf_remove_pdalink')): ?>
-<pdalink><?php the_permalink_rss();?></pdalink>
-<?php endif ?>
 <description><?php La_Yandex_Feed_Core::custom_the_excerpt_rss();?></description>
 <?php
     $layf_author = '';

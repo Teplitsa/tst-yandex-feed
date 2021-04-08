@@ -650,8 +650,14 @@ class La_Yandex_Feed_Core {
 	    return $site_protocol ? $site_protocol : ( is_ssl() ? 'https' : 'http' );
 	}
 
+    public static function get_host() {
+        $urlparts = parse_url(home_url());
+        return $urlparts['host'];
+    }
+
     public static function get_host_id() {
-        $protocol_domain = self::add_protocol(site_url());
+        $host = self::get_host();
+        $protocol_domain = self::add_protocol($host);
         $protocol_domain = str_replace('://', ':', $protocol_domain);
         $protocol_domain = preg_replace('/\/$/', '', $protocol_domain);
         $host_id = self::add_port($protocol_domain);
@@ -1290,7 +1296,7 @@ class TstYandexNewsAPIClient {
 
 	private function __construct() {
         $this->auth_token = trim(get_option('layf_api_sync_token', ""));
-        error_log("api auth_token:" . $this->auth_token);
+        // error_log("api auth_token:" . $this->auth_token);
     }
 
     public static function get_instance(){
@@ -1308,19 +1314,65 @@ class TstYandexNewsAPIClient {
         }
 
         $yandex_user_id = $this->get_user_id_from_yandex();
-        error_log("yandex_user_id:" . $yandex_user_id);
+        // error_log("yandex_user_id:" . $yandex_user_id);
 
-        // $yandex_post_turbo_feed_url = $this->get_post_feed_url_from_yandex($yandex_user_id);
+        $yandex_post_turbo_feed_url = $this->get_post_feed_url_from_yandex($yandex_user_id);
         // error_log("yandex_post_turbo_feed_url:" . $yandex_post_turbo_feed_url);
 
-        $this->post_turbo_page_to_yandex();
+        $this->post_turbo_page_to_yandex($yandex_post_turbo_feed_url);
     }
 
-    public function post_turbo_page_to_yandex() {
+    public function post_turbo_page_to_yandex($yandex_post_turbo_feed_url) {
         ob_start();
         include("feed-single.php");
         $feed_content = ob_get_clean();
-        error_log("feed to post:\n\n===========================\n\n" . $feed_content . "\n\n");
+        // error_log("feed to post:\n\n===========================\n\n" . $feed_content . "\n\n");
+
+        $headers = array();
+        $headers[] = 'Content-type: application/rss+xml';
+        $headers[] = 'Authorization: OAuth ' . $this->auth_token;
+
+        // error_log("get_post_feed_url:" . $yandex_post_turbo_feed_url);
+
+        $ch = curl_init($yandex_post_turbo_feed_url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $feed_content ); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        
+        // error_log("api result:" . print_r($result, true));
+
+        try {
+            $result_data = json_decode($result);
+        }
+        catch(Exception $e) {
+            error_log("[TstYandexNews]: Parse JSON error in get_post_feed_url_from_yandex:" . $e->getMessage());
+            $result_data = null;
+        }
+
+        // error_log("data:" . print_r($result_data, true));
+
+        if(!empty($result_data->error_code)) {
+            if($result_data->error_code === 'INVALID_OAUTH_TOKEN') {
+                throw new TstYandexNewsInvalidAuthTokenException();
+            }
+            elseif($result_data->error_code === 'HOST_NOT_VERIFIED') {
+                throw new TstYandexNewsHostNotVerifiedException();
+            }
+            elseif($result_data->error_code === 'RESOURCE_NOT_FOUND') {
+                throw new TstYandexNewsResourceNotFoundException();
+            }
+            else {
+                throw new Exception($result_data->error_code);
+            }
+        }
+        elseif(!$result_data || !$result_data->task_id) {
+            throw new Exception('UNKNOWN_POST_FEED_ERROR');
+        }
     }
 
     private function get_user_id_from_yandex() {
@@ -1338,7 +1390,7 @@ class TstYandexNewsAPIClient {
         $result = curl_exec($ch);
         curl_close($ch);
         
-        error_log("get_user_id_from_yandex api result:" . print_r($result, true));
+        // error_log("get_user_id_from_yandex api result:" . print_r($result, true));
 
         try {
             $result_data = json_decode($result);
@@ -1348,15 +1400,18 @@ class TstYandexNewsAPIClient {
             $result_data = null;
         }
 
-        error_log("data:" . print_r($result_data, true));
+        // error_log("data:" . print_r($result_data, true));
 
         if(!empty($result_data->error_code)) {
             if($result_data->error_code === 'INVALID_OAUTH_TOKEN') {
                 throw new TstYandexNewsInvalidAuthTokenException();
             }
             else {
-                throw new Exception();                
+                throw new Exception($result_data->error_code);                
             }
+        }
+        elseif(!$result_data || !$result_data->user_id) {
+            throw new Exception('UNKNOWN_GET_USER_ID_ERROR');
         }
 
         return !empty($result_data->user_id) ? $result_data->user_id : 0;
@@ -1372,7 +1427,7 @@ class TstYandexNewsAPIClient {
         $url = 'https://api.webmaster.yandex.net/v4/user';
         $url .= "/{$yandex_user_id}/hosts/{$host_id}/turbo/uploadAddress";
 
-        error_log("get_post_feed_url:" . $url);
+        // error_log("get_post_feed_url:" . $url);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -1382,7 +1437,7 @@ class TstYandexNewsAPIClient {
         $result = curl_exec($ch);
         curl_close($ch);
         
-        error_log("api result:" . print_r($result, true));
+        // error_log("api result:" . print_r($result, true));
 
         try {
             $result_data = json_decode($result);
@@ -1392,7 +1447,7 @@ class TstYandexNewsAPIClient {
             $result_data = null;
         }
 
-        error_log("data:" . print_r($result_data, true));
+        // error_log("data:" . print_r($result_data, true));
 
         if(!empty($result_data->error_code)) {
             if($result_data->error_code === 'INVALID_OAUTH_TOKEN') {
@@ -1401,9 +1456,15 @@ class TstYandexNewsAPIClient {
             elseif($result_data->error_code === 'HOST_NOT_VERIFIED') {
                 throw new TstYandexNewsHostNotVerifiedException();
             }
-            else {
-                throw new Exception();                
+            elseif($result_data->error_code === 'RESOURCE_NOT_FOUND') {
+                throw new TstYandexNewsResourceNotFoundException();
             }
+            else {
+                throw new Exception($result_data->error_code);                
+            }
+        }
+        elseif(!$result_data || !$result_data->upload_address) {
+            throw new Exception('UNKNOWN_GET_UPLOAD_ADDRESS_ERROR');
         }
 
         return !empty($result_data->upload_address) ? $result_data->upload_address : "";
@@ -1417,16 +1478,18 @@ class TstYandexNewsInvalidAuthTokenException extends Exception {
 class TstYandexNewsHostNotVerifiedException extends Exception {
 }
 
+class TstYandexNewsResourceNotFoundException extends Exception {
+}
+
 // shortcodes
 class TstYandexNewsShortcodes {
     public static $list = array(
-        'TstYandexNewsComponent', 'TstYandexNewsButton', 'TstYandexNewsSearch', 'TstYandexNewsShare', 'TstYandexNewsFeedback',
+        'TstYandexNewsComponent', 'TstYandexNewsButton', 'TstYandexNewsSearch', 'TstYandexNewsShare', 'TstYandexNewsFeedback', 'TstYandexNewsAds', 
     );
 
-    public static function shortcodeComponent($atts) {
+    public static function shortcode_component($atts, $content) {
         $a = shortcode_atts( array(
             'tag' => '',
-            'content' => '',
         ), $atts );
 
         if(empty($a['tag'])) {
@@ -1436,7 +1499,15 @@ class TstYandexNewsShortcodes {
         $other_a_pairs = self::get_other_a_pairs($a);        
         La_Yandex_Feed_Core::add_allowed_tag($a['tag']);
 
-        return self::get_tag_str($a['tag'], $a['content'], $other_a_pairs);
+        return self::get_tag_str($a['tag'], $content, $other_a_pairs);
+    }
+
+    public static function shortcode_ads($a, $content) {
+        $a = self::fix_no_val_atts($a);
+        $other_a_pairs = self::get_other_a_pairs($a);
+        $tag = 'figure';
+        La_Yandex_Feed_Core::add_allowed_tag($tag);
+        return self::get_tag_str($tag, $content ? $content : " ", $other_a_pairs);
     }
 
     public static function shortcode_button($a, $content) {
@@ -1489,10 +1560,52 @@ class TstYandexNewsShortcodes {
         return self::get_tag_str('div', "", $other_a_pairs);
     }
 
-    public static function shortcode_feedback($a, $content) {
+    public static function shortcode_feedback($a) {
         $a['data-block'] = 'widget-feedback';
+
+        $content = "";
+        $ways = array('call', 'callback', 'mail', 'chat', 'facebook', 'google', 'odnoklassniki', 'telegram', 'twitter', 'vkontakte', 'whatsapp', 'viber');
+        foreach($ways as $way) {
+            if(!isset($a[$way])) {
+                continue;
+            }
+
+            $away = array('data-type' => $way);
+
+            if($way === 'callback') {
+                $away['data-send-to'] = $a[$way];
+
+                if(isset($a['company'])) {
+                    $away['data-agreement-company'] = $a['company'];
+                }
+
+                if(isset($a['agreement'])) {
+                    $away['data-agreement-link'] = $a['agreement'];
+                }
+            }
+            elseif($way === 'chat') {
+            }
+            else {
+                $away['data-url'] = $a[$way];
+            }
+
+            $other_a_pairs = self::get_other_a_pairs($away);
+            $content .= self::get_tag_str('div', " ", $other_a_pairs);
+        }
+
+        foreach(array_merge($ways, array('company', 'agreement')) as $way) {
+            if(!isset($a[$way])) {
+                continue;
+            }
+
+            unset($a[$way]);
+        }
+
+        $a = self::fix_no_val_atts($a);
+        // error_log('a:' . print_r($a, true));
+
         $other_a_pairs = self::get_other_a_pairs($a);
-        error_log('content: ' . $content);
+        // error_log('content: ' . $content);
         return self::get_tag_str('div', $content, $other_a_pairs);
     }
 
@@ -1547,7 +1660,9 @@ class TstYandexNewsShortcodes {
         $ca = count($a);
         for($i = 0; $i < $ca; $i++) {
             if(isset($a[$i])) {
-                $a[$a[$i]] = true;
+                if(!preg_match('/^[ \/>]*$/', $a[$i])) {
+                    $a[$a[$i]] = true;
+                }
                 unset($a[$i]);
             }
         }

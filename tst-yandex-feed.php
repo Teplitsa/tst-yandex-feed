@@ -2,7 +2,7 @@
 /*
 Plugin Name: Yandex.News Feed by Teplitsa
 Description: The plugin creates feed for Yandex.News service
-Version: 1.11.0
+Version: 1.12.0
 Author: Teplitsa
 Author URI: https://te-st.ru/
 Text Domain: yandexnews-feed-by-teplitsa
@@ -34,11 +34,13 @@ License: GPLv2 or later
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
+error_reporting(E_ERROR);
+
 if(!defined('ABSPATH')) die; // Die if accessed directly
 
 // Plugin version:
 if( !defined('LAYF_VERSION') )
-    define('LAYF_VERSION', '1.12.0');
+    define('LAYF_VERSION', '1.12.8');
 	
 // Plugin DIR, with trailing slash:
 if( !defined('LAYF_PLUGIN_DIR') )
@@ -60,6 +62,11 @@ if( !defined('LAYF_DEFAULT_MAX_POST_AGE') )
 if( !defined('LAYF_YANDEX_CMS_PLUGIN_ID') )
     define('LAYF_YANDEX_CMS_PLUGIN_ID', '6987189DB81CB618F223396A679B6B05');
 
+if(get_locale() === 'ru_RU') {
+	load_textdomain('yandexnews-feed-by-teplitsa', dirname(realpath(__FILE__)).'/languages/yandexnews-feed-by-teplitsa-ru_RU.mo'); // Load the lang. pack included
+}
+load_plugin_textdomain('yandexnews-feed-by-teplitsa', false, basename(dirname(__FILE__)).'/languages/'); // Load the lang. pack by priority
+	
 function yandexnews_feed_by_teplitsa_load_plugin_textdomain() {
     load_plugin_textdomain('yandexnews-feed-by-teplitsa', false, '/'.basename(LAYF_PLUGIN_DIR).'/languages/');
 }
@@ -81,33 +88,7 @@ $strings = array(
 	__('Teplitsa', 'yandexnews-feed-by-teplitsa'),
 );
 
-// debug
-function add_some_js($content) {
-	return $content . '
-		<script type="text/javascript">
-			(function (w) {
-				function start() {
-				w.removeEventListener("YaMarketAffiliateLoad", start);
-				w.YaMarketAffiliate.createWidget({
-					containerId: "marketWidget1",
-					type: "offers",
-					params: {
-					clid: 2310490,
-					searchText: "Яндекс.Станция",
-					themeId: 2
-					}
-				});
-				}
-				w.YaMarketAffiliate
-				? start()
-				: w.addEventListener("YaMarketAffiliateLoad", start);
-			})(window);
-		</script>';
-}
-add_filter( 'layf_turbo_content_feed', 'add_some_js', 1, 3);
-
 function prefix_disable_gutenberg($current_status, $post_type) {
     return false;
-    // return $current_status;
 }
 // add_filter('use_block_editor_for_post_type', 'prefix_disable_gutenberg', 10, 2);
