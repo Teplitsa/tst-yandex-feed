@@ -301,7 +301,7 @@ class La_Yandex_Feed_Admin {
 <?php
 	}
 
-	function shortcode_examples_metabox_callback() {
+	public static function shortcode_examples_metabox_callback() {
 ?>
 		<h3><?php _e('Button', 'yandexnews-feed-by-teplitsa')?></h3>
 		<code>[TstYandexNewsButton formaction="tel:+7(800)123-45-67" data-background-color="#eee" data-color="white" data-turbo="false" data-primary="true" disabled]8 800 123-45-67[/TstYandexNewsButton]</code>
