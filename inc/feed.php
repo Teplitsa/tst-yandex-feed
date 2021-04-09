@@ -4,9 +4,8 @@ $layf_enable_turbo = get_option('layf_enable_turbo');
 $is_show_turbo = $layf_enable_turbo || $is_turbo;
 $tstyn_is_single = false;
 
+include("feed-header.php");
 ?>
-
-<?php include("feed-header.php") ?>
 
 <?php while( have_posts()) : the_post();?>
 
