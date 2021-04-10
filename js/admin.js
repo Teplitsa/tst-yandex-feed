@@ -1,9 +1,10 @@
 ( function( wp ) {
     if(!wp || !wp.data || !wp.data.select( 'core/editor' )) {
+        // console.log("no editor");
         return
     }
 
-    const { getCurrentPostId, getCurrentPostAttribute } = wp.data.select("core/editor");
+    const { getCurrentPostAttribute } = wp.data.select("core/editor");
 
     let wasSavingPost = wp.data.select( 'core/editor' ).isSavingPost();
     let wasAutosavingPost = wp.data.select( 'core/editor' ).isAutosavingPost();
@@ -14,11 +15,8 @@
         const isSavingPost = wp.data.select( 'core/editor' ).isSavingPost();
         const isAutosavingPost = wp.data.select( 'core/editor' ).isAutosavingPost();
         const isPreviewingPost = wp.data.select( 'core/editor' ).isPreviewingPost();
-        const isSavePostError = wp.data.select('core/editor').didPostSaveRequestFail();
-        const post_id = getCurrentPostId();
-        const post_meta = getCurrentPostAttribute('meta');
-        const post_tstyn_error = post_meta ? post_meta['tstyn_error'] : null;
-        console.log('post_tstyn_error:', post_tstyn_error);
+        const postMeta = wp.data.select( 'core/editor' ).getCurrentPostAttribute('meta');
+        const post2yandexError = postMeta ? postMeta['tstyn_error'] : null;
 
         const isDoneSaving = (
             ( wasSavingPost && ! isSavingPost && ! wasAutosavingPost ) ||
@@ -30,15 +28,9 @@
         wasPreviewingPost = isPreviewingPost;
     
         if ( isDoneSaving ) {  
-            console.log("post_id:", post_id);
-            let cookieName = 'tstyn-post2yandex-error';
-            const post2yandexError = post_tstyn_error;
-            // let post2yandexError = wpCookies.get( cookieName );
+            let noticeId = 'tstyn-post2yandex-error';
 
-            console.log("isDoneSaving...");
-            console.log("post2yandexError:", post2yandexError);
-
-            wp.data.dispatch( 'core/notices' ).removeNotice( cookieName );
+            wp.data.dispatch( 'core/notices' ).removeNotice( noticeId );
 
             if(post2yandexError) {
                 let errorMessage = decodeURIComponent(post2yandexError.replace(/[+]/g, " "));
@@ -48,15 +40,15 @@
                     errorMessage,
                     {
                         isDismissible: true,
-                        id: cookieName,
+                        id: noticeId,
                     }
                 );
-            
-                // wpCookies.set( cookieName, '', - 48 * 60 * 60, "/" );
         }
         }
     });
 
 } )( window.wp );
 
-postboxes.add_postbox_toggles( 'settings_page_layf_settings' );
+if(typeof postboxes !== 'undefined' && postboxes) {
+    postboxes.add_postbox_toggles( 'settings_page_layf_settings' );
+}

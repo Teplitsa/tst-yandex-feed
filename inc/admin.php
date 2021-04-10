@@ -546,7 +546,7 @@ class La_Yandex_Feed_Admin {
 			'layf-admin',
 			LAYF_PLUGIN_BASE_URL . 'js/admin.js',
 			array(),
-			LAYF_VERSION . $screen->id,
+			LAYF_VERSION,
 			true
 		);		
 
@@ -701,7 +701,7 @@ function layf_admin_notice_dismissed() {
 function tstyn_add_shortcode_examples_metabox() {
 	add_meta_box(
 		'tstyn-shortcode-examples',
-		__('Shortcode examples'),
+		__('Shortcode examples', 'yandexnews-feed-by-teplitsa'),
 		'La_Yandex_Feed_Admin::shortcode_examples_metabox_callback',
 		'settings_page_layf_settings',
 		'side',
