@@ -542,7 +542,7 @@ class La_Yandex_Feed_Admin {
 			wp_enqueue_script( 'postbox' );			
 
 			wp_enqueue_script(
-				'layf-admin',
+				'layf-admin-settings',
 				LAYF_PLUGIN_BASE_URL . 'js/admin-settings.js',
 				array(),
 				LAYF_VERSION,
