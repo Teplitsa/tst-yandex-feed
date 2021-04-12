@@ -540,15 +540,25 @@ class La_Yandex_Feed_Admin {
 			wp_enqueue_script( 'common' );
 			wp_enqueue_script( 'wp-lists' );
 			wp_enqueue_script( 'postbox' );			
-		}
 
-		wp_enqueue_script(
-			'layf-admin',
-			LAYF_PLUGIN_BASE_URL . 'js/admin.js',
-			array(),
-			LAYF_VERSION,
-			true
-		);		
+			wp_enqueue_script(
+				'layf-admin',
+				LAYF_PLUGIN_BASE_URL . 'js/admin-settings.js',
+				array(),
+				LAYF_VERSION,
+				true
+			);		
+	
+		}
+		else {
+			wp_enqueue_script(
+				'layf-admin',
+				LAYF_PLUGIN_BASE_URL . 'js/admin.js',
+				array(),
+				LAYF_VERSION,
+				true
+			);		
+		}
 
 	}
 	
