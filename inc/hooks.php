@@ -2,6 +2,7 @@
 
 class TstYandexNewsHooks {
     private static $error_transient = 'tst_yandex_news_error';
+    private static $sync_delay = 10 * 60;
 
     public static function update_turbo_page_in_yandex($post_id) {
 
@@ -42,9 +43,17 @@ class TstYandexNewsHooks {
 
         TstYandexNewsShortcodes::setup_shortcodes();
 
+        $sync_time = get_post_meta( $post_id, 'tstyn_sync_time', true);
+        if($sync_time) {
+            if(time() - intval($sync_time) <= self::$sync_delay) {
+                return;
+            }
+        }
+
         $error = "";
         try {
             $yandex_client->update_current_post_in_yandex();
+            update_post_meta( $post_id, 'tstyn_sync_time', time());
         }
         catch(TstYandexNewsInvalidAuthTokenException $e) {
             $error = __( 'Turbo page update error: invalid auth token error', 'yandexnews-feed-by-teplitsa' );

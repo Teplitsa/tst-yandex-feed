@@ -738,13 +738,23 @@ class La_Yandex_Feed_Core {
 		if(!empty($terms)){
 			$filter_tax = $tax = get_option('layf_filter_taxonomy', 'category');
 			$terms = array_map('intval', explode(',', $terms));
-			$query->query_vars['tax_query'][] = array(
-				'taxonomy' => $tax,
-				'field' => 'id',
-				'terms' => $terms
-			);
 		}
-	
+        else {
+            $terms = array();
+        }
+
+        $terms_slug = get_option('layf_filter_terms_slug', '');
+        if(!empty($terms_slug)){
+            $tax = get_option('layf_filter_taxonomy', 'category');
+            
+            if(!empty($terms_slug)) {
+                $terms_slug = explode(',', $terms_slug);
+                if(count($terms_slug)) {
+                    $terms = array_merge($terms, get_terms(array('taxonomy' => $tax, 'hide_empty' => false, 'slug' => $terms_slug, 'fields' => 'ids')));
+                }
+            }
+        }
+
 		$category_tax = apply_filters('layf_category_taxonomy', 'category', $post_id);
 		$category = wp_get_object_terms($post_id, $category_tax);
 		
